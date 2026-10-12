@@ -1,60 +1,106 @@
-# Salam
+# سلام (Salam) — منظومة الوعي النفسي الذكي باللغة العربية
 
-Arabic-first AI/NLP platform for mental-health awareness and early-indicator screening support.
+واجهة أمامية إنتاجية كاملة لنظام التوعية بالصحة النفسية والاستكشاف المبكر للمؤشرات اللغوية العربية، مع التركيز على اللهجة المصرية واللغة العربية الفصحى، مدعومة بالذكاء الاصطناعي المفسَّر (Explainable AI).
 
-> **Important:** Salam is an awareness and screening-support system. It is not a medical diagnosis system and must not be used as a substitute for professional clinical assessment.
+---
 
-## Current Direction
+## ⚠️ قاعدة السلامة العلمية والأخلاقية الحاسمة
+**هذا النظام ليس أداة تشخيص طبي أو نفسي.**
+لا يستخدم النظام أي لغة تشخيصية قطعية (مثل "أنت مصاب بـ..." أو "تشخيص طبي")، بل يعتمد لغة توعوية مسؤولة مثل:
+- "مؤشرات تستحق الانتباه والرعاية"
+- "مؤشر أولي استرشادي"
+- "تنبيه توعوي: هذه النتيجة ليست تشخيصاً طبياً"
 
-The project is being developed around a modular pipeline:
+---
 
-```text
-Arabic Text
-    ↓
-Arabic NLP Preprocessing
-    ↓
-Semantic / Linguistic Features
-    ↓
-ML / Deep Learning / Arabic Language Models
-    ↓
-Estimated Indicator Level
-    ↓
-Explainable AI (XAI)
-    ↓
-Awareness / Referral
+## 🛠 التقنيات المستخدمة (Production Stack)
+- **Framework:** React 19 + Vite 8
+- **Language:** JavaScript / JSX (خالٍ تماماً من TypeScript)
+- **Styling & Design Tokens:** Tailwind CSS v4 (`@theme inline` tokens)
+- **Primary Arabic Font:** خط **Cairo** معتمد ومحمّل لكامل التطبيق
+- **Layout Direction:** عربي أولاً (`dir="rtl"`) مع خصائص CSS المنطقية
+- **Routing:** React Router v7 مع تقسيم الكود والتحميل الكسول (Route-level Lazy Loading)
+- **Icons:** `lucide-react`
+- **Animations:** `framer-motion` (حركات هادئة مع احترام `prefers-reduced-motion`)
+
+---
+
+## 📂 الهيكل المعماري (Feature-Based Architecture)
+
+```
+salam-app/
+├── index.html                   # غلاف HTML عربي مع خط Cairo و dir="rtl"
+├── vite.config.js               # تكوين Vite مع إضافة Tailwind v4 ومسارات @
+├── DESIGN-SYSTEM.md             # وثيقة مرجعية لتوكنز التصميم والألوان والظلال
+└── src/
+    ├── main.jsx                 # نقطة الدخول الرئيسية
+    ├── App.jsx                  # مغلّف التوجيه
+    ├── index.css                # توكنز التصميم وقواعد Cairo والاتجاه RTL
+    ├── app/
+    │   ├── layouts/
+    │   │   └── AppShell.jsx     # الهيكل العام (الشريط العلوي، الفوتر، روابط الوصول)
+    │   └── router/
+    │       └── index.jsx        # جدول المسارات وتقسيم الشفرة
+    ├── components/
+    │   ├── ui/                  # العناصر الأساسية المشتركة
+    │   │   ├── Button.jsx       # أزرار بمتغيرات كاملة وحالات تحميل
+    │   │   ├── Card.jsx         # بطاقات الأسطح والحاويات
+    │   │   ├── Input.jsx        # حقول الإدخال مع التسميات والأخطاء
+    │   │   ├── Textarea.jsx     # مساحة النص المريحة مع عداد الحروف
+    │   │   ├── Badge.jsx        # شارات الحالات (مستقر، انتباه، مرتفع)
+    │   │   ├── Alert.jsx        # تنبيهات وإخلاء المسؤولية الطبي
+    │   │   ├── Dialog.jsx       # نوافذ منبثقة تفاعلية ومرنة
+    │   │   ├── Tabs.jsx         # تبويبات متجاوبة
+    │   │   ├── Accordion.jsx    # أقسام قابلة للتوسيع (XAI والأسئلة الشائعة)
+    │   │   ├── Progress.jsx     # مؤشرات التقدم الخطية والدائرية
+    │   │   └── Skeleton.jsx     # حالات الهيكل العظمي أثناء التحميل
+    │   ├── feedback/            # شاشات ردود الفعل
+    │   │   ├── EmptyState.jsx   # الحالة الفارغة
+    │   │   ├── ErrorState.jsx   # حالة الخطأ مع إعادة المحاولة
+    │   │   └── LoadingState.jsx # حالة التحميل الهادئة
+    │   ├── forms/
+    │   │   ├── FormField.jsx    # غلاف التسميات وإرشادات الحقول
+    │   │   └── FormActions.jsx  # أزرار الإرسال والإلغاء مع شريط الموبايل
+    │   └── navigation/
+    │       ├── Navbar.jsx       # شريط التنقل العلوي المتجاوب
+    │       ├── MobileMenu.jsx   # القائمة الجانبية للشاشات الصغيرة
+    │       └── Footer.jsx       # التذييل وإخلاء المسؤولية الرسمي
+    ├── features/                # صفحات وميزات التطبيق
+    │   ├── home/                # الصفحة الرئيسية والتعريف بالمنظومة
+    │   ├── assessment/          # جلسة التقييم الأولي وعرض النتائج والتفسير
+    │   ├── about/               # كيف يعمل النظام وهندسة NLP و XAI
+    │   ├── awareness/           # دليل التوعية النفسية والمفاهيم المغلوطة
+    │   ├── support/             # دليل الاستشارة المتخصصة وحالات الطوارئ
+    │   └── privacy/             # سياسة الخصوصية وأمان النصوص المؤقتة
+    ├── services/
+    │   └── assessmentService.js # خدمة التحليل اللغوي ومراحل خط المعالجة
+    ├── data/
+    │   └── awarenessContent.js  # المحتوى التوعوي والمقالات والتمارين
+    └── lib/
+        ├── utils.js             # دوال الدمج cn()
+        └── motion.js            # إعدادات الحركات الهادئة و reduced-motion
 ```
 
-## Frontend
+---
 
-The current frontend direction is:
+## 🚀 التشغيل والتطوير
 
-- React
-- Vite
-- JavaScript / JSX
-- Tailwind CSS v4
-- Cairo typography
-- RTL / Arabic-first UI
-- Framer Motion
-- lucide-react
+### 1. تثبيت الحزم:
+```bash
+npm install
+```
 
-## Development Status
+### 2. تشغيل خادم التطوير:
+```bash
+npm run dev
+```
 
-This repository is currently in active development. The production frontend and AI/backend layers are being prepared before the first complete public-ready release.
+### 3. بناء نسخة الإنتاج:
+```bash
+npm run build
+```
 
-## Repository Principles
-
-- Modular, feature-oriented architecture
-- Reusable shared components
-- Privacy by design
-- Explainable model outputs
-- Reproducible ML experiments
-- Explicit separation between product UI, API, AI orchestration, and model implementations
-- No diagnostic claims or fabricated model metrics
-
-## Getting Started
-
-After the first application source is pushed, installation and development instructions will be finalized here.
-
-## License
-
-License terms will be added before the project is published as an open-source release.
+### 4. معاينة نسخة الإنتاج:
+```bash
+npm run preview
+```
