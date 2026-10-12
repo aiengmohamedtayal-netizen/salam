@@ -215,7 +215,7 @@ export const technicalStack = [
 export const teamMembers = [
   {
     id: '42141812',
-    name: 'لينا مجدي عوض',
+    name: 'لينه مجدي عوض',
     nameEn: 'Lina Magdy Awad',
     role: 'قائدة الفريق ومسؤولة مجموعات البيانات',
     roleEn: 'Team Leader; Data / Dataset Owner',
