@@ -2,16 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  Brain,
-  Sparkles,
-  Lock,
   ArrowLeft,
   CheckCircle2,
-  Clock,
   Send,
   Loader2,
   Phone,
-  HeartHandshake,
   ExternalLink,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -19,6 +14,8 @@ import { Card } from '@/components/ui/Card';
 import { Textarea } from '@/components/ui/Textarea';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
+import { Icon3D } from '@/components/ui/Icon3D';
+import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
 import { FormField } from '@/components/forms/FormField';
 import { FormActions } from '@/components/forms/FormActions';
 import { ErrorState } from '@/components/feedback/ErrorState';
@@ -122,7 +119,7 @@ export function AssessmentPage() {
             ========================================================== */}
         <div className="p-3 sm:p-3.5 rounded-xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-sm">
           <div className="flex items-center gap-2">
-            <HeartHandshake className="h-4 w-4 text-teal-400 shrink-0" aria-hidden="true" />
+            <Icon3D name="lifebuoy" size="xs" className="w-5 h-5 shrink-0" />
             <span className="font-medium text-slate-200">{t('assessment.quickCrisisBar.label')}</span>
             <span className="hidden md:inline-block px-2 py-0.5 rounded-full bg-teal-900/80 text-[11px] text-teal-300 font-semibold border border-teal-800">
               {t('assessment.quickCrisisBar.hotlineBadge')}
@@ -153,7 +150,10 @@ export function AssessmentPage() {
         {step === 'onboarding' && (
           <motion.div {...safeMotion(fadeUp)} className="space-y-6">
             <div className="text-center max-w-2xl mx-auto space-y-3">
-              <Badge variant="primary">{t('assessment.onboarding.badge')}</Badge>
+              <Badge variant="primary" className="gap-2">
+                <Icon3D name="clipboard" size="xs" className="w-4 h-4 shrink-0" />
+                <span>{t('assessment.onboarding.badge')}</span>
+              </Badge>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-text-primary">
                 {t('assessment.onboarding.title')}
               </h1>
@@ -165,28 +165,28 @@ export function AssessmentPage() {
             <Card variant="default" padding="lg" className="space-y-6 shadow-sm">
               <div className="space-y-4">
                 <h3 className="font-bold text-base text-text-primary flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-teal-600 shrink-0" aria-hidden="true" />
+                  <Icon3D name="calendar" size="xs" className="w-5 h-5 shrink-0" />
                   <span>{t('assessment.onboarding.expectTitle')}</span>
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-text-secondary">
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                     <span className="font-bold text-text-primary flex items-center gap-1.5 text-sm">
-                      <Clock className="h-4 w-4 text-teal-600 shrink-0" aria-hidden="true" />
+                      <Icon3D name="calendar" size="xs" className="w-5 h-5 shrink-0" />
                       <span>{t('assessment.onboarding.card1Title')}</span>
                     </span>
                     <span>{t('assessment.onboarding.card1Desc')}</span>
                   </div>
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                     <span className="font-bold text-text-primary flex items-center gap-1.5 text-sm">
-                      <Lock className="h-4 w-4 text-teal-600 shrink-0" aria-hidden="true" />
+                      <Icon3D name="shield" size="xs" className="w-5 h-5 shrink-0" />
                       <span>{t('assessment.onboarding.card2Title')}</span>
                     </span>
                     <span>{t('assessment.onboarding.card2Desc')}</span>
                   </div>
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                     <span className="font-bold text-text-primary flex items-center gap-1.5 text-sm">
-                      <Sparkles className="h-4 w-4 text-teal-600 shrink-0" aria-hidden="true" />
+                      <Icon3D name="lightbulb" size="xs" className="w-5 h-5 shrink-0" />
                       <span>{t('assessment.onboarding.card3Title')}</span>
                     </span>
                     <span>{t('assessment.onboarding.card3Desc')}</span>
@@ -278,7 +278,7 @@ export function AssessmentPage() {
                       }}
                       className="text-xs px-3 py-1.5 rounded-lg bg-surface-card border border-surface-border hover:border-teal-400 hover:bg-teal-50/50 text-text-secondary hover:text-teal-900 transition-colors cursor-pointer text-start inline-flex items-center gap-1.5"
                     >
-                      <Sparkles className="h-3 w-3 text-teal-600 shrink-0" aria-hidden="true" />
+                      <Icon3D name="lightbulb" size="xs" className="w-4 h-4 shrink-0" />
                       <span>{prompt.label}</span>
                     </button>
                   ))}
@@ -392,9 +392,15 @@ export function AssessmentPage() {
             ========================================================== */}
         {step === 'analyzing' && (
           <motion.div {...safeMotion(fadeUp)} className="space-y-6 max-w-lg mx-auto py-8">
-            <Card variant="elevated" padding="lg" className="text-center space-y-6">
-              <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-700 mx-auto">
-                <Brain className="h-8 w-8 animate-pulse" aria-hidden="true" />
+            <Card variant="elevated" padding="lg" className="text-center space-y-6 overflow-hidden">
+              {/* 3D Dynamic Processing Visual */}
+              <div className="h-44 w-full rounded-2xl bg-gradient-to-b from-teal-50/60 to-surface-card border border-surface-border/70 overflow-hidden relative flex items-center justify-center">
+                <SalamNeuralNetwork state="processing" className="w-full h-full absolute inset-0" />
+                <div className="absolute top-2.5 start-3 z-10">
+                  <Badge variant="primary" size="sm" className="shadow-xs text-[10px]">
+                    {t('home.threeVisual.stateProcessing')}
+                  </Badge>
+                </div>
               </div>
 
               <div>
@@ -484,7 +490,7 @@ export function AssessmentPage() {
             {/* Unbroken Human Support Guarantee Card */}
             <Card variant="default" padding="lg" className="border-teal-200 bg-teal-50/40 space-y-4">
               <div className="flex items-center gap-2 text-teal-900 font-bold text-base">
-                <HeartHandshake className="h-5 w-5 text-teal-700 shrink-0" aria-hidden="true" />
+                <Icon3D name="care" size="xs" className="w-6 h-6 object-contain shrink-0" />
                 <span>{t('assessment.errorFallbackSupport.title')}</span>
               </div>
               <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">

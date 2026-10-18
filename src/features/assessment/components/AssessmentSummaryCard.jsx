@@ -1,8 +1,9 @@
-import { CheckCircle2, Edit3, ArrowLeft, ArrowRight, Sparkles, FileText } from 'lucide-react';
+import { CheckCircle2, Edit3, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { STRUCTURED_QUESTIONS } from '@/services/assessmentService';
 import { checkAssessmentConsistency, resolveQuestionText } from '../data/adaptiveQuestionBank';
 import { useTranslation } from '@/context/LanguageContext';
@@ -56,8 +57,9 @@ export function AssessmentSummaryCard({
       {/* Top Header Card */}
       <div className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <Badge variant="primary" size="md">
-            {t('assessment.summary.badge')}
+          <Badge variant="primary" size="md" className="gap-2">
+            <Icon3D name="clipboard" size="xs" className="w-4 h-4 shrink-0" />
+            <span>{t('assessment.summary.badge')}</span>
           </Badge>
           <span className="text-xs text-text-muted">
             {t('assessment.summary.completionCount', {
@@ -85,7 +87,7 @@ export function AssessmentSummaryCard({
       <Card variant="default" padding="md" className="space-y-3 bg-white">
         <div className="flex items-center justify-between border-b border-surface-border pb-2.5">
           <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4 text-teal-600 shrink-0" aria-hidden="true" />
+            <Icon3D name="notepad" size="xs" className="w-5 h-5 shrink-0" />
             <h3 className="text-sm font-bold text-text-primary">{t('assessment.summary.textSnippetTitle')}</h3>
             <span className="text-xs text-text-muted">
               ({inputText.trim().length} {language === 'en' ? 'chars' : 'حرفاً'})
@@ -108,7 +110,10 @@ export function AssessmentSummaryCard({
       {/* 2. Initial Structured Answers */}
       <Card variant="default" padding="md" className="space-y-3 bg-white">
         <div className="flex items-center justify-between border-b border-surface-border pb-2.5">
-          <h3 className="text-sm font-bold text-text-primary">{t('assessment.summary.bioIndicatorsTitle')}</h3>
+          <div className="flex items-center gap-2">
+            <Icon3D name="heartbeat" size="xs" className="w-5 h-5 shrink-0" />
+            <h3 className="text-sm font-bold text-text-primary">{t('assessment.summary.bioIndicatorsTitle')}</h3>
+          </div>
           <button
             type="button"
             onClick={onBackToInput}

@@ -9,7 +9,6 @@ import { RadarDisclaimer } from '../components/RadarDisclaimer';
 import { ClaimDetailModal } from '../components/ClaimDetailModal';
 import { initialMonitoredClaims } from '../data/radarData';
 import { fadeUp, safeMotion } from '@/lib/motion';
-import { useTranslation } from '@/context/LanguageContext';
 
 /**
  * Rumor & Misinformation Radar Page
@@ -20,8 +19,6 @@ export function RumorRadarPage() {
   const [claimsList, setClaimsList] = useState(initialMonitoredClaims);
   const [selectedClaim, setSelectedClaim] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { language } = useTranslation();
-  const isEn = language === 'en';
 
   const handleSelectClaim = (claim) => {
     setSelectedClaim(claim);

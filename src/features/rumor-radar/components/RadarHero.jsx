@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { Radar, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
 
@@ -17,7 +18,7 @@ export function RadarHero() {
       {/* Top Status & Integrity Pill */}
       <motion.div {...safeMotion(fadeUp)} className="inline-flex justify-center">
         <Badge variant="primary" size="md" className="gap-2 py-1 px-4 shadow-2xs">
-          <Radar className="h-4 w-4 text-teal-700 animate-pulse" aria-hidden="true" />
+          <Icon3D name="robot" size="xs" className="w-5 h-5 shrink-0" />
           <span>
             {isEn
               ? 'Monitoring grounded in verifiable indicators & sources'

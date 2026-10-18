@@ -1,16 +1,12 @@
 import {
-  Users,
   Crown,
-  Layout,
-  Server,
-  Brain,
-  ClipboardCheck,
   CheckCircle2,
   Briefcase,
   Wrench,
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { teamMembers } from '../data/projectData';
 import { useTranslation } from '@/context/LanguageContext';
 
@@ -22,12 +18,12 @@ import { useTranslation } from '@/context/LanguageContext';
 export function TeamSection() {
   const { isAr } = useTranslation();
 
-  const getRoleIcon = (member) => {
-    if (member.isLeader) return Crown;
-    if (member.roleEn.includes('Frontend')) return Layout;
-    if (member.roleEn.includes('Backend')) return Server;
-    if (member.roleEn.includes('Model') || member.roleEn.includes('AI')) return Brain;
-    return ClipboardCheck;
+  const getRole3DIcon = (member) => {
+    if (member.isLeader) return 'care';
+    if (member.roleEn.includes('Frontend')) return 'robot';
+    if (member.roleEn.includes('Backend')) return 'shield';
+    if (member.roleEn.includes('Model') || member.roleEn.includes('AI')) return 'brain';
+    return 'clipboard';
   };
 
   return (
@@ -35,8 +31,9 @@ export function TeamSection() {
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-surface-border">
         <div>
-          <Badge variant="primary" className="mb-2">
-            {isAr ? '2. هيكل الفريق والمسؤوليات' : '2. Team Structure & Roles'}
+          <Badge variant="primary" className="mb-2 gap-2">
+            <Icon3D name="community" size="xs" className="w-4 h-4 shrink-0" />
+            <span>{isAr ? '2. هيكل الفريق والمسؤوليات' : '2. Team Structure & Roles'}</span>
           </Badge>
           <h2 className="text-2xl sm:text-3xl font-bold text-text-primary">
             {isAr ? 'أعضاء الفريق والمهام المعتمدة' : 'Team Members & Assigned Roles'}
@@ -57,7 +54,6 @@ export function TeamSection() {
       {/* Team Member Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {teamMembers.map((member) => {
-          const RoleIcon = getRoleIcon(member);
           const isLeader = member.isLeader;
           const isPlaceholder = member.isPlaceholder;
 
@@ -82,15 +78,15 @@ export function TeamSection() {
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold shrink-0 ${
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 p-1 ${
                       isLeader
-                        ? 'bg-teal-700 text-white shadow-xs'
+                        ? 'bg-teal-50 border border-teal-200 shadow-xs'
                         : isPlaceholder
-                        ? 'bg-slate-200 text-slate-700'
-                        : 'bg-teal-50 border border-teal-200 text-teal-800'
+                        ? 'bg-slate-100 border border-slate-200 text-slate-700'
+                        : 'bg-teal-50/60 border border-teal-100'
                     }`}
                   >
-                    <RoleIcon className="h-5 w-5" aria-hidden="true" />
+                    <Icon3D name={getRole3DIcon(member)} size="sm" className="w-8 h-8 object-contain" />
                   </div>
 
                   <div className="flex flex-col items-end gap-1">
@@ -180,7 +176,7 @@ export function TeamSection() {
 
       {/* Skills Transparency Note */}
       <div className="p-4 rounded-xl bg-surface-card border border-surface-border flex items-start gap-3 text-xs text-text-secondary leading-relaxed">
-        <Users className="h-4 w-4 text-teal-700 shrink-0 mt-0.5" aria-hidden="true" />
+        <Icon3D name="community" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
         <p>
           <strong>{isAr ? 'ملاحظة توثيقية:' : 'Documentation Note:'}</strong>{' '}
           {isAr

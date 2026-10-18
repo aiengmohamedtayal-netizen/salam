@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { GraduationCap, Award, BookOpen, UserCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { academicMetadata } from '../data/projectData';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
@@ -11,24 +11,24 @@ import { useTranslation } from '@/context/LanguageContext';
  * Localized for Arabic and English.
  */
 export function AcademicHeader() {
-  const { t, isAr } = useTranslation();
+  const { isAr } = useTranslation();
 
   return (
     <motion.header {...safeMotion(fadeUp)} className="space-y-6 text-center max-w-4xl mx-auto">
       {/* Top Academic Credential Badges */}
       <div className="flex flex-wrap items-center justify-center gap-2.5">
         <Badge variant="primary" size="md" className="gap-2 py-1 px-3.5 shadow-2xs font-semibold">
-          <GraduationCap className="h-4 w-4 text-teal-700 shrink-0" aria-hidden="true" />
+          <Icon3D name="graduation" size="xs" className="w-5 h-5 shrink-0" />
           <span>{isAr ? academicMetadata.university : 'Delta University for Science and Technology'}</span>
         </Badge>
         <span className="text-text-muted text-xs hidden sm:inline">•</span>
         <Badge variant="default" size="md" className="gap-2 py-1 px-3.5 font-medium">
-          <BookOpen className="h-4 w-4 text-slate-600 shrink-0" aria-hidden="true" />
+          <Icon3D name="books" size="xs" className="w-5 h-5 shrink-0" />
           <span>{isAr ? academicMetadata.faculty : academicMetadata.department}</span>
         </Badge>
         <span className="text-text-muted text-xs hidden sm:inline">•</span>
         <Badge variant="info" size="md" className="gap-2 py-1 px-3.5 font-bold">
-          <Award className="h-4 w-4 text-sky-700 shrink-0" aria-hidden="true" />
+          <Icon3D name="lightbulb" size="xs" className="w-5 h-5 shrink-0" />
           <span>
             {isAr
               ? `مقرر ${academicMetadata.courseCode}`
@@ -50,7 +50,7 @@ export function AcademicHeader() {
       {/* Supervisor and Course Pill */}
       <div className="inline-flex flex-wrap items-center justify-center gap-4 py-2.5 px-5 rounded-2xl bg-surface-card border border-surface-border shadow-xs text-xs sm:text-sm">
         <div className="flex items-center gap-2 text-teal-900 font-bold">
-          <UserCheck className="h-4 w-4 text-teal-700 shrink-0" aria-hidden="true" />
+          <Icon3D name="community" size="xs" className="w-4 h-4 shrink-0" />
           <span>{isAr ? `إشراف: ${academicMetadata.supervisor}` : academicMetadata.supervisorTitle}</span>
         </div>
         <span className="w-1.5 h-1.5 rounded-full bg-surface-border-strong hidden sm:block" aria-hidden="true" />

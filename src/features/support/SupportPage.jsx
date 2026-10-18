@@ -1,20 +1,14 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  HeartHandshake,
-  ShieldAlert,
-  HelpCircle,
   CheckCircle2,
-  PhoneCall,
-  Clock,
-  Compass,
   ArrowLeft,
-  Info,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { PROFESSIONAL_REFERRAL_GUIDE } from '@/data/awarenessContent';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
@@ -44,7 +38,10 @@ export function SupportPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <Badge variant="primary">{t('support.badge')}</Badge>
+          <Badge variant="primary" className="gap-2">
+            <Icon3D name="care" size="xs" className="w-4 h-4 shrink-0" />
+            <span>{t('support.badge')}</span>
+          </Badge>
           <h1 className="text-3xl sm:text-5xl font-black text-text-primary">
             {t('support.title')}
           </h1>
@@ -62,13 +59,18 @@ export function SupportPage() {
 
         {/* When to Seek Help Card */}
         <Card variant="default" padding="lg" className="space-y-6">
-          <div className="space-y-2 pb-4 border-b border-surface-border">
-            <h2 className="text-xl sm:text-2xl font-bold text-text-primary">
-              {guideTitle}
-            </h2>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              {guideDesc}
-            </p>
+          <div className="flex items-start gap-4 pb-4 border-b border-surface-border">
+            <div className="w-11 h-11 flex items-center justify-center shrink-0">
+              <Icon3D name="care" size="lg" className="w-11 h-11 object-contain drop-shadow-xs" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-xl sm:text-2xl font-bold text-text-primary">
+                {guideTitle}
+              </h2>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                {guideDesc}
+              </p>
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -94,8 +96,8 @@ export function SupportPage() {
         {/* What to Expect in a Session */}
         <Card variant="default" padding="lg" className="space-y-6 bg-teal-50/30 border-teal-200">
           <div className="space-y-2 pb-4 border-b border-teal-200/60">
-            <div className="flex items-center gap-2 text-teal-900 font-bold text-lg">
-              <Compass className="h-5 w-5 text-teal-700" aria-hidden="true" />
+            <div className="flex items-center gap-2.5 text-teal-900 font-bold text-lg">
+              <Icon3D name="location" size="md" className="w-7 h-7 shrink-0 drop-shadow-xs" />
               <h3>{t('support.whatToExpectTitle')}</h3>
             </div>
             <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
@@ -122,9 +124,12 @@ export function SupportPage() {
 
         {/* Practical Checklist before booking */}
         <Card variant="default" padding="lg" className="space-y-4">
-          <h3 className="text-base font-bold text-text-primary">
-            {t('support.checklistTitle')}
-          </h3>
+          <div className="flex items-center gap-2.5 pb-2 border-b border-surface-border">
+            <Icon3D name="clipboard" size="md" className="w-7 h-7 shrink-0 drop-shadow-xs" />
+            <h3 className="text-base font-bold text-text-primary">
+              {t('support.checklistTitle')}
+            </h3>
+          </div>
           <ul className="space-y-2 text-xs sm:text-sm text-text-secondary leading-relaxed list-disc list-inside">
             <li>{t('support.checklistItem1')}</li>
             <li>{t('support.checklistItem2')}</li>

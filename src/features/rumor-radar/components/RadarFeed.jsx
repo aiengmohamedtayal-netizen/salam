@@ -1,14 +1,9 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   Clock,
-  ExternalLink,
   ChevronLeft,
   AlertTriangle,
-  CheckCircle2,
-  Filter,
   Search,
-  Eye,
   FileQuestion,
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
@@ -16,14 +11,13 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { useTranslation } from '@/context/LanguageContext';
 import { getStatusMeta, resolveClaimText } from '../data/radarData';
-import { fadeUp, safeMotion } from '@/lib/motion';
 
 /**
  * Radar Feed Component
  * Displays filtered list of monitored claims with status indicators and detail trigger.
  */
 export function RadarFeed({ claims = [], onSelectClaim }) {
-  const { t, language } = useTranslation();
+  const { language } = useTranslation();
   const isEn = language === 'en';
 
   const [activeFilter, setActiveFilter] = useState('all');

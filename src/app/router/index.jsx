@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Link } from 'react-router-dom';
+import { createBrowserRouter, Link, useRouteError } from 'react-router-dom';
 import { AppShell } from '@/app/layouts/AppShell';
 import { LoadingState } from '@/components/feedback/LoadingState';
+import { ErrorState } from '@/components/feedback/ErrorState';
 import { Button } from '@/components/ui/Button';
 
 // Route-level lazy loading for optimal bundle size and performance
@@ -36,6 +37,24 @@ const RumorRadarPage = lazy(() =>
     default: m.RumorRadarPage,
   }))
 );
+const LoginPage = lazy(() =>
+  import('@/features/auth/pages/LoginPage').then((m) => ({ default: m.LoginPage }))
+);
+const RegisterPage = lazy(() =>
+  import('@/features/auth/pages/RegisterPage').then((m) => ({
+    default: m.RegisterPage,
+  }))
+);
+const MultimodalAnalysisPage = lazy(() =>
+  import('@/features/multimodal/pages/MultimodalAnalysisPage').then((m) => ({
+    default: m.MultimodalAnalysisPage,
+  }))
+);
+const VoiceAnalysisPage = lazy(() =>
+  import('@/features/voice/pages/VoiceAnalysisPage').then((m) => ({
+    default: m.VoiceAnalysisPage,
+  }))
+);
 
 import { useTranslation } from '@/context/LanguageContext';
 
@@ -68,6 +87,39 @@ function NotFoundPage() {
           {t('notFound.backHome')}
         </Button>
       </Link>
+    </div>
+  );
+}
+
+/**
+ * Route error boundary with SALAM ErrorState feedback.
+ */
+function RouteErrorBoundary() {
+  const error = useRouteError();
+  const { language } = useTranslation();
+  const isEn = language === 'en';
+
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-6">
+      <ErrorState
+        title={isEn ? 'An unexpected error occurred' : 'حدث خطأ غير متوقع'}
+        message={
+          error?.statusText ||
+          error?.message ||
+          (isEn
+            ? 'We encountered a momentary issue. Your inputs remain secure.'
+            : 'واجهنا تعثراً مؤقتاً في عرض هذه الصفحة. يمكنك العودة للصفحة الرئيسية أو إعادة المحاولة.')
+        }
+        onRetry={() => window.location.reload()}
+        retryLabel={isEn ? 'Reload Page' : 'إعادة تحميل الصفحة'}
+        secondaryAction={
+          <Link to="/">
+            <Button variant="outline" size="md">
+              {isEn ? 'Return Home' : 'العودة للرئيسية'}
+            </Button>
+          </Link>
+        }
+      />
     </div>
   );
 }
@@ -129,26 +181,100 @@ const routeChildren = [
       </Suspense>
     ),
   },
+  {
+    path: 'multimodal',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <MultimodalAnalysisPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: 'voice',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <VoiceAnalysisPage />
+      </Suspense>
+    ),
+  },
   { path: '*', element: <NotFoundPage /> },
+];
+
+const authRoutes = [
+  {
+    path: '/ar/login',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <LoginPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/ar/register',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <RegisterPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/en/login',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <LoginPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/en/register',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <RegisterPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/login',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <LoginPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/register',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <RegisterPage />
+      </Suspense>
+    ),
+  },
 ];
 
 /**
  * Application routing table supporting /ar, /en, and root navigation.
  */
 export const router = createBrowserRouter([
+  ...authRoutes.map((route) => ({
+    ...route,
+    errorElement: <RouteErrorBoundary />,
+  })),
   {
     path: '/ar',
     element: <AppShell />,
+    errorElement: <RouteErrorBoundary />,
     children: routeChildren,
   },
   {
     path: '/en',
     element: <AppShell />,
+    errorElement: <RouteErrorBoundary />,
     children: routeChildren,
   },
   {
     path: '/',
     element: <AppShell />,
+    errorElement: <RouteErrorBoundary />,
     children: routeChildren,
   },
 ]);

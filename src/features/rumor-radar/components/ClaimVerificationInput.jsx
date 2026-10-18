@@ -2,15 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
-  CheckCircle2,
   AlertTriangle,
   RotateCcw,
-  Sparkles,
   Lock,
   ArrowLeft,
-  FileQuestion,
   HelpCircle,
-  ExternalLink,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -26,7 +22,7 @@ import { getStatusMeta } from '../data/radarData';
  * Does not store submitted text into localStorage or permanent storage.
  */
 export function ClaimVerificationInput({ onAnalysisResult }) {
-  const { t, language } = useTranslation();
+  const { language } = useTranslation();
   const isEn = language === 'en';
 
   const [claimInput, setClaimInput] = useState('');

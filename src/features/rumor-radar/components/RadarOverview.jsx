@@ -1,6 +1,6 @@
-import { Activity, AlertTriangle, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { useTranslation } from '@/context/LanguageContext';
 
 /**
@@ -26,7 +26,7 @@ export function RadarOverview({ claims = [] }) {
       id: 'circulating',
       label: isEn ? 'Total Circulating Claims' : 'إجمالي المحتوى المتداول',
       count: circulatingCount,
-      icon: Activity,
+      icon3d: 'gauge',
       badge: isEn ? 'Active' : 'المرصود حالياً',
       badgeVariant: 'info',
       hint: isEn ? 'Claims under active tracking' : 'ادعاءات تحت المتابعة النشطة',
@@ -35,7 +35,7 @@ export function RadarOverview({ claims = [] }) {
       id: 'needs_verification',
       label: isEn ? 'Needs Verification' : 'يحتاج إلى تحقق',
       count: needsVerificationCount,
-      icon: AlertTriangle,
+      icon3d: 'clipboard',
       badge: isEn ? 'Under Review' : 'قيد التدقيق',
       badgeVariant: 'attention',
       hint: isEn ? 'Sparse sources or conflicting data' : 'نقص في المصادر أو تضارب أولي',
@@ -44,7 +44,7 @@ export function RadarOverview({ claims = [] }) {
       id: 'potentially_misleading',
       label: isEn ? 'Potentially Misleading' : 'مضلل محتمل',
       count: misleadingCount,
-      icon: ShieldAlert,
+      icon3d: 'lifebuoy',
       badge: isEn ? 'High Indicators' : 'مؤشرات مرتفعة',
       badgeVariant: 'elevated',
       hint: isEn ? 'Decontextualized framing or sensational tone' : 'تأطير مقتطع أو مبالغة لغوية',
@@ -53,7 +53,7 @@ export function RadarOverview({ claims = [] }) {
       id: 'verified',
       label: isEn ? 'Verified' : 'تم التحقق منه',
       count: verifiedCount,
-      icon: CheckCircle2,
+      icon3d: 'shield',
       badge: isEn ? 'Official Records' : 'موثّق رسمياً',
       badgeVariant: 'safe',
       hint: isEn ? 'Supported by verified evidence & sources' : 'مؤيد بأدلة ومصادر موثوقة',
@@ -63,7 +63,6 @@ export function RadarOverview({ claims = [] }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {STATS_ITEMS.map((item) => {
-        const Icon = item.icon;
         return (
           <Card
             key={item.id}
@@ -73,8 +72,8 @@ export function RadarOverview({ claims = [] }) {
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-xl bg-surface-muted border border-surface-border flex items-center justify-center font-bold text-teal-800">
-                  <Icon className="h-4 w-4" aria-hidden="true" />
+                <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                  <Icon3D name={item.icon3d} size="md" className="w-10 h-10 object-contain drop-shadow-xs" />
                 </div>
                 <Badge variant={item.badgeVariant} size="sm">
                   {item.badge}

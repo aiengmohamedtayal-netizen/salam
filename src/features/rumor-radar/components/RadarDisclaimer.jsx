@@ -1,4 +1,4 @@
-import { ShieldAlert, Info } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 import { useTranslation } from '@/context/LanguageContext';
 
 /**

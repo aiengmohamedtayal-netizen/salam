@@ -8,7 +8,6 @@ import {
   Layers,
   Sparkles,
   BarChart2,
-  Gauge,
   Code,
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';

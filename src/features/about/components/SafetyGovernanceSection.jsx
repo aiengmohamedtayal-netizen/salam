@@ -1,15 +1,7 @@
-import {
-  ShieldAlert,
-  ShieldCheck,
-  Lock,
-  HeartHandshake,
-  AlertTriangle,
-  Scale,
-  FileCheck,
-} from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { safetyPrinciples } from '../data/projectData';
 import { useTranslation } from '@/context/LanguageContext';
 
@@ -21,15 +13,15 @@ export function SafetyGovernanceSection() {
   const { t, language } = useTranslation();
   const isEn = language === 'en';
 
-  const getIcon = (id) => {
+  const get3DIcon = (id) => {
     switch (id) {
-      case 'non-diagnostic': return ShieldAlert;
-      case 'uncertainty-handling': return AlertTriangle;
-      case 'no-safe-guarantee': return Scale;
-      case 'zero-storage': return Lock;
-      case 'always-visible-support': return HeartHandshake;
-      case 'academic-governance': return FileCheck;
-      default: return ShieldCheck;
+      case 'non-diagnostic': return 'shield';
+      case 'uncertainty-handling': return 'gauge';
+      case 'no-safe-guarantee': return 'clipboard';
+      case 'zero-storage': return 'shield';
+      case 'always-visible-support': return 'care';
+      case 'academic-governance': return 'graduation';
+      default: return 'shield';
     }
   };
 
@@ -68,7 +60,6 @@ export function SafetyGovernanceSection() {
       {/* Safety Principles Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {safetyPrinciples.map((item) => {
-          const Icon = getIcon(item.id);
           const isCritical = item.id === 'non-diagnostic' || item.id === 'no-safe-guarantee';
 
           return (
@@ -82,14 +73,8 @@ export function SafetyGovernanceSection() {
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between pb-2 border-b border-surface-border">
-                  <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold ${
-                      isCritical
-                        ? 'bg-rose-100 text-rose-800'
-                        : 'bg-teal-50 text-teal-800'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                    <Icon3D name={get3DIcon(item.id)} size="md" className="w-10 h-10 object-contain drop-shadow-xs" />
                   </div>
                   <Badge variant={isCritical ? 'elevated' : 'primary'} size="sm">
                     {isCritical

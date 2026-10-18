@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
  * @param {string} [props.className]
  */
 export const Input = forwardRef(function Input(
-  { label, helperText, error, icon, className, id: externalId, ...rest },
+  { label, helperText, error, icon, endAdornment, className, inputClassName, id: externalId, ...rest },
   ref
 ) {
   const generatedId = useId();
@@ -30,9 +30,9 @@ export const Input = forwardRef(function Input(
         </label>
       )}
 
-      <div className="relative">
+      <div className="relative flex items-center">
         {icon && (
-          <span className="absolute top-1/2 -translate-y-1/2 start-3 text-text-muted pointer-events-none">
+          <span className="absolute top-1/2 -translate-y-1/2 start-3 text-text-muted pointer-events-none flex items-center justify-center">
             {icon}
           </span>
         )}
@@ -47,7 +47,9 @@ export const Input = forwardRef(function Input(
             error
               ? 'border-error focus:ring-error'
               : 'border-surface-border hover:border-surface-border-strong',
-            icon && 'ps-10'
+            icon && 'ps-10',
+            endAdornment && 'pe-10',
+            inputClassName
           )}
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={
@@ -55,6 +57,11 @@ export const Input = forwardRef(function Input(
           }
           {...rest}
         />
+        {endAdornment && (
+          <div className="absolute top-1/2 -translate-y-1/2 end-3 flex items-center">
+            {endAdornment}
+          </div>
+        )}
       </div>
 
       {error && (

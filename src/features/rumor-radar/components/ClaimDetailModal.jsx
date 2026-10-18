@@ -1,14 +1,9 @@
 import {
-  FileText,
   AlertTriangle,
   Clock,
-  ExternalLink,
-  ShieldCheck,
   CheckCircle2,
-  Info,
   Layers,
   HelpCircle,
-  X,
 } from 'lucide-react';
 import { Dialog } from '@/components/ui/Dialog';
 import { Badge } from '@/components/ui/Badge';

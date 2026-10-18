@@ -1,9 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-  Brain,
-  ShieldAlert,
-  Lock,
-} from 'lucide-react';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { useTranslation } from '@/context/LanguageContext';
 
 /**
@@ -20,7 +16,7 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 text-xs leading-relaxed">
             <div className="flex items-center gap-2 shrink-0 text-teal-400 font-bold">
-              <ShieldAlert className="h-4 w-4" aria-hidden="true" />
+              <Icon3D name="shield" size="xs" className="w-5 h-5 shrink-0" />
               <span>{t('footer.disclaimerAlertTitle')}</span>
             </div>
             <p className="flex-1 text-slate-300/90 leading-relaxed">
@@ -39,8 +35,8 @@ export function Footer() {
               to="/"
               className="inline-flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-teal-500 rounded-lg p-0.5"
             >
-              <div className="w-9 h-9 rounded-xl bg-teal-600/90 text-white flex items-center justify-center font-bold shadow-xs shrink-0">
-                <Brain className="h-5 w-5" aria-hidden="true" />
+              <div className="w-9 h-9 flex items-center justify-center shrink-0">
+                <Icon3D name="brain" size="md" className="w-9 h-9 object-contain drop-shadow-sm" />
               </div>
               <div className="flex flex-col text-start">
                 <span className="text-xl font-black text-white tracking-tight group-hover:text-teal-300 transition-colors">
@@ -57,7 +53,7 @@ export function Footer() {
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-teal-300/90">
-              <Lock className="h-3.5 w-3.5 text-teal-400 shrink-0" aria-hidden="true" />
+              <Icon3D name="shield" size="xs" className="w-4 h-4 shrink-0" />
               <span>{t('footer.privacyGuarantee')}</span>
             </div>
           </div>
@@ -141,13 +137,16 @@ export function Footer() {
               {t('footer.urgentSupport')}
             </h3>
             <div className="space-y-3 text-xs sm:text-sm text-slate-400">
-              <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-                <span className="text-[11px] font-bold text-teal-400 block">
-                  {t('footer.emergencyHotline')}
-                </span>
-                <span className="text-sm font-black text-white tracking-wide block">
-                  {t('footer.emergencyHotlineNum')}
-                </span>
+              <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-3">
+                <Icon3D name="lifebuoy" size="md" className="w-9 h-9 shrink-0 drop-shadow-sm" />
+                <div className="space-y-0.5">
+                  <span className="text-[11px] font-bold text-teal-400 block">
+                    {t('footer.emergencyHotline')}
+                  </span>
+                  <span className="text-sm font-black text-white tracking-wide block">
+                    {t('footer.emergencyHotlineNum')}
+                  </span>
+                </div>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
                 {t('footer.supportAdvice')}

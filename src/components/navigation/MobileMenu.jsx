@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Brain, ShieldAlert, ArrowLeft, Languages } from 'lucide-react';
+import { X, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { cn } from '@/lib/utils';
 import { backdropFade, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
@@ -72,8 +73,8 @@ export function MobileMenu({ open, onClose, items, currentPath, onSelectLanguage
             <div>
               <div className="flex items-center justify-between pb-6 border-b border-surface-border">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-xs shrink-0">
-                    <Brain className="h-5 w-5" aria-hidden="true" />
+                  <div className="w-9 h-9 flex items-center justify-center shrink-0">
+                    <Icon3D name="brain" size="md" className="w-9 h-9 object-contain drop-shadow-sm" />
                   </div>
                   <div>
                     <span className="text-lg font-black text-text-primary">{t('common.brandName')}</span>
@@ -95,7 +96,7 @@ export function MobileMenu({ open, onClose, items, currentPath, onSelectLanguage
               <div className="pt-4 pb-2">
                 <div className="flex items-center justify-between p-1.5 rounded-xl border border-surface-border bg-slate-50">
                   <div className="flex items-center gap-2 text-xs font-bold text-text-primary px-2">
-                    <Languages className="h-4 w-4 text-teal-600" aria-hidden="true" />
+                    <Icon3D name="language" size="xs" className="w-5 h-5 shrink-0" />
                     <span>{t('common.language')}</span>
                   </div>
                   <div className="inline-flex items-center p-0.5 rounded-lg bg-surface-card border border-surface-border text-xs font-bold">
@@ -169,7 +170,7 @@ export function MobileMenu({ open, onClose, items, currentPath, onSelectLanguage
               </Link>
 
               <div className="p-3 rounded-xl bg-teal-50/70 border border-teal-100 flex items-start gap-2.5 text-xs text-teal-900 leading-relaxed">
-                <ShieldAlert className="h-4 w-4 shrink-0 mt-0.5 text-teal-700" aria-hidden="true" />
+                <Icon3D name="shield" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
                 <span>{t('common.disclaimerShort')}</span>
               </div>
             </div>

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Progress } from '@/components/ui/Progress';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { AssessmentSummaryCard } from './AssessmentSummaryCard';
 import { buildAdaptiveQuestionQueue, resolveQuestionText } from '../data/adaptiveQuestionBank';
 import { fadeUp, safeMotion } from '@/lib/motion';
@@ -134,8 +135,9 @@ export function AdaptiveAssessmentUI({
           {/* Header & Meta */}
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-2">
-              <Badge variant="primary" size="md">
-                {t('assessment.adaptive.badge')}
+              <Badge variant="primary" size="md" className="gap-2">
+                <Icon3D name="gauge" size="xs" className="w-4 h-4 shrink-0" />
+                <span>{t('assessment.adaptive.badge')}</span>
               </Badge>
               <span className="text-xs font-bold text-text-secondary bg-slate-100 px-2.5 py-1 rounded-full">
                 {t('assessment.adaptive.questionCounter', {

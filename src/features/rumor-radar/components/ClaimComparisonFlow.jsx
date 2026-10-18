@@ -1,4 +1,4 @@
-import { MessageSquareQuote, Layers, CheckCircle2, ArrowLeft, ShieldCheck } from 'lucide-react';
+import { MessageSquareQuote, Layers, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { useTranslation } from '@/context/LanguageContext';

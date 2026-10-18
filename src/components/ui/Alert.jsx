@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { cva } from 'class-variance-authority';
-import {
-  Info,
-  AlertTriangle,
-  CheckCircle2,
-  AlertCircle,
-  ShieldAlert,
-  X,
-} from 'lucide-react';
+import { X } from 'lucide-react';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { cn } from '@/lib/utils';
 
 const alertVariants = cva(
@@ -28,12 +22,12 @@ const alertVariants = cva(
   }
 );
 
-const defaultIcons = {
-  info: Info,
-  warning: AlertTriangle,
-  success: CheckCircle2,
-  error: AlertCircle,
-  disclaimer: ShieldAlert,
+const default3DIcons = {
+  info: 'lightbulb',
+  warning: 'lifebuoy',
+  success: 'care',
+  error: 'lifebuoy',
+  disclaimer: 'shield',
 };
 
 /**
@@ -61,7 +55,7 @@ export function Alert({
 
   if (dismissed) return null;
 
-  const IconComponent = defaultIcons[variant] || Info;
+  const iconName = default3DIcons[variant] || 'lightbulb';
 
   const handleDismiss = () => {
     setDismissed(true);
@@ -74,8 +68,8 @@ export function Alert({
       className={cn(alertVariants({ variant }), className)}
       {...rest}
     >
-      <div className="shrink-0 pt-0.5 text-current">
-        {icon || <IconComponent className="h-5 w-5" aria-hidden="true" />}
+      <div className="shrink-0 pt-0.5">
+        {icon || <Icon3D name={iconName} size="md" className="w-6 h-6 object-contain drop-shadow-xs" />}
       </div>
       <div className="flex-1 space-y-1">
         {title && <h5 className="font-bold text-base leading-snug">{title}</h5>}

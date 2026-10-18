@@ -1,34 +1,27 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  Brain,
-  ShieldCheck,
-  Sparkles,
   ArrowLeft,
-  Lock,
-  HeartHandshake,
-  MessageSquareQuote,
-  Activity,
-  Compass,
   CheckCircle2,
-  AlertCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
+import { Icon3D } from '@/components/ui/Icon3D';
+import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
 
 export function HomePage() {
   const { t } = useTranslation();
 
-  const pipelineIcons = [
-    MessageSquareQuote,
-    Brain,
-    Activity,
-    Compass,
-    HeartHandshake,
+  const pipelineIconNames = [
+    'chat',
+    'brain',
+    'analytics',
+    'location',
+    'care',
   ];
 
   const pipelineSteps = t('home.pipeline.steps') || [];
@@ -36,85 +29,98 @@ export function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* ============================================================
-          Hero Section
+          Hero Section (Enhanced with Three.js 3D Linguistic Network)
           ============================================================ */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-teal-50/70 via-surface-bg to-surface-bg pt-12 pb-20 sm:pt-20 sm:pb-28 border-b border-surface-border/60">
+      <section className="relative overflow-hidden bg-gradient-to-b from-teal-50/70 via-surface-bg to-surface-bg pt-10 pb-16 sm:pt-16 sm:pb-24 border-b border-surface-border/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            {/* Top pill badge */}
-            <motion.div {...safeMotion(fadeUp)} className="inline-flex justify-center">
-              <Badge variant="primary" size="md" className="gap-2 py-1 px-4 shadow-xs">
-                <Sparkles className="h-4 w-4 text-teal-600 shrink-0" aria-hidden="true" />
-                <span>{t('home.hero.badge')}</span>
-              </Badge>
-            </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Hero Main Content (7 cols on desktop) */}
+            <div className="lg:col-span-7 text-center lg:text-start space-y-6">
+              {/* Top pill badge */}
+              <motion.div {...safeMotion(fadeUp)} className="inline-flex justify-center lg:justify-start">
+                <Badge variant="primary" size="md" className="gap-2 py-1 px-4 shadow-xs">
+                  <Icon3D name="lightbulb" size="xs" className="w-4 h-4 shrink-0" />
+                  <span>{t('home.hero.badge')}</span>
+                </Badge>
+              </motion.div>
 
-            {/* Main Headline */}
-            <motion.h1
-              {...safeMotion(fadeUp)}
-              className="text-3xl sm:text-5xl lg:text-6xl font-black text-text-primary tracking-tight leading-[1.25]"
-            >
-              {t('home.hero.titleStart')}{' '}
-              <span className="text-teal-700 underline decoration-teal-300 decoration-wavy decoration-2 underline-offset-8">
-                {t('home.hero.titleHighlight')}
-              </span>
-            </motion.h1>
+              {/* Main Headline */}
+              <motion.h1
+                {...safeMotion(fadeUp)}
+                className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-text-primary tracking-tight leading-[1.25]"
+              >
+                {t('home.hero.titleStart')}{' '}
+                <span className="text-teal-700 underline decoration-teal-300 decoration-wavy decoration-2 underline-offset-8">
+                  {t('home.hero.titleHighlight')}
+                </span>
+              </motion.h1>
 
-            {/* Subtitle */}
-            <motion.p
-              {...safeMotion(fadeUp)}
-              className="text-base sm:text-xl text-text-secondary leading-relaxed font-normal max-w-2xl mx-auto"
-            >
-              {t('home.hero.subtitle')}
-            </motion.p>
+              {/* Subtitle */}
+              <motion.p
+                {...safeMotion(fadeUp)}
+                className="text-base sm:text-lg lg:text-xl text-text-secondary leading-relaxed font-normal max-w-2xl mx-auto lg:mx-0"
+              >
+                {t('home.hero.subtitle')}
+              </motion.p>
 
-            {/* Mandatory Non-Medical Disclaimer Box */}
-            <motion.div {...safeMotion(fadeUp)} className="text-start max-w-xl mx-auto pt-2">
-              <Alert variant="disclaimer">
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-teal-900">{t('home.hero.disclaimerLabel')}</span>
-                  <span className="text-xs text-teal-950 leading-relaxed">
-                    {t('home.hero.disclaimerBody')}
-                  </span>
-                </div>
-              </Alert>
-            </motion.div>
+              {/* Mandatory Non-Medical Disclaimer Box */}
+              <motion.div {...safeMotion(fadeUp)} className="text-start max-w-xl mx-auto lg:mx-0 pt-1">
+                <Alert variant="disclaimer">
+                  <div className="flex flex-col gap-1">
+                    <span className="font-bold text-teal-900">{t('home.hero.disclaimerLabel')}</span>
+                    <span className="text-xs text-teal-950 leading-relaxed">
+                      {t('home.hero.disclaimerBody')}
+                    </span>
+                  </div>
+                </Alert>
+              </motion.div>
 
-            {/* Hero CTAs */}
+              {/* Hero CTAs */}
+              <motion.div
+                {...safeMotion(fadeUp)}
+                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
+              >
+                <Link to="/assessment" className="w-full sm:w-auto">
+                  <Button variant="primary" size="lg" className="w-full sm:w-auto shadow-md shadow-teal-700/20 text-lg px-8 gap-2">
+                    <span>{t('home.hero.ctaStart')}</span>
+                    <ArrowLeft className="h-5 w-5 rtl:rotate-0 ltr:rotate-180" aria-hidden="true" />
+                  </Button>
+                </Link>
+                <Link to="/about" className="w-full sm:w-auto">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-7">
+                    <span>{t('home.hero.ctaLearn')}</span>
+                  </Button>
+                </Link>
+              </motion.div>
+
+              {/* Privacy trust guarantees */}
+              <motion.div
+                {...safeMotion(fadeUp)}
+                className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-text-secondary"
+              >
+                <span className="flex items-center gap-1.5">
+                  <Icon3D name="shield" size="xs" className="w-4 h-4 shrink-0" />
+                  <span>{t('home.hero.trustNoAccount')}</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" aria-hidden="true" />
+                  <span>{t('home.hero.trustNoStorage')}</span>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Icon3D name="care" size="xs" className="w-4 h-4 shrink-0" />
+                  <span>{t('home.hero.trustSupportive')}</span>
+                </span>
+              </motion.div>
+            </div>
+
+            {/* 3D Neural Network (Frameless floating cluster, standalone) */}
             <motion.div
               {...safeMotion(fadeUp)}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+              className="lg:col-span-5 w-full flex items-center justify-center pt-2 lg:pt-0"
             >
-              <Link to="/assessment" className="w-full sm:w-auto">
-                <Button variant="primary" size="lg" className="w-full sm:w-auto shadow-md shadow-teal-700/20 text-lg px-8 gap-2">
-                  <span>{t('home.hero.ctaStart')}</span>
-                  <ArrowLeft className="h-5 w-5 rtl:rotate-0 ltr:rotate-180" aria-hidden="true" />
-                </Button>
-              </Link>
-              <Link to="/about" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-7">
-                  <span>{t('home.hero.ctaLearn')}</span>
-                </Button>
-              </Link>
-            </motion.div>
-
-            {/* Privacy trust guarantees */}
-            <motion.div
-              {...safeMotion(fadeUp)}
-              className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-text-secondary"
-            >
-              <span className="flex items-center gap-1.5">
-                <Lock className="h-4 w-4 text-teal-600 shrink-0" aria-hidden="true" />
-                <span>{t('home.hero.trustNoAccount')}</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                <span>{t('home.hero.trustNoStorage')}</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <HeartHandshake className="h-4 w-4 text-teal-600 shrink-0" aria-hidden="true" />
-                <span>{t('home.hero.trustSupportive')}</span>
-              </span>
+              <div className="relative w-full h-[320px] sm:h-[400px] lg:h-[480px] flex items-center justify-center pointer-events-auto">
+                <SalamNeuralNetwork state="idle" className="w-full h-full" />
+              </div>
             </motion.div>
           </div>
         </div>
@@ -138,7 +144,7 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {Array.isArray(pipelineSteps) &&
               pipelineSteps.map((item, idx) => {
-                const Icon = pipelineIcons[idx] || MessageSquareQuote;
+                const iconName = pipelineIconNames[idx] || 'chat';
                 return (
                   <Card
                     key={idx}
@@ -150,8 +156,8 @@ export function HomePage() {
                       <span className="text-xs font-black text-teal-700 bg-teal-50 px-2.5 py-1 rounded-md">
                         {item.step}
                       </span>
-                      <div className="w-9 h-9 rounded-xl bg-slate-100 group-hover:bg-teal-100 text-slate-700 group-hover:text-teal-800 flex items-center justify-center transition-colors shrink-0">
-                        <Icon className="h-5 w-5" aria-hidden="true" />
+                      <div className="w-10 h-10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <Icon3D name={iconName} size="md" className="w-10 h-10 object-contain drop-shadow-xs" />
                       </div>
                     </div>
                     <h3 className="text-base font-bold text-text-primary mb-2">
@@ -224,8 +230,8 @@ export function HomePage() {
             {/* Visual reassurance card */}
             <div className="p-8 rounded-[var(--radius-2xl)] bg-surface-card border border-surface-border shadow-lg space-y-6">
               <div className="flex items-center gap-3 pb-4 border-b border-surface-border">
-                <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold shrink-0">
-                  <ShieldCheck className="h-6 w-6" aria-hidden="true" />
+                <div className="w-11 h-11 flex items-center justify-center font-bold shrink-0">
+                  <Icon3D name="shield" size="lg" className="w-11 h-11 object-contain drop-shadow-sm" />
                 </div>
                 <div>
                   <h3 className="font-bold text-base text-text-primary">{t('home.pillars.charterTitle')}</h3>
@@ -235,19 +241,19 @@ export function HomePage() {
 
               <div className="space-y-4 text-xs text-text-secondary leading-relaxed">
                 <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                  <Lock className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" aria-hidden="true" />
+                  <Icon3D name="shield" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
                   <div>
                     <strong>{t('home.pillars.rule1Title')}</strong> {t('home.pillars.rule1Desc')}
                   </div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                  <AlertCircle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+                  <Icon3D name="clipboard" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
                   <div>
                     <strong>{t('home.pillars.rule2Title')}</strong> {t('home.pillars.rule2Desc')}
                   </div>
                 </div>
                 <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
-                  <HeartHandshake className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" aria-hidden="true" />
+                  <Icon3D name="care" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
                   <div>
                     <strong>{t('home.pillars.rule3Title')}</strong> {t('home.pillars.rule3Desc')}
                   </div>

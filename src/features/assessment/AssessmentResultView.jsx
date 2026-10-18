@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   RotateCcw,
-  Sparkles,
-  HeartHandshake,
   CheckCircle,
   Copy,
   Check,
@@ -13,12 +11,14 @@ import {
   Edit3,
   HelpCircle,
   BookOpen,
+  HeartHandshake,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
 import { Progress } from '@/components/ui/Progress';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
 
@@ -242,16 +242,25 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
             className={`border-2 shadow-md ${levelBgColors[result.level] || 'bg-surface-card'}`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-surface-border/50">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge variant={levelBadgeVariants[result.level]} size="md">
-                    {levelBadgeText[result.level]}
-                  </Badge>
-                  <span className="text-xs text-text-muted">{t('assessment.results.exploratoryBadge')}</span>
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 flex items-center justify-center shrink-0">
+                  <Icon3D
+                    name={result.level === 'elevated' ? 'lifebuoy' : result.level === 'attention' ? 'gauge' : 'care'}
+                    size="xl"
+                    className="w-14 h-14 object-contain drop-shadow-md"
+                  />
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-black text-text-primary leading-snug">
-                  {displayTitle}
-                </h2>
+                <div>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Badge variant={levelBadgeVariants[result.level]} size="md">
+                      {levelBadgeText[result.level]}
+                    </Badge>
+                    <span className="text-xs text-text-muted">{t('assessment.results.exploratoryBadge')}</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-text-primary leading-snug">
+                    {displayTitle}
+                  </h2>
+                </div>
               </div>
 
               <div className="flex items-center gap-2">
@@ -325,8 +334,8 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
                 {t('assessment.results.xaiFactorsSubtitle')}
               </p>
             </div>
-            <Badge variant="primary" size="sm">
-              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            <Badge variant="primary" size="sm" className="gap-1.5">
+              <Icon3D name="lightbulb" size="xs" className="w-3.5 h-3.5 shrink-0" />
               <span>XAI</span>
             </Badge>
           </div>
@@ -414,7 +423,7 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="space-y-2 max-w-xl">
               <div className="flex items-center gap-2 text-teal-400 font-bold text-sm">
-                <HeartHandshake className="h-5 w-5" aria-hidden="true" />
+                <Icon3D name="care" size="xs" className="w-5 h-5 shrink-0" />
                 <span>
                   {language === 'en'
                     ? 'Need to speak with a licensed specialist?'

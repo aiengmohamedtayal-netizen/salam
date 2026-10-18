@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Brain, Menu, ArrowLeft, Languages } from 'lucide-react';
+import { Menu, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { cn } from '@/lib/utils';
 import { MobileMenu } from './MobileMenu';
 import { useTranslation } from '@/context/LanguageContext';
@@ -9,6 +10,8 @@ import { useTranslation } from '@/context/LanguageContext';
 export const navItems = [
   { path: '/', labelKey: 'nav.home' },
   { path: '/assessment', labelKey: 'nav.assessment' },
+  { path: '/multimodal', labelKey: 'nav.multimodal' },
+  { path: '/voice', labelKey: 'nav.voice' },
   { path: '/radar', labelKey: 'nav.radar' },
   { path: '/about', labelKey: 'nav.about' },
   { path: '/awareness', labelKey: 'nav.awareness' },
@@ -62,8 +65,8 @@ export function Navbar() {
             to={getLocalizedPath('/')}
             className="flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-teal-600 rounded-lg p-1"
           >
-            <div className="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center shadow-sm shadow-teal-700/20 group-hover:bg-teal-700 transition-colors shrink-0">
-              <Brain className="h-5 w-5" aria-hidden="true" />
+            <div className="w-10 h-10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <Icon3D name="brain" size="lg" className="w-10 h-10 object-contain drop-shadow-md" />
             </div>
             <div className="flex flex-col text-start">
               <span className="text-xl font-extrabold tracking-tight text-text-primary group-hover:text-teal-700 transition-colors">
@@ -101,11 +104,13 @@ export function Navbar() {
           {/* Actions: Segmented Language Switcher, Start Assessment CTA, Mobile Menu */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Segmented Visible Active Language Switcher (العربية | English) */}
-            <div
-              className="inline-flex items-center p-0.5 rounded-lg border border-surface-border bg-surface-muted/70 text-xs font-bold"
-              role="group"
-              aria-label={t('common.language')}
-            >
+            <div className="flex items-center gap-1.5">
+              <Icon3D name="language" size="sm" className="w-6 h-6 shrink-0 hidden sm:inline-block drop-shadow-xs" />
+              <div
+                className="inline-flex items-center p-0.5 rounded-lg border border-surface-border bg-surface-muted/70 text-xs font-bold"
+                role="group"
+                aria-label={t('common.language')}
+              >
               <button
                 type="button"
                 onClick={() => handleSelectLanguage('ar')}
@@ -136,6 +141,7 @@ export function Navbar() {
                 English
               </button>
             </div>
+          </div>
 
             <Link to={getLocalizedPath('/assessment')} className="hidden sm:inline-flex">
               <Button variant="primary" size="sm" className="shadow-xs gap-1.5">

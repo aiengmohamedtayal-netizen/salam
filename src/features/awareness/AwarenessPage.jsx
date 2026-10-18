@@ -1,25 +1,15 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  BookOpen,
-  HelpCircle,
-  Sparkles,
-  Heart,
-  Clock,
-  ArrowLeft,
-  CheckCircle2,
-  Wind,
-} from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Dialog } from '@/components/ui/Dialog';
 import { Accordion } from '@/components/ui/Accordion';
+import { Icon3D } from '@/components/ui/Icon3D';
 import {
   AWARENESS_ARTICLES,
   CULTURAL_MYTHS_FACTS,
 } from '@/data/awarenessContent';
-import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
 
 export function AwarenessPage() {
@@ -70,13 +60,16 @@ export function AwarenessPage() {
         {/* Section 1: Awareness Articles Grid */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-text-primary">
-                {t('awareness.articlesTitle')}
-              </h2>
-              <p className="text-xs text-text-secondary mt-0.5">
-                {t('awareness.articlesSubtitle')}
-              </p>
+            <div className="flex items-center gap-2.5">
+              <Icon3D name="books" size="md" className="w-8 h-8 shrink-0 drop-shadow-xs" />
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-text-primary">
+                  {t('awareness.articlesTitle')}
+                </h2>
+                <p className="text-xs text-text-secondary mt-0.5">
+                  {t('awareness.articlesSubtitle')}
+                </p>
+              </div>
             </div>
             <Badge variant="info">{t('awareness.reviewedBadge')}</Badge>
           </div>
@@ -134,13 +127,16 @@ export function AwarenessPage() {
         {/* Section 2: Myths vs Facts in Arabic Culture */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-text-primary">
-                {t('awareness.mythsTitle')}
-              </h2>
-              <p className="text-xs text-text-secondary mt-0.5">
-                {t('awareness.mythsSubtitle')}
-              </p>
+            <div className="flex items-center gap-2.5">
+              <Icon3D name="lightbulb" size="md" className="w-8 h-8 shrink-0 drop-shadow-xs" />
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-text-primary">
+                  {t('awareness.mythsTitle')}
+                </h2>
+                <p className="text-xs text-text-secondary mt-0.5">
+                  {t('awareness.mythsSubtitle')}
+                </p>
+              </div>
             </div>
             <Badge variant="attention">{t('awareness.destigmaBadge')}</Badge>
           </div>
@@ -151,8 +147,8 @@ export function AwarenessPage() {
         {/* Section 3: Grounding & Breathing Self-Care Widget */}
         <Card variant="default" padding="lg" className="bg-teal-900 text-white space-y-6">
           <div className="flex items-center gap-3 pb-4 border-b border-teal-800">
-            <div className="w-10 h-10 rounded-xl bg-teal-500 text-slate-950 flex items-center justify-center font-bold">
-              <Wind className="h-5 w-5" aria-hidden="true" />
+            <div className="w-12 h-12 flex items-center justify-center font-bold shrink-0">
+              <Icon3D name="meditation" size="lg" className="w-12 h-12 object-contain drop-shadow-md" />
             </div>
             <div>
               <h3 className="text-lg font-bold">{t('awareness.breathingTitle')}</h3>

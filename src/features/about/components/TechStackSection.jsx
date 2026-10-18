@@ -1,16 +1,6 @@
-import {
-  Layers,
-  Layout,
-  Server,
-  Brain,
-  Eye,
-  CheckCircle2,
-  Container,
-  Cpu,
-  Terminal,
-} from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { Icon3D } from '@/components/ui/Icon3D';
 import { technicalStack } from '../data/projectData';
 import { useTranslation } from '@/context/LanguageContext';
 
@@ -22,16 +12,16 @@ export function TechStackSection() {
   const { t, language } = useTranslation();
   const isEn = language === 'en';
 
-  const getComponentIcon = (index) => {
+  const getComponentIcon3D = (index) => {
     switch (index) {
-      case 0: return Layout;
-      case 1: return Server;
-      case 2: return Terminal;
-      case 3: return Brain;
-      case 4: return Eye;
-      case 5: return CheckCircle2;
-      case 6: return Container;
-      default: return Layers;
+      case 0: return 'robot';      // Frontend UI
+      case 1: return 'shield';     // Backend API
+      case 2: return 'notepad';    // Data Pipeline / NLP
+      case 3: return 'brain';      // Core ML / LLM
+      case 4: return 'analytics';  // XAI & Interpretability
+      case 5: return 'clipboard';  // Validation & Evaluation
+      case 6: return 'location';   // Cloud & Deployment
+      default: return 'robot';
     }
   };
 
@@ -58,7 +48,6 @@ export function TechStackSection() {
       {/* Tech Stack Matrix / Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {technicalStack.map((item, idx) => {
-          const Icon = getComponentIcon(idx);
           const isAi = idx === 2 || idx === 3;
 
           return (
@@ -73,8 +62,8 @@ export function TechStackSection() {
               <div className="space-y-3">
                 {/* Header: Role Badge & Icon */}
                 <div className="flex items-center justify-between pb-2 border-b border-surface-border">
-                  <div className="w-8 h-8 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center font-bold">
-                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  <div className="w-10 h-10 flex items-center justify-center shrink-0">
+                    <Icon3D name={getComponentIcon3D(idx)} size="md" className="w-10 h-10 object-contain drop-shadow-xs" />
                   </div>
                   <Badge variant={isAi ? 'primary' : 'default'} size="sm">
                     {isEn ? item.roleEn || item.role : item.role}
