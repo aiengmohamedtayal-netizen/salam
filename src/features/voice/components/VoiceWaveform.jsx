@@ -19,13 +19,6 @@ export function VoiceWaveform({ analyser, isRecording, className }) {
   const animationFrameRef = useRef(null);
 
   useEffect(() => {
-    if (!isRecording || prefersReducedMotion()) {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      return;
-    }
-
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -40,16 +33,26 @@ export function VoiceWaveform({ analyser, isRecording, className }) {
     const bufferLength = analyser ? analyser.frequencyBinCount : 32;
     const dataArray = new Uint8Array(bufferLength);
 
-    const draw = () => {
-      animationFrameRef.current = requestAnimationFrame(draw);
+    const reducedMotion = prefersReducedMotion();
+    const shouldAnimate = isRecording && !reducedMotion;
+    let isVisible = true;
+    let isActive = true;
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, 'rgba(161, 105, 207, 0.9)');
+    gradient.addColorStop(1, 'rgba(112, 64, 154, 0.4)');
 
-      if (analyser) {
+    const draw = () => {
+      if (!isActive || !isVisible) return;
+
+      if (shouldAnimate && analyser) {
         analyser.getByteFrequencyData(dataArray);
-      } else {
+      } else if (shouldAnimate) {
         // Fallback subtle ambient animation if analyser is unavailable
         for (let i = 0; i < bufferLength; i++) {
-          dataArray[i] = Math.floor(Math.sin(Date.now() / 200 + i * 0.3) * 40 + 60);
+          dataArray[i] = Math.floor(Math.sin(performance.now() / 200 + i * 0.3) * 40 + 60);
         }
+      } else {
+        dataArray.fill(44);
       }
 
       ctx.clearRect(0, 0, width, height);
@@ -66,11 +69,6 @@ export function VoiceWaveform({ analyser, isRecording, className }) {
         const x = i * (barWidth + 3) + 2;
         const y = (height - barHeight) / 2;
 
-        // Gradient styling matching AMAL teal palette
-        const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
-        gradient.addColorStop(0, 'rgba(13, 148, 136, 0.9)'); // teal-600
-        gradient.addColorStop(1, 'rgba(161, 105, 207, 0.4)');
-
         ctx.fillStyle = gradient;
         ctx.beginPath();
         if (ctx.roundRect) {
@@ -80,13 +78,35 @@ export function VoiceWaveform({ analyser, isRecording, className }) {
         }
         ctx.fill();
       }
+
+      if (shouldAnimate && isVisible) {
+        animationFrameRef.current = requestAnimationFrame(draw);
+      }
     };
 
     draw();
 
+    const visibilityObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver(([entry]) => {
+          isVisible = entry.isIntersecting;
+          if (!isVisible && animationFrameRef.current !== null) {
+            cancelAnimationFrame(animationFrameRef.current);
+            animationFrameRef.current = null;
+          } else if (isVisible && shouldAnimate && animationFrameRef.current === null) {
+            draw();
+          } else if (isVisible && !shouldAnimate) {
+            draw();
+          }
+        }, { rootMargin: '80px' })
+      : null;
+    visibilityObserver?.observe(canvas);
+
     return () => {
-      if (animationFrameRef.current) {
+      isActive = false;
+      visibilityObserver?.disconnect();
+      if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
     };
   }, [analyser, isRecording]);

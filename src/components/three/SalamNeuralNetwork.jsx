@@ -251,10 +251,18 @@ export function SalamNeuralNetwork({
     // 5. Animation Loop
     let animationFrameId = null;
     let isVisible = true;
+    let lastFrameTime = 0;
+    const frameInterval = 1000 / 30;
     const startTime = performance.now();
     const reducedMotion = prefersReducedMotion();
 
-    const animate = () => {
+    const animate = (frameTime = performance.now()) => {
+      if (!reducedMotion && frameTime - lastFrameTime < frameInterval) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+      lastFrameTime = frameTime;
+
       const elapsedTime = (performance.now() - startTime) * 0.001;
       const currentState = stateRef.current;
 
@@ -385,6 +393,7 @@ export function SalamNeuralNetwork({
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
           } else if (isVisible && !reducedMotion && animationFrameId === null) {
+            lastFrameTime = 0;
             animationFrameId = requestAnimationFrame(animate);
           } else if (isVisible && reducedMotion) {
             renderer.render(scene, camera);
