@@ -3,6 +3,7 @@ import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, ArrowLeft, Sun, Moon, Settings2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Icon3D } from '@/components/ui/Icon3D';
+import { BrandMark } from '@/components/ui/BrandMark';
 import { cn } from '@/lib/utils';
 import { MobileMenu } from './MobileMenu';
 import { useTranslation } from '@/context/LanguageContext';
@@ -84,7 +85,7 @@ export function Navbar() {
             className="flex items-center gap-2.5 sm:gap-3 shrink-0 group focus-visible:outline-2 focus-visible:outline-teal-600 rounded-lg p-1"
           >
             <div className="w-10 h-10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-              <Icon3D name="brain" size="lg" className="w-10 h-10 object-contain drop-shadow-md" />
+              <BrandMark className="w-10 h-10" />
             </div>
             <div className="flex flex-col text-start shrink-0 min-w-0">
               <span className="text-xl font-extrabold tracking-tight text-text-primary group-hover:text-teal-700 transition-colors leading-none">

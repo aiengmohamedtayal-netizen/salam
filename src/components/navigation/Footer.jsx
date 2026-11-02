@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon3D } from '@/components/ui/Icon3D';
+import { BrandMark } from '@/components/ui/BrandMark';
 import { useTranslation } from '@/context/LanguageContext';
 
 /**
@@ -36,7 +37,7 @@ export function Footer() {
               className="inline-flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-teal-500 rounded-lg p-0.5"
             >
               <div className="w-9 h-9 flex items-center justify-center shrink-0">
-                <Icon3D name="brain" size="md" className="w-9 h-9 object-contain drop-shadow-sm" />
+                <BrandMark className="w-9 h-9 text-primary-300" />
               </div>
               <div className="flex flex-col text-start">
                 <span className="text-xl font-black text-white tracking-tight group-hover:text-teal-300 transition-colors">

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Icon3D } from '@/components/ui/Icon3D';
+import { BrandMark } from '@/components/ui/BrandMark';
 import { useTranslation } from '@/context/LanguageContext';
 
 /**
@@ -21,12 +21,8 @@ export function AuthHeader({ title, subtitle }) {
         className="inline-flex items-center gap-3 group focus-visible:outline-2 focus-visible:outline-primary-500 rounded-xl p-1.5 transition-transform hover:scale-[1.02]"
         aria-label={t('common.brandName')}
       >
-        <div className="w-12 h-12 rounded-xl bg-teal-50/80 border border-teal-100 flex items-center justify-center shrink-0 shadow-xs group-hover:border-teal-200 transition-colors">
-          <Icon3D
-            name="brain"
-            size="lg"
-            className="w-9 h-9 object-contain drop-shadow-sm group-hover:scale-105 transition-transform"
-          />
+        <div className="w-12 h-12 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
+          <BrandMark className="w-12 h-12" />
         </div>
         <div className="flex flex-col text-start">
           <span className="text-2xl font-black tracking-tight text-text-primary group-hover:text-primary-700 transition-colors">

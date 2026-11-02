@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowLeft, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Icon3D } from '@/components/ui/Icon3D';
+import { BrandMark } from '@/components/ui/BrandMark';
 import { cn } from '@/lib/utils';
 import { backdropFade, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
@@ -76,7 +77,7 @@ export function MobileMenu({ open, onClose, items, currentPath, onSelectLanguage
               <div className="flex items-center justify-between pb-6 border-b border-surface-border">
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 flex items-center justify-center shrink-0">
-                    <Icon3D name="brain" size="md" className="w-9 h-9 object-contain drop-shadow-sm" />
+                    <BrandMark className="w-9 h-9" />
                   </div>
                   <div>
                     <span className="text-lg font-black text-text-primary">{t('common.brandName')}</span>
