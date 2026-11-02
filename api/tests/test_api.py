@@ -1,6 +1,10 @@
 import json
 from pathlib import Path
 
+import pytest
+from pydantic import ValidationError
+
+from app.config import Settings
 from app.main import app
 
 
@@ -53,4 +57,25 @@ def test_short_text_is_abstained_without_an_estimate(client):
 def test_checked_in_openapi_contract_matches_application():
     contract_path = Path(__file__).resolve().parents[2] / "contracts" / "openapi.json"
     assert json.loads(contract_path.read_text(encoding="utf-8")) == app.openapi()
+
+
+def test_production_configuration_rejects_http_origins():
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, env="production")
+
+
+def test_environment_must_be_selected(monkeypatch):
+    monkeypatch.delenv("AMAL_ENV", raising=False)
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None)
+
+
+def test_production_configuration_accepts_https_origins():
+    settings = Settings(
+        _env_file=None,
+        env="production",
+        allowed_origins="https://amal.example",
+        frontend_url="https://amal.example",
+    )
+    assert settings.env == "production"
 

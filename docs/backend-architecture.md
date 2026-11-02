@@ -44,4 +44,4 @@ No training dataset, trained model weights, evaluation protocol results, manifes
 
 ## Run and deploy
 
-See [api/README.md](../api/README.md). Run Uvicorn on port 8000 and Vite on port 5173. For deployment, configure allowed origins, a durable database path, HTTPS, and persistent disk. Do not use `/health` as model readiness; check `/ready`.
+See [api/README.md](../api/README.md). Run Uvicorn on port 8000 and Vite on port 5173. Production requires an explicit `AMAL_ENV=production`, HTTPS frontend and allowed origins, a dedicated durable database directory, and encrypted persistent storage and backups for sensitive assessment text. On POSIX systems the API applies owner-only permissions to its SQLite data directory and database file. Use a shared gateway rate limit with multiple workers or replicas. Do not use `/health` as model readiness; check `/ready`.

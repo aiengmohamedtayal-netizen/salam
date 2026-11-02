@@ -41,7 +41,9 @@ Errors use `{ "error": { "code", "message", "request_id" } }`. Request bodies ar
 
 ## Environment
 
-See `.env.example` for application settings. Google sign-in is enabled only when `AMAL_GOOGLE_CLIENT_ID`, `AMAL_GOOGLE_CLIENT_SECRET`, and `AMAL_GOOGLE_REDIRECT_URI` are all set. Create an OAuth client of type **Web application** and register the redirect URI exactly as configured. Keep the client secret on the API server. The flow uses a short-lived, HTTP-only state and nonce cookie, verifies the Google ID token on the server, and requires a verified email. `AMAL_FRONTEND_URL` is the post-login redirect origin. Set the database path to durable storage in deployments. Use HTTPS in production; session cookies are `HttpOnly`, `SameSite=Strict`, and `Secure` in production. Rate limits are process-local and should be paired with a deployment-level limit if multiple workers are introduced.
+See `.env.example` for local development. `AMAL_ENV` is required and accepts `development`, `test`, or `production`. Production configuration is rejected unless `AMAL_FRONTEND_URL`, every `AMAL_ALLOWED_ORIGINS` entry, and any configured Google redirect URI use HTTPS. Keep the Google client secret on the API server. The flow uses short-lived, HTTP-only state and nonce cookies, verifies the Google ID token on the server, and requires a verified email. Set `AMAL_DATABASE_PATH` to a dedicated, durable directory in deployments. On POSIX systems the API restricts the database directory to owner-only access and the database file to owner read/write. This is filesystem access control, not encryption at rest; use encrypted persistent storage and encrypted backups for real user data. Session cookies are `HttpOnly`, `SameSite=Strict`, and `Secure` in production. Rate limits use process-local memory; place a shared rate limit at the gateway when running multiple workers or replicas.
+
+The Docker image starts in production mode. Supply `AMAL_ALLOWED_ORIGINS` and `AMAL_FRONTEND_URL` as HTTPS values for the deployed frontend; the service intentionally exits on startup if these are left at their insecure local defaults.
 
 ## Tests
 

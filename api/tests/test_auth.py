@@ -1,7 +1,24 @@
+import os
+import stat
 import sqlite3
 
+import pytest
+
 from app.config import settings
+from app.auth import _connect
 from conftest import register_user
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file modes are not available on Windows")
+def test_database_file_and_directory_are_private_on_posix(tmp_path, monkeypatch):
+    database_path = tmp_path / "private" / "amal.sqlite3"
+    monkeypatch.setattr(settings, "database_path", str(database_path))
+
+    connection = _connect()
+    connection.close()
+
+    assert stat.S_IMODE(database_path.stat().st_mode) == 0o600
+    assert stat.S_IMODE(database_path.parent.stat().st_mode) == 0o700
 
 
 def test_registration_creates_hashed_account_and_session(client):

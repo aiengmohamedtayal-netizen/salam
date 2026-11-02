@@ -1,5 +1,9 @@
+import os
+
 import pytest
 from fastapi.testclient import TestClient
+
+os.environ["AMAL_ENV"] = "test"
 
 from app.config import settings
 from app.main import app, limiter

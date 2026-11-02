@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import os
 import re
 import secrets
 import sqlite3
@@ -25,8 +26,12 @@ GOOGLE_PASSWORD_SENTINEL = "google_account_without_password"
 
 def _connect() -> sqlite3.Connection:
     path = Path(settings.database_path).resolve()
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if os.name == "posix":
+        path.parent.chmod(0o700)
     connection = sqlite3.connect(path, timeout=10)
+    if os.name == "posix":
+        path.chmod(0o600)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     connection.execute("PRAGMA busy_timeout = 10000")
