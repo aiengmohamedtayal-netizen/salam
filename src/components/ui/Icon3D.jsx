@@ -189,7 +189,7 @@ export const Icon3D = forwardRef(function Icon3D(
       decoding="async"
       aria-hidden={!alt}
       className={cn(
-        'inline-block object-contain select-none shrink-0 pointer-events-none transition-transform duration-200',
+        'icon-3d-image inline-block object-contain select-none shrink-0 transition-transform duration-200',
         glow && 'filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)]',
         animated && 'hover:scale-110 active:scale-95 cursor-pointer pointer-events-auto',
         sizeClasses,

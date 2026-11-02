@@ -487,6 +487,19 @@ html[dir="ltr"] p, html[dir="ltr"] span, html[dir="ltr"] label, html[dir="ltr"] 
    Reduced Motion
    ======================================== */
 
+.icon-3d-image {
+  transform: perspective(720px) rotateX(0deg) rotateY(0deg) translateZ(0);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .icon-3d-image:hover {
+    transform: perspective(720px) rotateX(-7deg) rotateY(8deg) translateZ(7px) scale(1.05);
+    filter: drop-shadow(0 10px 12px rgba(88, 50, 120, 0.2));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

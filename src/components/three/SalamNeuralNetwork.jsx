@@ -19,6 +19,17 @@ function isWebGLAvailable() {
   }
 }
 
+function readThemeColor(variableName, fallback) {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue(variableName)
+    .trim();
+  try {
+    return new THREE.Color(value || fallback);
+  } catch {
+    return new THREE.Color(fallback);
+  }
+}
+
 /**
  * AMAL Interactive 3D Neural/NLP Network Component.
  * Abstract representation of linguistic parsing, embeddings, and cognitive indicators.
@@ -83,12 +94,12 @@ export function SalamNeuralNetwork({
     const nodeBasePositions = [];
     const nodeColors = new Float32Array(nodeCount * 3);
 
-    // Color definitions from AMAL Design Tokens
-    const colorTeal = new THREE.Color(0x14b8a6); // primary-500
-    const colorCyan = new THREE.Color(0x2dd4bf); // primary-400
+    // Read the active theme so the scene stays in step with the rest of AMAL.
+    const colorPrimary = readThemeColor('--color-primary-500', '#a169cf');
+    const colorPrimaryLight = readThemeColor('--color-primary-300', '#d1b1e9');
+    const colorPrimaryDark = readThemeColor('--color-primary-700', '#70409a');
     const colorGold = new THREE.Color(0xf59e0b); // attention / gold
-    const colorSafe = new THREE.Color(0x10b981); // safe emerald
-    const colorSlate = new THREE.Color(0x475569); // text-secondary
+    const colorSlate = readThemeColor('--color-text-muted', '#81718f');
 
     for (let i = 0; i < nodeCount; i++) {
       // Distribute organically in a central ellipsoid
@@ -112,13 +123,13 @@ export function SalamNeuralNetwork({
         speed: 0.3 + Math.random() * 0.5,
       });
 
-      // Palette distribution: mostly teal/cyan, occasional gold/safe markers
-      let chosenColor = colorTeal;
+      // Keep most signals in the brand family with a few warm attention points.
+      let chosenColor = colorPrimary;
       const rand = Math.random();
       if (rand > 0.85) chosenColor = colorGold;
-      else if (rand > 0.65) chosenColor = colorCyan;
-      else if (rand > 0.5) chosenColor = colorSafe;
-      else if (rand > 0.35) chosenColor = colorSlate;
+      else if (rand > 0.62) chosenColor = colorPrimaryLight;
+      else if (rand > 0.32) chosenColor = colorPrimaryDark;
+      else if (rand > 0.16) chosenColor = colorSlate;
 
       nodeColors[i * 3] = chosenColor.r;
       nodeColors[i * 3 + 1] = chosenColor.g;
@@ -144,9 +155,9 @@ export function SalamNeuralNetwork({
     if (ctx) {
       const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
       gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.35, 'rgba(161,105,207,0.95)');
-      gradient.addColorStop(0.7, 'rgba(15,118,110,0.8)');
-      gradient.addColorStop(1, 'rgba(15,23,42,0)');
+      gradient.addColorStop(0.35, 'rgba(161,105,207,0.92)');
+      gradient.addColorStop(0.7, 'rgba(88,50,120,0.72)');
+      gradient.addColorStop(1, 'rgba(40,27,52,0)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 32, 32);
     }
@@ -194,13 +205,31 @@ export function SalamNeuralNetwork({
     // Central Core Wireframe Orb
     const coreGeometry = new THREE.IcosahedronGeometry(3.6, 1);
     const coreMaterial = new THREE.MeshBasicMaterial({
-      color: 0x14b8a6,
+      color: colorPrimary,
       wireframe: true,
       transparent: true,
       opacity: 0.12,
     });
     const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
     scene.add(coreMesh);
+
+    const createOrbit = (radius, color, opacity, rotation) => {
+      const geometry = new THREE.TorusGeometry(radius, 0.018, 6, 160);
+      const material = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity,
+        depthWrite: false,
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.rotation.set(...rotation);
+      scene.add(mesh);
+      return { geometry, material, mesh };
+    };
+    const orbits = [
+      createOrbit(7.2, colorPrimaryLight, 0.28, [1.1, 0.2, -0.15]),
+      createOrbit(9.1, colorGold, 0.13, [1.65, -0.45, 0.35]),
+    ];
 
     // 4. Mouse Parallax & Interaction
     let targetRotationX = 0;
@@ -220,7 +249,8 @@ export function SalamNeuralNetwork({
     container.addEventListener('pointermove', handlePointerMove);
 
     // 5. Animation Loop
-    let animationFrameId;
+    let animationFrameId = null;
+    let isVisible = true;
     const startTime = performance.now();
     const reducedMotion = prefersReducedMotion();
 
@@ -259,6 +289,8 @@ export function SalamNeuralNetwork({
 
       coreMesh.rotation.y = -elapsedTime * 0.07 * speedFactor + currentRotationY;
       coreMesh.rotation.x = currentRotationX;
+      orbits[0].mesh.rotation.z = -0.15 + elapsedTime * 0.018 * speedFactor;
+      orbits[1].mesh.rotation.y = -0.45 + elapsedTime * 0.012 * speedFactor;
 
       // Update Node Positions with organic breathing drift
       const posAttr = pointsGeometry.attributes.position;
@@ -311,9 +343,9 @@ export function SalamNeuralNetwork({
             const pulse =
               0.55 + 0.45 * Math.sin(elapsedTime * pulseFreq + (x1 + y1));
 
-            const r = 0.08 * alpha * pulse;
-            const g = 0.46 * alpha * pulse;
-            const b = 0.42 * alpha * pulse;
+            const r = colorPrimary.r * alpha * pulse;
+            const g = colorPrimary.g * alpha * pulse;
+            const b = colorPrimary.b * alpha * pulse;
 
             lineColArray[lineIndex * 6] = r;
             lineColArray[lineIndex * 6 + 1] = g;
@@ -336,13 +368,30 @@ export function SalamNeuralNetwork({
       renderer.render(scene, camera);
 
       // In reduced motion, render single static state and avoid RAF loop
-      if (!reducedMotion) {
+      if (!reducedMotion && isVisible) {
         animationFrameId = requestAnimationFrame(animate);
+      } else {
+        animationFrameId = null;
       }
     };
 
     // Initial render
     animate();
+
+    const visibilityObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver(([entry]) => {
+          isVisible = entry.isIntersecting;
+          if (!isVisible && animationFrameId !== null) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+          } else if (isVisible && !reducedMotion && animationFrameId === null) {
+            animationFrameId = requestAnimationFrame(animate);
+          } else if (isVisible && reducedMotion) {
+            renderer.render(scene, camera);
+          }
+        }, { rootMargin: '120px' })
+      : null;
+    visibilityObserver?.observe(container);
 
     // 6. Responsive Resize Observer
     const resizeObserver = new ResizeObserver((entries) => {
@@ -362,6 +411,7 @@ export function SalamNeuralNetwork({
     // 7. Complete Memory & Resource Cleanup
     return () => {
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      visibilityObserver?.disconnect();
       resizeObserver.disconnect();
       container.removeEventListener('pointermove', handlePointerMove);
 
@@ -375,6 +425,10 @@ export function SalamNeuralNetwork({
 
       coreGeometry.dispose();
       coreMaterial.dispose();
+      orbits.forEach(({ geometry, material }) => {
+        geometry.dispose();
+        material.dispose();
+      });
 
       renderer.dispose();
       if (renderer.domElement && container.contains(renderer.domElement)) {
@@ -391,7 +445,7 @@ export function SalamNeuralNetwork({
     <div
       ref={containerRef}
       className={cn(
-        'relative w-full h-full min-h-[260px] overflow-hidden select-none touch-none',
+        'relative w-full h-full min-h-[260px] overflow-hidden select-none touch-pan-y',
         className
       )}
       aria-hidden="true"
