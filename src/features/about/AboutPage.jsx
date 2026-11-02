@@ -14,7 +14,7 @@ import { useTranslation } from '@/context/LanguageContext';
 /**
  * AboutPage — Comprehensive Academic & Technical System Documentation
  * Grounded in AI317 Team Document (AI317_SALAM_Team_Document_Arabic_Updated.docx)
- * Strictly preserving the SALAM Design System (RTL/LTR, Cairo, Semantic Tokens, WCAG AA).
+ * Strictly preserving the AMAL Design System (RTL/LTR, Cairo, Semantic Tokens, WCAG AA).
  * Localized for Arabic and English.
  */
 export function AboutPage() {

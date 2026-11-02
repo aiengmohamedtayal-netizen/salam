@@ -11,7 +11,7 @@ const badgeVariants = cva(
         elevated: 'bg-rose-50 text-rose-800 border border-rose-200',
         info: 'bg-sky-50 text-sky-800 border border-sky-200',
         primary: 'bg-teal-50 text-teal-800 border border-teal-200',
-        default: 'bg-slate-100 text-slate-700 border border-slate-200',
+        default: 'bg-surface-muted text-text-secondary border border-surface-border',
       },
       size: {
         sm: 'text-xs px-2.5 py-0.5',

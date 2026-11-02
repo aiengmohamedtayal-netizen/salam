@@ -137,7 +137,7 @@ export function ProjectOverviewSection() {
                 Problem Statement
               </span>
               <h3 className="text-lg font-bold text-text-primary">
-                {isEn ? 'Challenge Addressed by SALAM' : 'المشكلة التي يعالجها النظام'}
+                {isEn ? 'Challenge Addressed by AMAL' : 'المشكلة التي يعالجها النظام'}
               </h3>
             </div>
           </div>

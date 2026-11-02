@@ -139,7 +139,7 @@ export function AdaptiveAssessmentUI({
                 <Icon3D name="gauge" size="xs" className="w-4 h-4 shrink-0" />
                 <span>{t('assessment.adaptive.badge')}</span>
               </Badge>
-              <span className="text-xs font-bold text-text-secondary bg-slate-100 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-bold text-text-secondary bg-surface-muted px-2.5 py-1 rounded-full">
                 {t('assessment.adaptive.questionCounter', {
                   current: currentIndex + 1,
                   total: totalQuestions,
@@ -156,7 +156,7 @@ export function AdaptiveAssessmentUI({
           </div>
 
           {/* Progress Bar */}
-          <div className="space-y-1.5 bg-white p-3 rounded-xl border border-surface-border">
+          <div className="space-y-1.5 bg-surface-card p-3 rounded-xl border border-surface-border">
             <div className="flex items-center justify-between text-xs text-text-secondary">
               <span className="font-semibold">{t('assessment.adaptive.progressLabel')}</span>
               <span className="font-bold text-teal-800">{progressValue}%</span>
@@ -165,7 +165,7 @@ export function AdaptiveAssessmentUI({
           </div>
 
           {/* Question Card */}
-          <Card variant="default" padding="lg" className="space-y-6 bg-white shadow-xs">
+          <Card variant="default" padding="lg" className="space-y-6 shadow-xs">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200">
@@ -207,7 +207,7 @@ export function AdaptiveAssessmentUI({
                     className={`p-4 rounded-xl border transition-all duration-200 cursor-pointer select-none flex items-center justify-between gap-3 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
                       isSelected
                         ? 'border-teal-600 bg-teal-50/70 shadow-sm ring-1 ring-teal-500/30'
-                        : 'border-surface-border bg-surface-card hover:border-teal-300 hover:bg-slate-50/50'
+                        : 'border-surface-border bg-surface-card hover:border-teal-300 hover:bg-surface-muted/50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -215,7 +215,7 @@ export function AdaptiveAssessmentUI({
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                           isSelected
                             ? 'border-teal-600 bg-teal-600'
-                            : 'border-slate-300 bg-white'
+                            : 'border-surface-border-strong bg-surface-card'
                         }`}
                       >
                         {isSelected && (
@@ -256,7 +256,7 @@ export function AdaptiveAssessmentUI({
             )}
 
             {/* Informative Micro-Notice */}
-            <div className="p-3 rounded-xl bg-slate-50/80 border border-slate-200 text-[11px] text-text-muted flex items-start gap-2">
+            <div className="p-3 rounded-xl bg-surface-muted border border-surface-border text-[11px] text-text-muted flex items-start gap-2">
               <ShieldCheck className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" aria-hidden="true" />
               <span>{t('assessment.adaptive.privacyNote')}</span>
             </div>

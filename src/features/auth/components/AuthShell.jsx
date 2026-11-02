@@ -7,7 +7,7 @@ import { fadeUp, safeMotion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
 
 /**
- * Shared AuthShell layout for SALAM Login and Create Account pages.
+ * Shared AuthShell layout for AMAL Login and Create Account pages.
  * Provides a focused, calm, trustworthy environment with top navigation bar
  * (Back to Home, language toggle) and subtle ambient background depth.
  * @param {object} props

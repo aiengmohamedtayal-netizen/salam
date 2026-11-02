@@ -54,7 +54,7 @@ export function AssessmentResultView({ result, onReset }) {
     low: 'bg-emerald-50/70 border-emerald-200 text-emerald-950',
     attention: 'bg-amber-50/70 border-amber-200 text-amber-950',
     elevated: 'bg-rose-50/70 border-rose-200 text-rose-950',
-    out_of_scope: 'bg-slate-50 border-slate-200 text-slate-900',
+    out_of_scope: 'bg-surface-muted border-surface-border text-text-primary',
     insufficient: 'bg-amber-50/50 border-amber-200 text-amber-950',
     abstained: 'bg-amber-50/50 border-amber-200 text-amber-950',
   };
@@ -77,14 +77,17 @@ export function AssessmentResultView({ result, onReset }) {
     language === 'en'
       ? result.levelSummaryEn || t(`assessment.results.levels.${result.level}.summary`) || result.levelSummary
       : result.levelSummaryAr || t(`assessment.results.levels.${result.level}.summary`) || result.levelSummary;
+  const uncertaintyPercentage = Number.isFinite(result.uncertaintyPercentage)
+    ? result.uncertaintyPercentage
+    : null;
 
   const handleCopySummary = () => {
     const textToCopy = isAr
-      ? `نتيجة جلسة سَـــلام التوعوية:
+      ? `نتيجة جلسة أمل التوعوية:
 المستوى: ${displayTitle}
 الملخص: ${displaySummary}
 تنبيه: هذه النتيجة توعوية استرشادية مبنية على الذكاء الاصطناعي وليست تشخيصاً طبياً.`
-      : `SALAM Awareness Session Result:
+      : `AMAL Awareness Session Result:
 Level: ${displayTitle}
 Summary: ${displaySummary}
 Notice: This is an educational awareness indicator based on AI, not a clinical diagnosis.`;
@@ -109,7 +112,7 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
           <Card
             variant="default"
             padding="lg"
-            className="border-2 border-slate-300 shadow-md bg-surface-card space-y-6"
+            className="border-2 border-surface-border-strong shadow-md bg-surface-card space-y-6"
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-surface-border">
               <div>
@@ -133,20 +136,20 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
               {t('assessment.outOfScope.description')}
             </p>
 
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div className="p-4 rounded-xl bg-surface-muted border border-surface-border space-y-3">
               <span className="text-xs font-bold text-text-primary flex items-center gap-2">
                 <HelpCircle className="h-4 w-4 text-teal-600" aria-hidden="true" />
                 <span>{t('assessment.outOfScope.scopeTitle')}</span>
               </span>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-text-secondary">
-                <div className="p-3 rounded-lg bg-white border border-emerald-200">
+                <div className="p-3 rounded-lg bg-surface-card border border-emerald-500/30">
                   <span className="font-bold text-emerald-800 block mb-1">
                     {isAr ? 'المواضيع المدعومة' : 'Supported Themes'}
                   </span>
                   <span>{t('assessment.outOfScope.supported')}</span>
                 </div>
-                <div className="p-3 rounded-lg bg-white border border-slate-200">
-                  <span className="font-bold text-slate-700 block mb-1">
+                <div className="p-3 rounded-lg bg-surface-card border border-surface-border">
+                  <span className="font-bold text-text-primary block mb-1">
                     {isAr ? 'خارج النطاق' : 'Outside System Scope'}
                   </span>
                   <span>{t('assessment.outOfScope.notSupported')}</span>
@@ -195,7 +198,7 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
                   {t('assessment.insufficient.title')}
                 </h2>
               </div>
-              <Button variant="outline" size="sm" onClick={onReset} className="self-start sm:self-auto bg-white">
+              <Button variant="outline" size="sm" onClick={onReset} className="self-start sm:self-auto">
                 <Edit3 className="h-4 w-4" aria-hidden="true" />
                 <span>{t('assessment.insufficient.editText')}</span>
               </Button>
@@ -205,7 +208,7 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
               {t('assessment.insufficient.description')}
             </p>
 
-            <div className="p-4 rounded-xl bg-white/90 border border-amber-200 space-y-3">
+            <div className="p-4 rounded-xl bg-surface-card border border-amber-500/30 space-y-3">
               <span className="text-xs font-bold text-amber-950 flex items-center gap-2">
                 <Info className="h-4 w-4 text-amber-600" aria-hidden="true" />
                 <span>{t('assessment.insufficient.suggestionsTitle')}</span>
@@ -223,7 +226,7 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
                 <span>{t('assessment.insufficient.editText')}</span>
               </Button>
               <Link to="/support">
-                <Button variant="outline" size="md" className="gap-2 bg-white">
+                <Button variant="outline" size="md" className="gap-2">
                   <HeartHandshake className="h-4 w-4 text-rose-600" aria-hidden="true" />
                   <span>{t('assessment.insufficient.contactSupport')}</span>
                 </Button>
@@ -268,7 +271,7 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
                   variant="outline"
                   size="sm"
                   onClick={handleCopySummary}
-                  className="bg-white/80"
+                  className="bg-surface-card"
                 >
                   {copied ? (
                     <>
@@ -286,7 +289,7 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
                   variant="outline"
                   size="sm"
                   onClick={onReset}
-                  className="bg-white/80"
+                  className="bg-surface-card"
                 >
                   <RotateCcw className="h-4 w-4" aria-hidden="true" />
                   <span>{t('assessment.results.resetSession')}</span>
@@ -300,21 +303,13 @@ Notice: This is an educational awareness indicator based on AI, not a clinical d
               </p>
 
               {/* Model uncertainty note */}
-              <div className="p-3.5 rounded-xl bg-white/70 border border-surface-border/70 flex items-start gap-2.5 text-xs text-text-secondary">
+              <div className="p-3.5 rounded-xl bg-surface-muted/60 border border-surface-border flex items-start gap-2.5 text-xs text-text-secondary">
                 <Info className="h-4 w-4 text-teal-700 shrink-0 mt-0.5" aria-hidden="true" />
                 <span>
                   <strong>{t('assessment.results.disclaimerNoteTitle')}</strong>{' '}
-                  {language === 'en' ? (
-                    <>
-                      This analysis carries an estimated uncertainty factor of approx.{' '}
-                      <span className="font-bold text-text-primary">%{result.uncertaintyPercentage}</span> due to the inherent richness of human linguistic expression; it should be valued as an exploratory observation rather than a definitive determination.
-                    </>
-                  ) : (
-                    <>
-                      يحمل هذا التحليل نسبة عدم يقين تقديرية تبلغ قرابة{' '}
-                      <span className="font-bold text-text-primary">%{result.uncertaintyPercentage}</span> نظراً لطبيعة التنوع البشري في التعبير اللغوي؛ ولذلك يُعتد به كملاحظة توعوية وليس حكماً حتمياً.
-                    </>
-                  )}
+                  {uncertaintyPercentage === null
+                    ? t('assessment.results.uncertaintyGeneral')
+                    : t('assessment.results.uncertaintyValue', { value: uncertaintyPercentage })}
                 </span>
               </div>
             </div>

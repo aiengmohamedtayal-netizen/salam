@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
  * @param {() => void} props.onReset
  * @param {string} [props.className]
  */
-export function MultimodalResult({ modality = 'multimodal', onReset, className }) {
+export function MultimodalResult({ modality = 'multimodal', dynamicResult, onReset, className }) {
   const { t } = useTranslation();
 
   return (
@@ -48,11 +48,27 @@ export function MultimodalResult({ modality = 'multimodal', onReset, className }
           </div>
         </div>
 
-        {/* Pending Backend Disclaimer Banner */}
-        <div className="p-3.5 rounded-[var(--radius-lg)] bg-teal-500/10 border border-teal-500/20 text-xs text-teal-800 leading-relaxed flex items-start gap-2.5">
-          <Sparkles className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" aria-hidden="true" />
-          <p>{t('multimodal.results.pendingBackend')}</p>
-        </div>
+        {/* Dynamic Model Analysis or Fallback Banner */}
+        {dynamicResult ? (
+          <div className="p-3.5 rounded-[var(--radius-lg)] bg-teal-500/10 border border-teal-500/20 text-xs text-teal-900 leading-relaxed space-y-1.5">
+            <div className="flex items-center gap-2 font-bold text-teal-800">
+              <Sparkles className="w-4 h-4 text-teal-600 shrink-0" aria-hidden="true" />
+              <span>تحليل المنشور عبر الموديل اللغوي الحي:</span>
+            </div>
+            <p className="text-xs text-teal-950 font-medium leading-relaxed">{dynamicResult.summary}</p>
+            {dynamicResult.sentimentTone && (
+              <p className="text-[11px] text-teal-800">
+                النبرة العاطفية: <strong className="font-bold">{dynamicResult.sentimentTone}</strong>
+                {dynamicResult.overallRiskLevel && ` — مستوى المؤشر: ${dynamicResult.overallRiskLevel}`}
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="p-3.5 rounded-[var(--radius-lg)] bg-teal-500/10 border border-teal-500/20 text-xs text-teal-800 leading-relaxed flex items-start gap-2.5">
+            <Sparkles className="w-4 h-4 text-teal-700 shrink-0 mt-0.5" aria-hidden="true" />
+            <p>{t('multimodal.results.pendingBackend')}</p>
+          </div>
+        )}
 
         {/* Observed Indicators Summary */}
         <div className="space-y-3 pt-1">
@@ -67,7 +83,9 @@ export function MultimodalResult({ modality = 'multimodal', onReset, className }
                 {t('multimodal.results.textMarkers')}
               </span>
               <p className="text-[11px] text-text-secondary leading-normal">
-                {t('multimodal.results.textMarkersDesc')}
+                {Array.isArray(dynamicResult?.linguisticSignals) && dynamicResult.linguisticSignals.length > 0
+                  ? dynamicResult.linguisticSignals.join(' • ')
+                  : t('multimodal.results.textMarkersDesc')}
               </p>
             </div>
 

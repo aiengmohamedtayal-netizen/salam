@@ -1,18 +1,23 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, AlertCircle, Info, CheckCircle2 } from 'lucide-react';
 import { AuthShell } from '../components/AuthShell';
 import { AuthHeader } from '../components/AuthHeader';
 import { PasswordField } from '../components/PasswordField';
 import { AuthDivider } from '../components/AuthDivider';
+import { GoogleAuthButton } from '../components/GoogleAuthButton';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Alert } from '@/components/ui/Alert';
 import { useTranslation } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 
 export function LoginPage() {
   const { t, language } = useTranslation();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const registerPath = language === 'en' ? '/en/register' : '/ar/register';
 
   // Form State
@@ -56,23 +61,17 @@ export function LoginPage() {
     }
 
     setIsLoading(true);
-
     try {
-      // Simulate frontend submission interaction with clear UI state
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Demonstration frontend feedback
-      setFormAlert({
-        type: 'success',
-        title: t('auth.demoSuccessLogin'),
-        message: t('auth.demoNotice'),
-      });
-    } catch {
-      setFormAlert({
-        type: 'error',
-        title: t('auth.errors.generalFailure'),
-        message: null,
-      });
+      await login(email.trim(), password);
+      const destination = location.state?.from;
+      navigate(destination ? `${destination.pathname}${destination.search || ''}` : (language === 'en' ? '/en/assessment' : '/ar/assessment'), { replace: true });
+    } catch (error) {
+      const message = error.code === 'INVALID_CREDENTIALS'
+        ? t('auth.errors.invalidCredentials')
+        : error.code === 'API_UNAVAILABLE'
+          ? t('auth.errors.networkError')
+          : t('auth.errors.generalFailure');
+      setFormAlert({ type: 'error', title: t('auth.errors.generalFailure'), message });
     } finally {
       setIsLoading(false);
     }
@@ -186,7 +185,9 @@ export function LoginPage() {
           </div>
         </form>
 
-        <AuthDivider />
+        <AuthDivider>{t('auth.orContinue')}</AuthDivider>
+
+        <GoogleAuthButton />
 
         {/* Switch to Register Page */}
         <div className="text-center text-sm text-text-secondary">

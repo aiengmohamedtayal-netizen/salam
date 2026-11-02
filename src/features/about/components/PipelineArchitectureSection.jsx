@@ -151,8 +151,8 @@ export function PipelineArchitectureSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm text-slate-300 leading-relaxed">
           <p>
             {isEn
-              ? 'In conventional AI tools, users often receive scores without visibility into how conclusions were drawn, causing ambiguity or undue anxiety. In SALAM, mathematical feature attributions are translated into intuitive, non-stigmatizing linguistic explanations.'
-              : 'في معظم أنظمة الذكاء الاصطناعي التقليدية، يتلقى المستخدم تقييماً دون معرفة الكيفية التي تم بها استنتاجه، مما يخلق شعوراً بالغموض أو القلق. في «سَـــلام»، نحرص على ترجمة قيم التأثير الرياضية إلى لغة عربية مفهومة.'}
+              ? 'In conventional AI tools, users often receive scores without visibility into how conclusions were drawn, causing ambiguity or undue anxiety. In AMAL, mathematical feature attributions are translated into intuitive, non-stigmatizing linguistic explanations.'
+              : 'في معظم أنظمة الذكاء الاصطناعي التقليدية، يتلقى المستخدم تقييماً دون معرفة الكيفية التي تم بها استنتاجه، مما يخلق شعوراً بالغموض أو القلق. في «أمل»، نحرص على ترجمة قيم التأثير الرياضية إلى لغة عربية مفهومة.'}
           </p>
           <p>
             {isEn

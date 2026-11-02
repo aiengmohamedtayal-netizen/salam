@@ -66,14 +66,14 @@ export function TeamSection() {
                 isLeader
                   ? 'border-teal-500/80 shadow-teal-700/5'
                   : isPlaceholder
-                  ? 'border-dashed border-slate-300 bg-slate-50/50'
+                  ? 'border-dashed border-surface-border-strong bg-surface-muted/50'
                   : 'hover:border-teal-300'
               }`}
             >
               {/* Card Header: Role & Identification */}
               <div
                 className={`p-5 border-b border-surface-border ${
-                  isLeader ? 'bg-teal-50/50' : isPlaceholder ? 'bg-slate-100/60' : 'bg-surface-card'
+                  isLeader ? 'bg-teal-50/50' : isPlaceholder ? 'bg-surface-muted/60' : 'bg-surface-card'
                 }`}
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
@@ -82,7 +82,7 @@ export function TeamSection() {
                       isLeader
                         ? 'bg-teal-50 border border-teal-200 shadow-xs'
                         : isPlaceholder
-                        ? 'bg-slate-100 border border-slate-200 text-slate-700'
+                        ? 'bg-surface-muted border border-surface-border text-text-secondary'
                         : 'bg-teal-50/60 border border-teal-100'
                     }`}
                   >
@@ -161,10 +161,10 @@ export function TeamSection() {
                 {/* Skills & Capabilities Footer */}
                 <div className="pt-3 border-t border-surface-border mt-4">
                   <div className="flex items-center gap-1.5 text-[11px] text-text-muted font-medium mb-1">
-                    <Wrench className="h-3 w-3 text-slate-500" aria-hidden="true" />
+                    <Wrench className="h-3 w-3 text-text-muted" aria-hidden="true" />
                     <span>{isAr ? 'الكفاءات والمهارات المقترحة:' : 'Target Competencies & Skills:'}</span>
                   </div>
-                  <p className="text-xs font-mono text-slate-700 bg-slate-100/80 px-2.5 py-1.5 rounded-lg border border-slate-200/80 leading-relaxed">
+                  <p className="text-xs font-mono text-text-secondary bg-surface-muted px-2.5 py-1.5 rounded-lg border border-surface-border leading-relaxed">
                     {isAr ? member.skills : member.skillsEn || member.skills}
                   </p>
                 </div>

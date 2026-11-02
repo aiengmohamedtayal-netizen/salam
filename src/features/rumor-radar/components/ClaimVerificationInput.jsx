@@ -15,11 +15,12 @@ import { Alert } from '@/components/ui/Alert';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
 import { getStatusMeta } from '../data/radarData';
+import { verifyClaim } from '@/services/amalApi';
 
 /**
  * Claim Verification Input & Analysis Component
  * Allows users to paste a claim, headline, or circulating rumor and view evidence-based analysis.
- * Does not store submitted text into localStorage or permanent storage.
+ * Claim submissions are not added to the user's assessment history.
  */
 export function ClaimVerificationInput({ onAnalysisResult }) {
   const { language } = useTranslation();
@@ -30,7 +31,7 @@ export function ClaimVerificationInput({ onAnalysisResult }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [activeAnalysis, setActiveAnalysis] = useState(null);
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
     const trimmed = claimInput.trim();
 
@@ -48,116 +49,18 @@ export function ClaimVerificationInput({ onAnalysisResult }) {
     setIsAnalyzing(true);
     setActiveAnalysis(null);
 
-    // Heuristic analysis simulation based on textual indicators
-    setTimeout(() => {
-      const lower = trimmed.toLowerCase();
-      let status = 'needs_verification';
-      let confidence = 'أولي (مبني على خصائص النص والتركيب اللغوي)';
-      let confidenceEn = 'Preliminary (grounded in syntax & textual indicators)';
-      let indicators = [];
-      let indicatorsEn = [];
-      let sources = [];
-      let explanation = '';
-      let explanationEn = '';
-
-      if (
-        lower.includes('علاج نهائي') ||
-        lower.includes('علاج فوري') ||
-        lower.includes('يشفي تماما') ||
-        lower.includes('معجزة') ||
-        lower.includes('سر خطير') ||
-        lower.includes('سري للغاية') ||
-        lower.includes('cure') ||
-        lower.includes('miracle')
-      ) {
-        status = 'potentially_misleading';
-        confidence = 'متوسط (مرتفع الدلالة على الصياغات الدعائية غير المعتمدة)';
-        confidenceEn = 'Moderate (strong indicators of uncertified promotional phrasing)';
-        indicators = [
-          'صياغة مثيرة أو مبالغ فيها',
-          'نقص المصادر المعتمدة',
-          'مصدر النشر الأساسي غير واضح',
-        ];
-        indicatorsEn = [
-          'Sensational or exaggerated phrasing',
-          'Lack of verified sources',
-          'Primary publishing origin unclear',
-        ];
-        explanation =
-          'استخدام مفردات الجزم بالشفاء المطلق أو الأسرار الطبية الخفية يرتبط بنمط الشائعات الترويجية التي تفتقر لتجارب سريرية موثقة.';
-        explanationEn =
-          'Absolute guarantees of rapid remission or hidden remedies strongly align with viral promotional claims lacking controlled clinical trials.';
-        sources = [
-          {
-            name: 'قواعد الأدلة الطبية الصيدلانية',
-            nameEn: 'Clinical Pharmacology Evidence Databases',
-            status: 'مصدر متعارض مع الادعاء',
-            statusEn: 'Conflicting with Claim',
-            relevance: 'لا توجد أدوية عشبية فورية مرخصة تشفي الاضطرابات النفسية جذرياً دون بروتوكول علاجي.',
-            relevanceEn: 'No licensed herbal preparations cure mental disorders instantaneously without clinical protocols.',
-          },
-        ];
-      } else if (
-        lower.includes('16328') ||
-        lower.includes('الخط الساخن') ||
-        lower.includes('وزارة الصحة') ||
-        lower.includes('hotline')
-      ) {
-        status = 'verified';
-        confidence = 'مرتفع (مطابق للبيانات الحكومية المعلنة)';
-        confidenceEn = 'High (corroborated by published governmental records)';
-        indicators = [];
-        indicatorsEn = [];
-        explanation =
-          'النص يتطابق مع الخدمات الوطنية المعلنة رسمياً من وزارة الصحة والأمانة العامة للصحة النفسية.';
-        explanationEn =
-          'Text matches verified national support services managed by the Egyptian Ministry of Health & GSMH.';
-        sources = [
-          {
-            name: 'وزارة الصحة والسكان المصرية',
-            nameEn: 'Egyptian Ministry of Health & Population',
-            status: 'مصدر داعم رسمي',
-            statusEn: 'Official Supporting Source',
-            relevance: 'الخط الساخن 16328 معتمد لخدمات الدعم والاستشارات النفسية المجانية.',
-            relevanceEn: 'Hotline 16328 is the accredited free mental health counseling service.',
-          },
-        ];
-      } else {
-        status = 'needs_verification';
-        confidence = 'أولي (يستلزم الرجوع لمصادر متخصصة إضافية)';
-        confidenceEn = 'Preliminary (requires further authoritative cross-referencing)';
-        indicators = [
-          'نقص المصادر المعتمدة',
-          'معلومات يصعب التحقق منها ميدانياً',
-        ];
-        indicatorsEn = [
-          'Lack of verified sources',
-          'Difficult to verify empirically',
-        ];
-        explanation =
-          'لم تتوفر مصادر رسمية أولية تؤكد هذا الادعاء أو تنفيه بشكل قاطع حتى لحظة الفحص. يوصى بعدم تداوله كحقيقة مطلقة.';
-        explanationEn =
-          'No official primary sources conclusively substantiate or refute this narrative at the time of review. Exercise caution before sharing.';
-        sources = [];
-      }
-
-      const result = {
-        claimText: trimmed,
-        status,
-        confidence,
-        confidenceEn,
-        indicators,
-        indicatorsEn,
-        explanation,
-        explanationEn,
-        sources,
-        analyzedAt: isEn ? 'Just now' : 'الآن',
-      };
-
-      setIsAnalyzing(false);
+    try {
+      const result = await verifyClaim(trimmed, language);
       setActiveAnalysis(result);
       if (onAnalysisResult) onAnalysisResult(result);
-    }, 900);
+    } catch (error) {
+      const message = isEn
+        ? 'Claim verification is unavailable because no evidence verification service is configured.'
+        : 'التحقق من الادعاءات غير متاح حالياً لعدم إعداد خدمة مراجعة المصادر.';
+      setErrorMessage(`${message}${error?.requestId ? ` (${error.requestId})` : ''}`);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleReset = () => {
@@ -182,7 +85,7 @@ export function ClaimVerificationInput({ onAnalysisResult }) {
         </div>
         <div className="flex items-center gap-2 text-xs text-text-muted">
           <Lock className="h-3.5 w-3.5 text-teal-600" aria-hidden="true" />
-          <span>{isEn ? 'Strict Privacy: Submitted text is never stored' : 'خصوصية تامة: لا يتم حفظ نص الادعاء'}</span>
+          <span>{isEn ? 'Claim text is not added to assessment history' : 'لا يُضاف نص الادعاء إلى سجل التقييمات'}</span>
         </div>
       </div>
 

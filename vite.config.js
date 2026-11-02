@@ -16,4 +16,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      '/api': process.env.AMAL_API_URL || 'http://127.0.0.1:8000',
+      '/health': process.env.AMAL_API_URL || 'http://127.0.0.1:8000',
+      '/ready': process.env.AMAL_API_URL || 'http://127.0.0.1:8000',
+    },
+  },
 })

@@ -1,24 +1,28 @@
 /**
- * SALAM — English Locale Dictionary
+ * AMAL — English Locale Dictionary
  * Rigorous, natural English terminology for Arabic NLP mental health awareness.
  * Non-diagnostic, evidence-based, WCAG AA compliant.
  */
 
 export const en = {
   common: {
-    brandName: 'SALAM',
-    brandSubtitle: 'AI-Powered Arabic Mental Health Awareness',
+    brandName: 'AMAL',
+    brandSubtitle: 'AI Mental Health Awareness',
     language: 'Language',
     arabic: 'العربية',
     english: 'English',
     switchLanguage: 'العربية',
     skipToContent: 'Skip directly to main content',
     disclaimerTitle: 'Educational Awareness Tool',
-    disclaimerShort: 'SALAM is an early indicator and educational awareness system, not a certified clinical or psychiatric diagnosis.',
-    disclaimerFull: 'SALAM is an educational and exploratory early-indicator tool based on linguistic pattern analysis, not a medical or psychiatric diagnosis. These indicators do not replace clinical assessment by certified healthcare professionals.',
+    disclaimerShort: 'AMAL is an early indicator and educational awareness system, not a certified clinical or psychiatric diagnosis.',
+    disclaimerFull: 'AMAL is an educational and exploratory early-indicator tool based on linguistic pattern analysis, not a medical or psychiatric diagnosis. These indicators do not replace clinical assessment by certified healthcare professionals.',
     loading: 'Loading...',
     loadingPage: 'Preparing page...',
     waitMoment: 'Please wait a moment',
+    pageErrorTitle: 'This page could not be displayed',
+    pageError: 'We ran into a temporary issue. Try again or return to the home page.',
+    reloadPage: 'Reload page',
+    returnHome: 'Return home',
     retry: 'Retry',
     close: 'Close',
     cancel: 'Cancel',
@@ -38,16 +42,29 @@ export const en = {
     question: 'Question',
   },
 
+  theme: {
+    theme: 'Theme',
+    dark: 'Dark mode',
+    light: 'Light mode',
+    enableDark: 'Enable dark mode',
+    enableLight: 'Enable light mode',
+    toggle: 'Toggle theme',
+    switchToDark: 'Switch to dark mode',
+    switchToLight: 'Switch to light mode',
+  },
+
   nav: {
     home: 'Home',
-    assessment: 'Smart Assessment',
+    assessment: 'Assessment',
+    textAnalysis: 'Text Analysis',
     radar: 'Rumor Radar',
-    multimodal: 'Multimodal Analysis',
-    voice: 'Voice Analysis',
+    multimodal: 'Multimodal',
+    voice: 'Voice',
     about: 'How It Works',
-    awareness: 'Awareness Guide',
-    support: 'Specialized Support',
-    privacy: 'Privacy & Safety',
+    awareness: 'Awareness',
+    support: 'Support',
+    privacy: 'Privacy',
+    settings: 'Settings',
     startAssessment: 'Start Assessment',
     openMenu: 'Open main menu',
     closeMenu: 'Close menu',
@@ -55,9 +72,9 @@ export const en = {
 
   footer: {
     disclaimerAlertTitle: 'Scientific & Ethical Notice:',
-    disclaimerText: 'SALAM is an educational awareness tool based on linguistic pattern analysis and is not a medical or psychiatric diagnosis. It does not replace clinical evaluation by licensed medical professionals.',
+    disclaimerText: 'AMAL is an educational awareness tool based on linguistic pattern analysis and is not a medical or psychiatric diagnosis. It does not replace clinical evaluation by licensed medical professionals.',
     brandDescription: 'An Arabic system based on natural language processing that analyzes everyday expressions and Egyptian dialect to explore psychological distress indicators in a responsible, scientific manner.',
-    privacyGuarantee: 'Complete text privacy with zero logging or permanent storage',
+    privacyGuarantee: 'Assessment history is saved to your account and can be deleted',
     quickLinks: 'Quick Links',
     systemAndScience: 'System & Methodology',
     academicDoc: 'Academic Documentation',
@@ -70,11 +87,12 @@ export const en = {
     emergencyHotlineNum: '16328 (General Secretariat of Mental Health)',
     supportAdvice: 'If you or someone you know is in acute distress or danger, please contact your nearest hospital or emergency services immediately.',
     viewSupportGuide: 'View specialized support resources ←',
-    copyright: '© 2026 SALAM Project (AI317). Faculty of Artificial Intelligence — Delta University for Science and Technology. All rights reserved.',
+    copyright: '© 2026 AMAL Project (AI317). Faculty of Artificial Intelligence — Delta University for Science and Technology. All rights reserved.',
   },
 
   home: {
     hero: {
+      welcome: 'Welcome back to AMAL, {name}',
       badge: 'Responsible Arabic AI for Early Mental Health Awareness',
       titleStart: 'Understand what lies behind your words,',
       titleHighlight: 'with clarity and calm',
@@ -83,8 +101,8 @@ export const en = {
       disclaimerBody: 'This system is designed for self-awareness and is not a medical or psychiatric diagnosis. It should not be used for clinical decisions and does not replace professional consultation.',
       ctaStart: 'Start Assessment Session',
       ctaLearn: 'How Does It Work?',
-      trustNoAccount: 'Complete privacy without account registration',
-      trustNoStorage: 'Your personal reflections are never stored',
+      trustNoAccount: 'Your account keeps your assessment history',
+      trustNoStorage: 'Review and delete your saved history',
       trustSupportive: 'Supportive, non-judgmental guidance',
     },
     threeVisual: {
@@ -131,7 +149,7 @@ export const en = {
     },
     pillars: {
       badge: 'Scientific & Ethical Safety',
-      title: 'Why is SALAM Built as an Awareness Tool Rather Than a Diagnostic One?',
+      title: 'Why is AMAL Built as an Awareness Tool Rather Than a Diagnostic One?',
       description: 'Psychological diagnosis is a complex clinical responsibility requiring comprehensive evaluation of an individual’s history, life context, and symptoms.',
       item1Title: 'Early Exploration Without Stigma',
       item1Desc: 'Empowering individuals to notice accumulated distress early without concerning clinical labels.',
@@ -141,8 +159,8 @@ export const en = {
       item3Desc: 'Specialized modeling of expressions like "suffocated", "unable to keep going", and "draining effort".',
       charterTitle: 'User Protection Charter',
       charterSubtitle: 'Strict principles to ensure your safety and peace of mind',
-      rule1Title: 'No Text Storage:',
-      rule1Desc: 'Once analysis completes and you leave the page, text is immediately erased from volatile memory with zero database retention.',
+      rule1Title: 'History Saved to Your Account:',
+      rule1Desc: 'Assessment text and answers are saved to your account so you can return to them. You can delete your assessment history.',
       rule2Title: 'No Alarming Language:',
       rule2Desc: 'We avoid phrases like "You are suffering from..." in favor of objective phrasing like "Indicators that warrant attention".',
       rule3Title: 'Human Support Bridge:',
@@ -151,25 +169,52 @@ export const en = {
     },
     ctaBanner: {
       title: 'Ready to pause and reflect on how you are feeling?',
-      subtitle: 'The session takes approximately two minutes in a peaceful, secure space designed to bring clarity.',
+      subtitle: 'The session takes about two minutes in a quiet space designed to help you reflect.',
       button: 'Begin Exploratory Session',
     },
   },
 
   assessment: {
+    history: {
+      title: 'Your Assessment History',
+      description: 'Text and answers stay in your account until you delete the history. You can revisit or delete them at any time.',
+      empty: 'There are no saved assessments in your account yet.',
+      clear: 'Delete history',
+      restore: 'Reuse this text',
+      loadError: 'Could not load assessment history.',
+      deleteError: 'Could not delete assessment history. Please try again.',
+      loading: 'Loading your history…',
+      retry: 'Reload history',
+      open: 'Show history',
+      close: 'Hide history',
+      count: 'Saved in history: {count}',
+      confirmTitle: 'Delete assessment history?',
+      confirmDescription: 'This permanently deletes the text and answers saved to your account. You cannot undo this action.',
+      confirmDelete: 'Delete history permanently',
+      status: {
+        insufficient_input: 'Not enough input',
+        model_unavailable: 'Analysis not completed',
+        default: 'Saved assessment',
+      },
+    },
+    modes: {
+      guided: 'Guided session',
+      direct: 'Text only',
+    },
     onboarding: {
       badge: 'Safe Exploratory Session',
-      title: 'Welcome to Your SALAM Awareness Session',
+      title: 'Welcome to Your AMAL Awareness Session',
+      welcomeTitle: 'Welcome, {name}. Let’s begin at your pace.',
       subtitle: 'A quiet space to express how you feel and receive early indicators powered by Arabic AI.',
       expectTitle: 'What to expect during this session?',
       card1Title: 'Only Two Minutes',
       card1Desc: 'A brief session for free expression followed by a few guided contextual questions.',
-      card2Title: 'Complete Data Privacy',
-      card2Desc: 'We do not store your text, link it to any personal identity, or share it with third parties.',
+      card2Title: 'Your Account History',
+      card2Desc: 'Your text and answers are saved to your account so you can revisit or delete them later.',
       card3Title: 'Transparent Explanations',
       card3Desc: 'The system highlights influential linguistic patterns alongside self-care suggestions.',
       disclaimerTitle: 'Medical Non-Diagnosis Affirmation',
-      disclaimerBody: 'SALAM is an early-indicator awareness tool, not a certified clinical or psychiatric diagnosis. If you are experiencing acute distress, please contact certified healthcare providers immediately.',
+      disclaimerBody: 'AMAL is an early-indicator awareness tool, not a certified clinical or psychiatric diagnosis. If you are experiencing acute distress, please contact certified healthcare providers immediately.',
       consentCheckboxTitle: 'I acknowledge the educational nature of this system',
       consentCheckboxSubtitle: 'I understand this session provides exploratory linguistic indicators only and does not substitute clinical examination or medical consultation.',
       consentError: 'Please confirm that you have reviewed the educational nature of the session to proceed.',
@@ -178,7 +223,7 @@ export const en = {
     input: {
       title: 'Free Expression & Initial Assessment Space',
       subtitle: 'Write naturally in whatever words feel right, in Modern Standard Arabic or Egyptian dialect.',
-      badgeEncrypted: 'Ephemeral & Encrypted Session',
+      badgeSaved: 'Saved to your account history',
       samplePromptsTitle: 'Sample prompts for quick exploration:',
       samples: [
         {
@@ -202,6 +247,50 @@ export const en = {
       clearButton: 'Clear Text',
       submitButton: 'Analyze Language Indicators',
     },
+    directAnalysis: {
+      title: 'Text and Language Analysis',
+      subtitle: 'An initial exploration of language patterns in your own words.',
+      serviceBadge: 'Direct analysis',
+      disclaimerTitle: 'For awareness and reflection',
+      disclaimerBody: 'AMAL offers educational indicators, not a medical or psychological diagnosis or a substitute for professional care.',
+      samplesTitle: 'Choose an example to get started',
+      samples: ['Work stress and pressure', 'Worry and overthinking', 'Feeling mostly steady'],
+      sampleTexts: [
+        'I feel worn down by ongoing work pressure, and have had trouble focusing and sleeping lately.',
+        'I keep worrying about the future and find it hard to relax, even during time off.',
+        'I have felt fairly balanced lately, and try to manage stress by planning and staying connected.',
+      ],
+      inputLabel: 'Describe how you have been feeling recently',
+      charCount: '{count} / 2,500 characters',
+      placeholder: 'Write freely about your day, current pressures, or what has been on your mind…',
+      savedNotice: 'Your assessment text is saved to your account history so you can revisit or delete it.',
+      clear: 'Clear text',
+      analyze: 'Analyze text',
+      analyzing: 'Analyzing text…',
+      loadingFirst: 'Sending your text for analysis…',
+      loadingLater: 'Analyzing your text. This may take a few moments…',
+      seconds: '{count} sec',
+      sending: 'Your text is being sent to AMAL for analysis.',
+      savedDuringAnalysis: 'Your text will be saved to your account history.',
+      emptyError: 'Write a few words about how you feel before starting the analysis.',
+      modelError: 'Your text reached the service, but analysis is unavailable right now. Please try again later.',
+      serviceError: 'We could not reach AMAL. Check your connection and try again.',
+      insufficientTitle: 'Your text needs a little more context',
+      insufficientBody: 'Add a sentence about how you are feeling so we can analyze it.',
+      outOfScopeTitle: 'This text is outside the awareness assessment',
+      outOfScopeBody: 'AMAL is designed to explore personal feelings and experiences.',
+      errorTitle: 'The analysis could not be completed',
+      errorBody: 'A temporary issue interrupted the analysis. Please try again.',
+      retry: 'Try again',
+      estimateLabel: 'Exploratory awareness indicator',
+      confidenceLabel: 'Estimate confidence',
+      influencedTitle: 'Phrases that influenced this estimate',
+      influencedNote: 'These are language observations, not definitive causes or a diagnosis.',
+      guidanceTitle: 'Supportive guidance',
+      supportTitle: 'Would you like to talk to someone?',
+      supportBody: 'Mental health support is available in Egypt.',
+      supportAction: 'Call support line 16328',
+    },
     adaptive: {
       badge: 'Exploratory Assessment',
       questionCounter: 'Question {current} of {total}',
@@ -210,7 +299,7 @@ export const en = {
       progressLabel: 'Assessment Progress',
       contextualBadge: 'Context Indicator',
       validationError: 'Please select an option to continue.',
-      privacyNote: 'Your answers are used strictly to frame the linguistic indicators and are never saved or shared.',
+      privacyNote: 'Your answers are saved with the assessment in your account history so you can return to them.',
       prevButton: 'Previous',
       backToInputButton: 'Back to Expression',
       nextButton: 'Next',
@@ -250,6 +339,8 @@ export const en = {
       recommendationsTitle: 'Practical Guidance & Suggested Self-Care Steps',
       supportResourcesTitle: 'Verified Support & Referral Resources',
       disclaimerNoteTitle: 'Uncertainty & Model Limitations Notice:',
+      uncertaintyGeneral: 'This indicator is exploratory and may not capture your full experience. Use it as a reflection aid, not a final judgment.',
+      uncertaintyValue: 'The estimated uncertainty is {value}%. Use this result as a reflection aid, not a final judgment.',
       disclaimerNoteBody: 'Statistical models cannot grasp the complete narrative of your life. Do not rely on this result for medical decision-making.',
       resetSession: 'Start New Assessment Session',
       learnMore: 'Explore Awareness Guide',
@@ -272,7 +363,7 @@ export const en = {
         out_of_scope: {
           badge: 'Out of Assessment Scope',
           title: 'Input Outside the Scope of Emotional Assessment',
-          summary: 'SALAM is specifically engineered to analyze personal emotional expressions and daily distress patterns. The submitted text appears to be a general inquiry or unrelated to psychological reflection.',
+          summary: 'AMAL is specifically engineered to analyze personal emotional expressions and daily distress patterns. The submitted text appears to be a general inquiry or unrelated to psychological reflection.',
         },
         insufficient: {
           badge: 'Abstention: Insufficient Signals',
@@ -284,8 +375,8 @@ export const en = {
     outOfScope: {
       badge: 'Out of Assessment Scope',
       title: 'Input is Outside the Scope of Emotional Assessment',
-      description: 'SALAM is specifically tailored for reflective personal thoughts, emotional feelings, and daily distress experiences. No subjective emotional reflection could be recognized in the entered text.',
-      scopeTitle: 'SALAM Scope of Operation & Boundaries:',
+      description: 'AMAL is specifically tailored for reflective personal thoughts, emotional feelings, and daily distress experiences. No subjective emotional reflection could be recognized in the entered text.',
+      scopeTitle: 'AMAL Scope of Operation & Boundaries:',
       supported: 'Supported Topics: Expressing sadness, work strain, anxiety, insomnia, daily routines, outlook on the future, and personal venting.',
       notSupported: 'Out of Scope: Programming code, hyperlinks, sports or financial queries, math formulas, and abstract factual knowledge.',
       editText: 'Edit Text & Try Again',
@@ -295,7 +386,7 @@ export const en = {
     insufficient: {
       badge: 'Exploratory Abstention',
       title: 'Exploratory Abstention to Safeguard Reliability',
-      description: 'Because SALAM adheres to strict scientific prudence, the system deliberately refrains from producing an indicator when textual evidence is too sparse or semantically ambiguous, avoiding misleading assumptions.',
+      description: 'Because AMAL adheres to strict scientific prudence, the system deliberately refrains from producing an indicator when textual evidence is too sparse or semantically ambiguous, avoiding misleading assumptions.',
       suggestionsTitle: 'Guidance to Enhance Expression Quality:',
       suggestion1: 'Write a full sentence or paragraph reflecting on what you experienced over the past two weeks and how it impacted your day.',
       suggestion2: 'Feel free to write naturally in Egyptian dialect or Modern Standard Arabic without formal constraints.',
@@ -311,7 +402,7 @@ export const en = {
     },
     errorFallbackSupport: {
       title: 'Human Support is Always Available Even During Technical Outages',
-      body: 'SALAM is an automated digital companion, but human care always comes first. If you are experiencing distress or wish to speak with a licensed specialist, national helplines and support centers are accessible 24/7 free of charge.',
+      body: 'AMAL is an automated digital companion, but human care always comes first. If you are experiencing distress or wish to speak with a licensed specialist, national helplines and support centers are accessible 24/7 free of charge.',
       hotlineLabel: 'General Secretariat of Mental Health Hotline (Egypt):',
       hotlineNumber: '16328',
       hotlineAvailable: 'Available 24/7, every day of the week',
@@ -368,7 +459,7 @@ export const en = {
     },
     disclaimer: {
       title: 'Scientific Neutrality & Transparency Charter',
-      body: 'SALAM Radar maintains strict neutrality and avoids absolute declarations such as "categorically false" without explicit reference to established scientific authorities like the WHO and recognized regulatory bodies.',
+      body: 'AMAL Radar maintains strict neutrality and avoids absolute declarations such as "categorically false" without explicit reference to established scientific authorities like the WHO and recognized regulatory bodies.',
     },
   },
 
@@ -378,7 +469,7 @@ export const en = {
       faculty: 'Faculty of Artificial Intelligence',
       courseCode: 'AI317',
       courseName: 'Work-based Professional Project in Artificial Intelligence (I)',
-      projectTitle: 'SALAM – AI-Powered Arabic Mental Health Awareness System',
+      projectTitle: 'AMAL – AI-Powered Arabic Mental Health Awareness System',
       supervisor: 'Supervisor: Dr. Ahmed Zakzouk',
       badgeAcademic: 'Official Academic Documentation',
       badgeTeamCount: '6-Member Team',
@@ -404,7 +495,7 @@ export const en = {
     },
     pipeline: {
       title: 'Pipeline Architecture',
-      subtitle: 'End-to-end text processing stages from ephemeral input to explainable semantic attribution.',
+      subtitle: 'End-to-end text processing stages from account-linked assessment input to explainable semantic attribution.',
     },
     stack: {
       title: 'Software & Technology Stack',
@@ -459,7 +550,7 @@ export const en = {
     title: 'When and How to Seek Professional Support?',
     subtitle: 'Artificial intelligence observes indicators, but compassionate human care is the genuine path to accurate assessment and sustainable recovery.',
     warningTitle: 'Non-Emergency Informational Guidance',
-    warningBody: 'SALAM is not designed for emergency crisis intervention. If you are experiencing severe distress that poses a risk to yourself or others, please proceed immediately to the nearest hospital emergency room or seek help from someone close to you.',
+    warningBody: 'AMAL is not designed for emergency crisis intervention. If you are experiencing severe distress that poses a risk to yourself or others, please proceed immediately to the nearest hospital emergency room or seek help from someone close to you.',
     whenSignsLabel: 'Signs Warranting Professional Consultation:',
     whatToExpectTitle: 'What to Expect in Your First Therapy Session?',
     whatToExpectSubtitle: 'Many hesitate because they do not know what happens in a consultation room. These principles govern professional sessions:',
@@ -477,22 +568,22 @@ export const en = {
 
   privacy: {
     badge: 'Safety & Privacy Charter',
-    title: 'Your Privacy and Text Security in SALAM',
-    subtitle: 'Expressing inner thoughts requires absolute trust and safety. Here we explain transparently how your words are handled.',
+    title: 'Your Privacy and Text Security in AMAL',
+    subtitle: 'This page explains what your account stores and how to review or delete your assessment history.',
     disclaimerTitle: 'Full Transparency Commitment',
-    disclaimerBody: 'SALAM is engineered with Privacy by Design principles. Our goal is self-awareness without leaving a digital footprint that compromises your personal confidentiality.',
+    disclaimerBody: 'Assessment use requires an account. Account details, assessment text, and answers are stored in the database until you delete your history. Do not submit information you do not want saved. You can delete your assessment history from the assessment page.',
     pillars: [
       {
-        title: 'No Registration or Identifiers',
-        desc: 'We never ask for your name, email, phone number, or account creation. You can use the platform with total freedom and complete anonymity.',
+        title: 'Account and Assessment History',
+        desc: 'We ask for your name and email, and store a derived password hash to manage your account and assessment history.',
       },
       {
         title: 'Data Minimization',
-        desc: 'We only process the text you voluntarily choose to express how you feel. We never access device details or geographic location.',
+        desc: 'We process the account details and assessment information you submit to provide the requested features. We do not request your device details or geographic location.',
       },
       {
-        title: 'Ephemeral In-Memory Processing',
-        desc: 'Natural Language Processing models run strictly in volatile memory. Inputs are instantly erased upon displaying results or leaving the page.',
+        title: 'Account-Linked Storage',
+        desc: 'Assessment text, answers, date, and processing status stay in your account until you delete them from the assessment page.',
       },
       {
         title: 'Zero Sale or Sharing of Text',
@@ -502,19 +593,18 @@ export const en = {
     breakdownTitle: 'What We Request vs. What We Never Collect',
     whatWeUseTitle: 'What Is Used Strictly:',
     whatWeUseList: [
-      'The Arabic text you voluntarily type into the assessment field.',
-      'Responses to the three contextual questions (entirely optional).',
-      'Transient statistical results displayed on your screen.',
+      'Your name, email, and a password hash. We do not store your password in plain text.',
+      'Assessment text, answers, submission date, and processing status for your account history.',
+      'Session data required to keep you signed in.',
     ],
     whatWeNeverCollectTitle: 'What Is Never Requested or Logged:',
     whatWeNeverCollectList: [
-      'No names, identities, or personal demographics.',
       'No banking credentials or payment data.',
       'No tracking cookies or cross-site advertising IDs.',
-      'No database persistence of messages after the session ends.',
+      'We do not sell account or assessment data.',
     ],
     ethicalTitle: 'Ethical AI Commitment',
-    ethicalDesc: 'We strictly reject using AI models for social sorting, employment screening, or psychological profiling. SALAM is built exclusively to serve human dignity and elevate individual and collective health awareness.',
+    ethicalDesc: 'We strictly reject using AI models for social sorting, employment screening, or psychological profiling. AMAL is built exclusively to serve human dignity and elevate individual and collective health awareness.',
   },
 
   notFound: {
@@ -525,19 +615,30 @@ export const en = {
   },
 
   auth: {
-    brandWelcome: 'Welcome to SALAM',
+    brandWelcome: 'Welcome to AMAL',
     backToHome: 'Back to Home',
     orContinue: 'or',
+    googleContinue: 'Continue with Google',
+    googleErrorTitle: 'Google sign-in could not be completed',
+    googleErrors: {
+      cancelled: 'Sign-in was cancelled.',
+      stateInvalid: 'The sign-in request could not be verified. Please try again.',
+      identityInvalid: 'The Google account could not be verified. Try another account.',
+      accountConflict: 'This email is linked to a different Google account. Contact support.',
+      notConfigured: 'Google sign-in is not configured yet. The server needs OAuth credentials from Google Cloud.',
+      failed: 'Google sign-in could not be completed. Please try again.',
+    },
     secureNotice: 'A secure system respecting your privacy and adhering to ethical AI standards.',
     
     // Login Page
     loginTitle: 'Sign In',
-    loginSubtitle: 'Welcome back to SALAM',
+    loginSubtitle: 'Welcome back to AMAL',
     emailLabel: 'Email',
     emailPlaceholder: 'Enter your email',
     passwordLabel: 'Password',
     passwordPlaceholder: 'Enter your password',
     loginCta: 'Sign In',
+    logout: 'Sign Out',
     loginLoading: 'Signing in...',
     noAccountPrompt: "Don't have an account?",
     createAccountLink: 'Create an account',
@@ -546,7 +647,7 @@ export const en = {
 
     // Create Account Page
     registerTitle: 'Create Account',
-    registerSubtitle: 'Create your account to access the SALAM experience',
+    registerSubtitle: 'Create your account to access the AMAL experience',
     nameLabel: 'Full Name',
     namePlaceholder: 'Enter your full name',
     confirmPasswordLabel: 'Confirm Password',
@@ -584,12 +685,56 @@ export const en = {
     },
 
     // Frontend demo boundary notice
-    demoNotice: 'Interactive frontend preview. Your credentials remain local and secure.',
-    demoSuccessLogin: 'Login credentials validated successfully (Frontend simulation).',
-    demoSuccessRegister: 'Account details validated successfully (Frontend simulation).',
+    demoNotice: 'Assessment history is saved to your account so you can return to it.',
+    demoSuccessLogin: 'You are signed in.',
+    demoSuccessRegister: 'Your account has been created.',
+  },
+
+  settings: {
+    eyebrow: 'Your account and preferences',
+    title: 'Settings',
+    subtitle: 'Manage your profile, AMAL appearance, account security, and saved assessment data.',
+    backToApp: 'Back to the app',
+    sections: 'Settings sections',
+    profile: 'Profile',
+    profileDescription: 'Update the name shown on your account.',
+    emailFixed: 'Email address used to sign in.',
+    saveProfile: 'Save profile',
+    profileSaved: 'Your name was updated.',
+    preferences: 'Appearance and language',
+    preferencesDescription: 'Choose your preferred theme and language for this browser.',
+    savedOnDevice: 'This preference is saved on this device.',
+    security: 'Security and password',
+    securityDescription: 'Change your password. Other active sessions will be signed out.',
+    currentPassword: 'Current password',
+    newPassword: 'New password',
+    confirmPassword: 'Confirm new password',
+    updatePassword: 'Update password',
+    passwordTooShort: 'Your new password must contain at least 8 characters.',
+    passwordMismatch: 'The passwords do not match.',
+    currentPasswordInvalid: 'The current password is incorrect.',
+    passwordSaved: 'Your password was updated and other sessions were signed out.',
+    googleConnected: 'A Google account is linked to this account.',
+    googlePasswordUnavailable: 'This account uses Google sign-in and has no local password to change.',
+    privacyData: 'Privacy and data',
+    privacyDescription: 'Review your account data, export your assessment history, or delete it.',
+    assessmentHistory: 'Assessment history',
+    historyCount: 'Saved assessments: {count}',
+    historyUnavailable: 'Assessment history could not be loaded.',
+    exportData: 'Export my data',
+    clearHistory: 'Delete history',
+    clearHistoryTitle: 'Delete assessment history?',
+    clearHistoryDescription: 'Your saved assessment text and answers will be permanently deleted. This cannot be undone.',
+    historyCleared: 'Your assessment history was deleted.',
+    privacyPolicy: 'Read the privacy policy',
+    support: 'Support and help',
+    actionFailed: 'The change could not be saved. Check your connection and try again.',
   },
 
   multimodal: {
+    apiWaiting: 'Waiting for the AMAL API response.',
+    apiUnavailableTitle: 'Multimodal analysis is unavailable',
+    apiUnavailable: 'No reviewed multimodal model is configured. No analysis result was created.',
     pageBadge: 'Multimodal Research & Analysis Engine',
     pageTitle: 'Social Media Content Analysis',
     pageSubtitle: 'Exploring linguistic and visual patterns associated with psychological distress signals in social posts (Interactive Preview).',
@@ -683,12 +828,14 @@ export const en = {
   },
 
   voice: {
+    analysisUnavailableTitle: 'Voice analysis is unavailable',
+    analysisUnavailable: 'There is no reviewed voice model in this release. The recording was not uploaded and no result was created.',
     badge: 'Acoustic Biomarker Signal Exploration',
     title: 'Voice Signal Analysis',
     subtitle: 'Record a short voice sample to explore speech rate, pause patterns, and vocal tone signals (Interactive Preview).',
     disclaimerShort: 'Voice indicators are for exploratory awareness and do NOT represent a medical diagnosis.',
     disclaimerFull: 'This recording can be used to analyze voice-related signals as part of the assessment. This is not a medical diagnosis.',
-    privacyNotice: 'Recording is used strictly in this session and is never stored locally or uploaded.',
+    privacyNotice: 'Recording is used in this session and is not added to your saved assessment history.',
     cardTitle: 'Voice Sample Recording',
     cardSubtitle: 'Speak freely at your natural pace for a brief moment to explore acoustic signals.',
     startRecording: 'Start Recording',
@@ -737,6 +884,72 @@ export const en = {
       uncertaintyNote: 'Future inference results will provide statistical uncertainty bounds.',
       disclaimerNotice: 'Scientific & Ethical Notice: Acoustic indicators are for exploratory awareness and do NOT constitute a medical or clinical diagnosis.',
       hotlineAdvice: 'If you are experiencing severe distress or need professional guidance, contact certified psychological support helplines.',
+    },
+  },
+
+  assistant: {
+    name: 'AMAL Assistant',
+    status: 'Awareness Assistant',
+    open: 'Open the AMAL Assistant',
+    close: 'Close the AMAL Assistant',
+    welcome:
+      'Hi, I\'m the AMAL Assistant. I can help explain how the platform works, the assessment flow, privacy, and awareness resources.',
+    disclaimer: 'I\'m not a doctor or a diagnostic tool.',
+    typing: 'AMAL Assistant is typing...',
+    inputPlaceholder: 'Type your question...',
+    inputLabel: 'Type your question for the AMAL Assistant',
+    send: 'Send',
+    privacyChip: 'In-browser only',
+    quickPromptsLabel: 'Common questions',
+    copy: 'Copy reply',
+    copied: 'Copied',
+    scrollToBottom: 'Back to the latest message',
+    privacyNotice:
+      'Your messages are sent to the AMAL service for a reply and are not added to your assessment history.',
+    safetyHeadline:
+      'If you are in immediate danger or need urgent help, contact emergency services or the approved support resources.',
+    safetyBody:
+      'This assistant is an awareness tool: it does not provide emergency intervention and does not diagnose. You can reach the approved support and awareness resources inside this platform through the links below.',
+    quickPrompts: {
+      work: 'How does AMAL work?',
+      result: 'What does the result mean?',
+      text: 'How is text analyzed?',
+      voice: 'What happens to my voice recording?',
+      privacy: 'Is my data stored?',
+      support: 'Where can I get support?',
+    },
+    supportLinks: {
+      support: 'Support & guidance page',
+      awareness: 'Mental health awareness guide',
+      privacy: 'Privacy and text security policy',
+    },
+    responses: {
+      overview:
+        'AMAL is an Arabic mental health awareness platform built on linguistic pattern analysis of Modern Standard Arabic and Egyptian dialect, and it is not a diagnostic tool. Assessment use requires an account, and assessment text and answers are saved to your account history so you can return to them. You can delete your history from the assessment page. Do not enter information you do not want saved.',
+      assessment:
+        'An AMAL exploratory session takes about two minutes. You first write freely about what is on your mind, then answer a few short guiding questions to clarify the context, and finally see the result with an explanation of the influential linguistic factors and practical self-care guidance. You can start a new session at any time.',
+      result:
+        'The result is a guiding indicator with four levels: "stable", "warrants attention", "calls for care and support", and "outside the assessment scope", plus an abstention state for when the wording carries too little signal. The system shows no opaque score — it explains which words and patterns influenced the indicator and suggests practical next steps. A result is not a diagnosis and does not replace a clinical evaluation.',
+      uncertainty:
+        'If the result feels unclear or does not describe your experience, that reflects uncertainty in the output rather than a problem with the way you wrote. Statistical models do not grasp the full context of your life, and the system prefers abstaining over presenting unreliable inferences. Rephrase the text with more detail, consult the awareness guide, or seek a professional consultation.',
+      textAnalysis:
+        'Text analysis in AMAL passes through linguistic processing stages: normalizing terms and understanding Modern Standard Arabic and Egyptian dialect, detecting distress vocabulary, communicative tone and the temporal focus of thoughts, estimating the indicator in a non-diagnostic way, and finally presenting the explanation and guidance. You can try it in the free expression space or on the Text Analysis page.',
+      voice:
+        'On the Voice Signal Analysis page you record a short sample of up to 60 seconds to explore tone and distress signals, covering speaking rate, pause patterns, pitch variation and prosodic energy. The recording is not added to your saved assessment history. Voice indicators are exploratory and do not constitute a diagnosis.',
+      multimodal:
+        'The Multimodal Analysis page brings text and voice together in one analysis workspace: you write or paste the post text, or upload an image, then start signal analysis through multimodal processing pipelines. Its purpose is to explore linguistic and visual patterns associated with distress signals in digital content, and it is an interactive preview within the project.',
+      privacy:
+        'Assessment use requires an account, and assessment text and answers are saved to your account history so you can return to them. You can delete your assessment history from the assessment page. We do not sell account or assessment data. Assistant messages are sent to the AMAL service for a reply and are not added to assessment history.',
+      awareness:
+        'The AMAL awareness guide brings together short articles, myth corrections and practical exercises such as the 4-2-6 grounding technique. It also explains when a professional consultation becomes warranted: when indicators persist for more than two consecutive weeks and begin to disrupt your basic daily activities. Start from the Awareness Guide page.',
+      support:
+        'The Support page explains when and how to seek professional help, lists the approved free support helplines, and suggests questions to ask when choosing a therapist or physician. Remember that AMAL is an awareness tool that surfaces indicators, while specialized human support is the real path to an accurate evaluation. Open the Support page to see the approved resources.',
+      limitations:
+        'AMAL is not a diagnostic system, not a clinical measurement tool, and not a substitute for a medical or psychological evaluation by a certified specialist. It is an educational and exploratory awareness tool built on linguistic pattern analysis, deliberately avoiding "you are suffering from..." phrasing. Account details and assessment text are saved in your account history, which you can delete from the assessment page. If you need a diagnosis or a treatment plan, consult a certified specialist.',
+      unsupported:
+        'I can help explain AMAL, how it works, and its awareness and support resources, but I can\'t provide a diagnosis or medical advice.',
+      safety:
+        'I will not provide an analysis or clinical reassurance here; instead I will show you the approved support and awareness resources inside the platform.',
     },
   },
 };

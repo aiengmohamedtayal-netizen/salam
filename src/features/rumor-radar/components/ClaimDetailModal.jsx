@@ -15,7 +15,7 @@ import { getStatusMeta, resolveClaimText } from '../data/radarData';
  * Renders the in-depth verification dossier for an inspected claim.
  */
 export function ClaimDetailModal({ claim, open, onClose }) {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
   const isEn = language === 'en';
 
   if (!claim) return null;
@@ -35,6 +35,7 @@ export function ClaimDetailModal({ claim, open, onClose }) {
       onClose={onClose}
       size="xl"
       title={isEn ? 'Claim Verification Dossier' : 'ملف تدقيق الادعاء والمؤشرات المرصودة'}
+      closeLabel={t('common.close')}
       description={
         isEn
           ? 'Advisory evaluation, observed indicators, and comparative evidence sources'

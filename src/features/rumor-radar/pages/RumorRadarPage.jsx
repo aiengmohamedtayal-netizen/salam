@@ -12,7 +12,7 @@ import { fadeUp, safeMotion } from '@/lib/motion';
 
 /**
  * Rumor & Misinformation Radar Page
- * Dedicated SALAM product section for monitoring unverified or suspicious claims,
+ * Dedicated AMAL product section for monitoring unverified or suspicious claims,
  * understanding verification confidence, inspecting sources, and testing claims.
  */
 export function RumorRadarPage() {

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 /**
  * Reusable ThreeScene showcase component.
  * Combines the 3D linguistic network with optional interactive state controls
- * and informative metadata badge matching SALAM's design system.
+ * and informative metadata badge matching AMAL's design system.
  *
  * @param {object} props
  * @param {'idle'|'processing'|'result'|'error'} [props.initialState='idle']

@@ -9,11 +9,11 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        info: 'bg-sky-50/70 border-sky-200 text-sky-900',
-        warning: 'bg-amber-50/80 border-amber-200 text-amber-950',
-        success: 'bg-emerald-50/80 border-emerald-200 text-emerald-950',
-        error: 'bg-rose-50/80 border-rose-200 text-rose-950',
-        disclaimer: 'bg-teal-50/90 border-teal-200 text-teal-950 shadow-sm',
+        info: 'bg-sky-50/70 border-sky-200 text-sky-900 dark:bg-sky-950/35 dark:border-sky-800/70 dark:text-sky-100',
+        warning: 'bg-amber-50/80 border-amber-200 text-amber-950 dark:bg-amber-950/35 dark:border-amber-800/70 dark:text-amber-800',
+        success: 'bg-emerald-50/80 border-emerald-200 text-emerald-950 dark:bg-emerald-950/35 dark:border-emerald-800/70 dark:text-emerald-900',
+        error: 'bg-rose-50/80 border-rose-200 text-rose-950 dark:bg-rose-950/35 dark:border-rose-800/70 dark:text-rose-900',
+        disclaimer: 'bg-teal-50/90 border-teal-200 text-teal-950 shadow-sm dark:bg-primary-950/45 dark:border-primary-800/70 dark:text-text-primary',
       },
     },
     defaultVariants: {

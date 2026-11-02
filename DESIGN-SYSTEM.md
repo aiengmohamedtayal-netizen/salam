@@ -1,8 +1,8 @@
-# سلام — Design System (DESIGN-INVENTORY)
+# أمل — Design System (DESIGN-INVENTORY)
 
 ## Product Identity
 
-- **Name**: سلام (Salam) — AI-Powered Arabic Mental Health Awareness System
+- **Name**: أمل (Amal) — AI-Powered Arabic Mental Health Awareness System
 - **Tagline**: وعي نفسي ذكي باللغة العربية
 - **Product Type**: Awareness & Early-Indicator System (NOT a diagnostic tool)
 
@@ -12,47 +12,47 @@
 
 ### 1.1 Color Palette — Semantic Tokens
 
-#### Primary (Teal/Cyan — Trust & Calm)
+#### Primary (Orchid — sampled from the provided `#A169CF` reference)
 | Token | Light | Dark |
 |---|---|---|
-| `--color-primary-50` | `#f0fdfa` | — |
-| `--color-primary-100` | `#ccfbf1` | — |
-| `--color-primary-200` | `#99f6e4` | — |
-| `--color-primary-300` | `#5eead4` | — |
-| `--color-primary-400` | `#2dd4bf` | — |
-| `--color-primary-500` | `#14b8a6` | — |
-| `--color-primary-600` | `#0d9488` | — |
-| `--color-primary-700` | `#0f766e` | — |
-| `--color-primary-800` | `#115e59` | — |
-| `--color-primary-900` | `#134e4a` | — |
+| `--color-primary-50` | `#fbf7ff` | — |
+| `--color-primary-100` | `#f3e9fb` | — |
+| `--color-primary-200` | `#e6d2f5` | — |
+| `--color-primary-300` | `#d1b1e9` | — |
+| `--color-primary-400` | `#b985dc` | — |
+| `--color-primary-500` | `#a169cf` | — |
+| `--color-primary-600` | `#8953b7` | — |
+| `--color-primary-700` | `#70409a` | — |
+| `--color-primary-800` | `#583278` | — |
+| `--color-primary-900` | `#402456` | — |
 
 #### Surface / Neutral
 | Token | Value |
 |---|---|
-| `--surface-bg` | `#fafbfc` |
-| `--surface-card` | `#ffffff` |
-| `--surface-elevated` | `#ffffff` |
-| `--surface-muted` | `#f1f5f9` |
-| `--surface-border` | `#e2e8f0` |
-| `--surface-border-strong` | `#cbd5e1` |
+| `--surface-bg` | `#f8f3fc` |
+| `--surface-card` | `#fdfaff` |
+| `--surface-elevated` | `#ffffff` (neutral highlight) |
+| `--surface-muted` | `#f1e9f8` |
+| `--surface-border` | `#e8ddf1` |
+| `--surface-border-strong` | `#d4c1e3` |
 
 #### Text
 | Token | Value |
 |---|---|
-| `--text-primary` | `#0f172a` |
-| `--text-secondary` | `#475569` |
-| `--text-muted` | `#94a3b8` |
+| `--text-primary` | `#281b34` |
+| `--text-secondary` | `#655572` |
+| `--text-muted` | `#81718f` |
 | `--text-inverse` | `#ffffff` |
 | `--text-on-primary` | `#ffffff` |
 
 #### Semantic / Status
 | Token | Use | Value |
 |---|---|---|
-| `--color-safe` | Low indicator | `#10b981` (emerald) |
+| `--color-safe` | Low indicator | `#8953b7` (orchid) |
 | `--color-attention` | Moderate indicator | `#f59e0b` (amber) |
 | `--color-elevated` | High indicator | `#ef4444` (red) |
 | `--color-info` | Information | `#3b82f6` (blue) |
-| `--color-success` | Success state | `#10b981` |
+| `--color-success` | Success state | `#8953b7` |
 | `--color-warning` | Warning | `#f59e0b` |
 | `--color-error` | Error state | `#ef4444` |
 
@@ -110,7 +110,7 @@
 | `shadow-md` | `0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05)` |
 | `shadow-lg` | `0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04)` |
 | `shadow-xl` | `0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04)` |
-| `shadow-glow-primary` | `0 0 20px rgba(20,184,166,0.15)` |
+| `shadow-glow-primary` | `0 0 24px rgba(161,105,207,0.2)` |
 
 ### 1.6 Motion
 | Token | Value | Use |

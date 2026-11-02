@@ -83,7 +83,7 @@ export function Accordion({
                   {...safeMotion(collapseExpand)}
                   className="overflow-hidden"
                 >
-                  <div className="p-5 pt-0 text-sm text-text-secondary leading-relaxed border-t border-surface-border/50 bg-slate-50/40">
+                  <div className="p-5 pt-0 text-sm text-text-secondary leading-relaxed border-t border-surface-border/50 bg-surface-muted/40">
                     {item.content}
                   </div>
                 </motion.div>

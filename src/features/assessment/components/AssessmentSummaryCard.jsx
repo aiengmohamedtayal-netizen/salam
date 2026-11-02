@@ -84,7 +84,7 @@ export function AssessmentSummaryCard({
       )}
 
       {/* 1. User Text Snippet Card */}
-      <Card variant="default" padding="md" className="space-y-3 bg-white">
+      <Card variant="default" padding="md" className="space-y-3">
         <div className="flex items-center justify-between border-b border-surface-border pb-2.5">
           <div className="flex items-center gap-2">
             <Icon3D name="notepad" size="xs" className="w-5 h-5 shrink-0" />
@@ -102,13 +102,13 @@ export function AssessmentSummaryCard({
             <span>{t('assessment.summary.editSnippet')}</span>
           </button>
         </div>
-        <p className="text-xs sm:text-sm text-text-secondary leading-relaxed line-clamp-3 bg-slate-50/80 p-3 rounded-lg border border-slate-200">
+        <p className="text-xs sm:text-sm text-text-secondary leading-relaxed line-clamp-3 bg-surface-muted p-3 rounded-lg border border-surface-border">
           «{inputText}»
         </p>
       </Card>
 
       {/* 2. Initial Structured Answers */}
-      <Card variant="default" padding="md" className="space-y-3 bg-white">
+      <Card variant="default" padding="md" className="space-y-3">
         <div className="flex items-center justify-between border-b border-surface-border pb-2.5">
           <div className="flex items-center gap-2">
             <Icon3D name="heartbeat" size="xs" className="w-5 h-5 shrink-0" />
@@ -128,7 +128,7 @@ export function AssessmentSummaryCard({
           {STRUCTURED_QUESTIONS.map((q) => (
             <div
               key={q.id}
-              className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1"
+              className="p-3 rounded-xl bg-surface-muted border border-surface-border space-y-1"
             >
               <span className="text-[11px] font-bold text-text-muted block">
                 {resolveQuestionText(q.category, language)}
@@ -142,7 +142,7 @@ export function AssessmentSummaryCard({
       </Card>
 
       {/* 3. Follow-up Adaptive Questions Summary */}
-      <Card variant="default" padding="md" className="space-y-4 bg-white">
+      <Card variant="default" padding="md" className="space-y-4">
         <div className="flex items-center justify-between border-b border-surface-border pb-2.5">
           <div>
             <h3 className="text-sm font-bold text-text-primary">
@@ -172,7 +172,7 @@ export function AssessmentSummaryCard({
             return (
               <div
                 key={q.id}
-                className="p-3.5 rounded-xl border border-surface-border hover:border-teal-200 bg-slate-50/50 hover:bg-white transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                className="p-3.5 rounded-xl border border-surface-border hover:border-teal-200 bg-surface-muted/50 hover:bg-surface-card transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <div className="space-y-1 flex-1">
                   <div className="flex items-center gap-2">

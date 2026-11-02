@@ -20,7 +20,7 @@ function isWebGLAvailable() {
 }
 
 /**
- * SALAM Interactive 3D Neural/NLP Network Component.
+ * AMAL Interactive 3D Neural/NLP Network Component.
  * Abstract representation of linguistic parsing, embeddings, and cognitive indicators.
  *
  * @param {object} props
@@ -83,7 +83,7 @@ export function SalamNeuralNetwork({
     const nodeBasePositions = [];
     const nodeColors = new Float32Array(nodeCount * 3);
 
-    // Color definitions from SALAM Design Tokens
+    // Color definitions from AMAL Design Tokens
     const colorTeal = new THREE.Color(0x14b8a6); // primary-500
     const colorCyan = new THREE.Color(0x2dd4bf); // primary-400
     const colorGold = new THREE.Color(0xf59e0b); // attention / gold
@@ -144,7 +144,7 @@ export function SalamNeuralNetwork({
     if (ctx) {
       const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
       gradient.addColorStop(0, 'rgba(255,255,255,1)');
-      gradient.addColorStop(0.35, 'rgba(20,184,166,0.95)');
+      gradient.addColorStop(0.35, 'rgba(161,105,207,0.95)');
       gradient.addColorStop(0.7, 'rgba(15,118,110,0.8)');
       gradient.addColorStop(1, 'rgba(15,23,42,0)');
       ctx.fillStyle = gradient;
@@ -398,3 +398,5 @@ export function SalamNeuralNetwork({
     />
   );
 }
+
+export const AmalNeuralNetwork = SalamNeuralNetwork;

@@ -3,7 +3,7 @@ import { Icon3D } from '@/components/ui/Icon3D';
 import { useTranslation } from '@/context/LanguageContext';
 
 /**
- * Standardized header for SALAM authentication pages.
+ * Standardized header for AMAL authentication pages.
  * Displays brand identity, page title, and supporting description.
  * @param {object} props
  * @param {string} props.title - Main heading

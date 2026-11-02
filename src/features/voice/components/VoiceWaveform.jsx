@@ -66,10 +66,10 @@ export function VoiceWaveform({ analyser, isRecording, className }) {
         const x = i * (barWidth + 3) + 2;
         const y = (height - barHeight) / 2;
 
-        // Gradient styling matching SALAM teal palette
+        // Gradient styling matching AMAL teal palette
         const gradient = ctx.createLinearGradient(0, y, 0, y + barHeight);
         gradient.addColorStop(0, 'rgba(13, 148, 136, 0.9)'); // teal-600
-        gradient.addColorStop(1, 'rgba(20, 184, 166, 0.4)'); // teal-500
+        gradient.addColorStop(1, 'rgba(161, 105, 207, 0.4)');
 
         ctx.fillStyle = gradient;
         ctx.beginPath();

@@ -30,7 +30,7 @@ export function Skeleton({
     <div
       aria-hidden="true"
       className={cn(
-        'animate-pulse bg-slate-200/80',
+        'animate-pulse bg-surface-muted',
         variantClasses[variant],
         className
       )}

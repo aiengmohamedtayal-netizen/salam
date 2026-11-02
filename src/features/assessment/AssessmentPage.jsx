@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -8,6 +8,8 @@ import {
   Loader2,
   Phone,
   ExternalLink,
+  History,
+  Trash2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -19,6 +21,7 @@ import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
 import { FormField } from '@/components/forms/FormField';
 import { FormActions } from '@/components/forms/FormActions';
 import { ErrorState } from '@/components/feedback/ErrorState';
+import { Dialog } from '@/components/ui/Dialog';
 import { AssessmentResultView } from './AssessmentResultView';
 import { AdaptiveAssessmentUI } from './components/AdaptiveAssessmentUI';
 import {
@@ -30,9 +33,16 @@ import {
 import { resolveQuestionText } from './data/adaptiveQuestionBank';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
+import { cn } from '@/lib/utils';
+import { TextAnalysisCard } from './components/TextAnalysisCard';
+import { useAuth, getCsrfHeader } from '@/context/AuthContext';
 
 export function AssessmentPage() {
   const { t, language } = useTranslation();
+  const { user } = useAuth();
+
+  // Mode: 'guided' (full multi-step flow) | 'direct' (temporary LLM inference card)
+  const [assessmentMode, setAssessmentMode] = useState('guided');
 
   // Step state: 'onboarding' | 'input' | 'adaptive' | 'analyzing' | 'results' | 'error'
   const [step, setStep] = useState('onboarding');
@@ -52,6 +62,57 @@ export function AssessmentPage() {
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [resultData, setResultData] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [assessmentHistory, setAssessmentHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(Boolean(user));
+  const [historyError, setHistoryError] = useState('');
+  const [confirmHistoryDelete, setConfirmHistoryDelete] = useState(false);
+  const [historyDeleting, setHistoryDeleting] = useState(false);
+
+  const loadHistory = useCallback(async () => {
+    try {
+      const response = await fetch('/api/v1/assessments', { credentials: 'include', cache: 'no-store' });
+      if (!response.ok) throw new Error('HISTORY_UNAVAILABLE');
+      const body = await response.json();
+      setAssessmentHistory(body.assessments || []);
+      setHistoryError('');
+    } catch {
+      setHistoryError(t('assessment.history.loadError'));
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, [t]);
+
+  useEffect(() => {
+    if (user) void Promise.resolve().then(loadHistory);
+  }, [user, loadHistory]);
+
+  const handleClearHistory = async () => {
+    setHistoryDeleting(true);
+    try {
+      const response = await fetch('/api/v1/assessments', {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: getCsrfHeader(),
+      });
+      if (!response.ok) throw new Error('HISTORY_DELETE_FAILED');
+      setAssessmentHistory([]);
+      setHistoryError('');
+      setConfirmHistoryDelete(false);
+    } catch {
+      setHistoryError(t('assessment.history.deleteError'));
+    } finally {
+      setHistoryDeleting(false);
+    }
+  };
+
+  const handleRestoreAssessment = (record) => {
+    setInputText(record.text);
+    setAnswers(record.answers || {});
+    setFinalCombinedAnswers(record.answers || null);
+    setAssessmentMode('guided');
+    setStep('input');
+    setValidationError('');
+  };
 
   const samplePrompts = t('assessment.input.samples') || [];
 
@@ -99,6 +160,8 @@ export function AssessmentPage() {
     } catch {
       setErrorMessage(t('assessment.error.generic'));
       setStep('error');
+    } finally {
+      loadHistory();
     }
   };
 
@@ -112,7 +175,7 @@ export function AssessmentPage() {
   };
 
   return (
-    <div className="py-8 sm:py-14 bg-surface-bg min-h-screen">
+    <div className="py-8 sm:py-14 max-sm:pb-28 bg-surface-bg min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* ==========================================================
             PERSISTENT CRISIS & SUPPORT BAR (Always accessible)
@@ -144,6 +207,100 @@ export function AssessmentPage() {
           </div>
         </div>
 
+        <details className="group rounded-2xl border border-surface-border bg-surface-card shadow-sm">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-2xl p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 sm:p-5 [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center gap-3">
+              <History className="h-5 w-5 text-teal-700" aria-hidden="true" />
+              <span className="font-bold text-text-primary">{t('assessment.history.title')}</span>
+              <span className="rounded-full bg-surface-muted px-2 py-0.5 text-xs text-text-secondary" aria-label={t('assessment.history.count', { count: assessmentHistory.length })}>
+                {assessmentHistory.length}
+              </span>
+            </span>
+            <span className="text-xs font-semibold text-primary-700 group-open:hidden">{t('assessment.history.open')}</span>
+            <span className="hidden text-xs font-semibold text-primary-700 group-open:inline">{t('assessment.history.close')}</span>
+          </summary>
+          <div className="border-t border-surface-border p-4 sm:p-5">
+            <p className="text-xs text-text-secondary">{t('assessment.history.description')}</p>
+            {historyError && (
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-3" role="alert">
+                <p className="text-sm text-rose-700">{historyError}</p>
+                <Button variant="outline" size="sm" onClick={() => { setHistoryLoading(true); loadHistory(); }} loading={historyLoading}>
+                  {t('assessment.history.retry')}
+                </Button>
+              </div>
+            )}
+            {historyLoading ? (
+              <p className="mt-4 text-sm text-text-muted" role="status">{t('assessment.history.loading')}</p>
+            ) : assessmentHistory.length === 0 ? (
+              <p className="mt-4 text-sm text-text-muted">{t('assessment.history.empty')}</p>
+            ) : (
+              <ul className="mt-4 space-y-3">
+                {assessmentHistory.map((record) => {
+                  const statusKey = ['insufficient_input', 'model_unavailable'].includes(record.status)
+                    ? record.status
+                    : 'default';
+                  return (
+                    <li key={record.id} className="rounded-xl border border-surface-border p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-xs text-text-muted">{new Date(record.created_at).toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US')}</span>
+                        <span className="rounded-full bg-surface-muted px-2 py-1 text-xs text-text-secondary">{t(`assessment.history.status.${statusKey}`)}</span>
+                      </div>
+                      <p className="mt-2 whitespace-pre-wrap text-sm text-text-primary">{record.text}</p>
+                      <Button variant="ghost" size="sm" onClick={() => handleRestoreAssessment(record)} className="mt-2 px-0 text-teal-800">
+                        {t('assessment.history.restore')}
+                      </Button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {assessmentHistory.length > 0 && (
+              <Button variant="outline" size="sm" onClick={() => setConfirmHistoryDelete(true)} className="mt-4 gap-2">
+                <Trash2 className="h-4 w-4" aria-hidden="true" />
+                {t('assessment.history.clear')}
+              </Button>
+            )}
+          </div>
+        </details>
+
+        {/* ==========================================================
+            MODE SELECTOR: GUIDED ASSESSMENT VS DIRECT LINGUISTIC INFERENCE
+            ========================================================== */}
+        <div className="flex items-center justify-center pt-1">
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-surface-card border border-surface-border shadow-xs">
+            <button
+              type="button"
+              aria-pressed={assessmentMode === 'guided'}
+              onClick={() => setAssessmentMode('guided')}
+              className={cn(
+                'px-4 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer',
+                assessmentMode === 'guided'
+                  ? 'bg-teal-700 text-white shadow-xs'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-surface-muted'
+              )}
+            >
+              {t('assessment.modes.guided')}
+            </button>
+            <button
+              type="button"
+              aria-pressed={assessmentMode === 'direct'}
+              onClick={() => setAssessmentMode('direct')}
+              className={cn(
+                'px-4 py-2 text-xs sm:text-sm font-bold rounded-lg transition-all cursor-pointer flex items-center gap-1.5',
+                assessmentMode === 'direct'
+                  ? 'bg-teal-700 text-white shadow-xs'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-surface-muted'
+              )}
+            >
+              {t('assessment.modes.direct')}
+            </button>
+          </div>
+        </div>
+
+        {assessmentMode === 'direct' ? (
+          <TextAnalysisCard />
+        ) : (
+          <>
         {/* ==========================================================
             STEP 1: ONBOARDING & INFORMED CONSENT
             ========================================================== */}
@@ -155,7 +312,9 @@ export function AssessmentPage() {
                 <span>{t('assessment.onboarding.badge')}</span>
               </Badge>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-text-primary">
-                {t('assessment.onboarding.title')}
+                {user?.name
+                  ? t('assessment.onboarding.welcomeTitle', { name: user.name })
+                  : t('assessment.onboarding.title')}
               </h1>
               <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
                 {t('assessment.onboarding.subtitle')}
@@ -170,21 +329,21 @@ export function AssessmentPage() {
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-text-secondary">
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="p-4 rounded-xl bg-surface-muted border border-surface-border space-y-1">
                     <span className="font-bold text-text-primary flex items-center gap-1.5 text-sm">
                       <Icon3D name="calendar" size="xs" className="w-5 h-5 shrink-0" />
                       <span>{t('assessment.onboarding.card1Title')}</span>
                     </span>
                     <span>{t('assessment.onboarding.card1Desc')}</span>
                   </div>
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="p-4 rounded-xl bg-surface-muted border border-surface-border space-y-1">
                     <span className="font-bold text-text-primary flex items-center gap-1.5 text-sm">
                       <Icon3D name="shield" size="xs" className="w-5 h-5 shrink-0" />
                       <span>{t('assessment.onboarding.card2Title')}</span>
                     </span>
                     <span>{t('assessment.onboarding.card2Desc')}</span>
                   </div>
-                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="p-4 rounded-xl bg-surface-muted border border-surface-border space-y-1">
                     <span className="font-bold text-text-primary flex items-center gap-1.5 text-sm">
                       <Icon3D name="lightbulb" size="xs" className="w-5 h-5 shrink-0" />
                       <span>{t('assessment.onboarding.card3Title')}</span>
@@ -227,7 +386,7 @@ export function AssessmentPage() {
                 )}
               </div>
 
-              <FormActions align="end">
+              <FormActions align="end" stickyMobile>
                 <Button
                   variant="primary"
                   size="lg"
@@ -257,7 +416,7 @@ export function AssessmentPage() {
                 </p>
               </div>
               <Badge variant="info" size="sm">
-                {t('assessment.input.badgeEncrypted')}
+                {t('assessment.input.badgeSaved')}
               </Badge>
             </div>
 
@@ -323,7 +482,7 @@ export function AssessmentPage() {
                     return (
                       <div
                         key={q.id}
-                        className="p-3.5 rounded-xl bg-slate-50/70 border border-surface-border space-y-2"
+                        className="p-3.5 rounded-xl bg-surface-muted/70 border border-surface-border space-y-2"
                       >
                         <span className="text-xs font-bold text-text-primary block">
                           {categoryLabel}
@@ -333,7 +492,7 @@ export function AssessmentPage() {
                           onChange={(e) =>
                             setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
                           }
-                          className="w-full text-xs p-2 rounded-lg bg-white border border-surface-border text-text-primary focus:outline-none focus:ring-1 focus:ring-teal-500"
+                          className="w-full text-xs p-2 rounded-lg bg-surface-card border border-surface-border text-text-primary focus:outline-none focus:ring-1 focus:ring-teal-500"
                         >
                           {q.options.map((opt) => (
                             <option key={opt.value} value={opt.value}>
@@ -428,7 +587,7 @@ export function AssessmentPage() {
                           ? 'bg-teal-50/80 border-teal-300 text-teal-950 font-bold shadow-xs'
                           : isCompleted
                           ? 'bg-emerald-50/40 border-emerald-200 text-emerald-950 opacity-90'
-                          : 'bg-slate-50/50 border-slate-200 text-slate-400 opacity-60'
+                          : 'bg-surface-muted/50 border-surface-border text-text-muted opacity-60'
                       }`}
                     >
                       <div className="shrink-0 mt-0.5">
@@ -437,7 +596,7 @@ export function AssessmentPage() {
                         ) : isCurrent ? (
                           <Loader2 className="h-4 w-4 text-teal-600 animate-spin" aria-hidden="true" />
                         ) : (
-                          <div className="w-4 h-4 rounded-full border border-slate-300" />
+                          <div className="w-4 h-4 rounded-full border border-surface-border-strong" />
                         )}
                       </div>
                       <div className="flex-1">
@@ -497,7 +656,7 @@ export function AssessmentPage() {
                 {t('assessment.errorFallbackSupport.body')}
               </p>
 
-              <div className="p-4 rounded-xl bg-white border border-teal-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-4 rounded-xl bg-surface-card border border-teal-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <span className="text-xs text-text-muted block">
                     {t('assessment.errorFallbackSupport.hotlineLabel')}
@@ -533,7 +692,27 @@ export function AssessmentPage() {
             </Card>
           </div>
         )}
+          </>
+        )}
       </div>
+
+      <Dialog
+        open={confirmHistoryDelete}
+        onClose={() => !historyDeleting && setConfirmHistoryDelete(false)}
+        title={t('assessment.history.confirmTitle')}
+        description={t('assessment.history.confirmDescription')}
+        closeLabel={t('common.close')}
+        role="alertdialog"
+      >
+        <div className="flex flex-wrap justify-end gap-3">
+          <Button variant="outline" onClick={() => setConfirmHistoryDelete(false)} disabled={historyDeleting}>
+            {t('common.cancel')}
+          </Button>
+          <Button variant="danger" onClick={handleClearHistory} loading={historyDeleting}>
+            {t('assessment.history.confirmDelete')}
+          </Button>
+        </div>
+      </Dialog>
     </div>
   );
 }

@@ -10,11 +10,13 @@ import { SignalOverview } from '../components/SignalOverview';
 import { useTranslation } from '@/context/LanguageContext';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
+import { ErrorState } from '@/components/feedback/ErrorState';
+import { analyzeMultimodalPost } from '@/services/amalApi';
 
 /**
  * MultimodalAnalysisPage Component
  * Main page for multimodal social-media content analysis.
- * Fully interactive frontend simulation adhering to the SALAM design system.
+ * Multimodal analysis workspace integrated with the AMAL API.
  */
 export function MultimodalAnalysisPage() {
   const { t } = useTranslation();
@@ -27,6 +29,8 @@ export function MultimodalAnalysisPage() {
   const [audioUrl, setAudioUrl] = useState(null);
   const [audioDuration, setAudioDuration] = useState(0);
   const [viewState, setViewState] = useState('input'); // 'input' | 'analyzing' | 'result'
+  const [multimodalResult, setMultimodalResult] = useState(null);
+  const [analysisError, setAnalysisError] = useState('');
 
   // Determine active input modality across Text, Image, Voice
   const modality = useMemo(() => {
@@ -68,16 +72,25 @@ export function MultimodalAnalysisPage() {
     setAudioBlob(null);
     setAudioUrl(null);
     setAudioDuration(0);
+    setMultimodalResult(null);
+    setAnalysisError('');
     setViewState('input');
   };
 
-  const handleStartAnalysis = () => {
+  const handleStartAnalysis = async () => {
     if (modality === 'empty') return;
+    setAnalysisError('');
     setViewState('analyzing');
-  };
-
-  const handleAnalysisComplete = () => {
-    setViewState('result');
+    try {
+      const res = await analyzeMultimodalPost({ text, modality }, 'ar');
+      setMultimodalResult(res);
+      setViewState('result');
+    } catch (err) {
+      setAnalysisError(
+        t('multimodal.apiUnavailable') + (err?.requestId ? ` (${err.requestId})` : '')
+      );
+      setViewState('error');
+    }
   };
 
   const tabs = [
@@ -135,7 +148,7 @@ export function MultimodalAnalysisPage() {
 
       {/* Main Tab Content */}
       <AnimatePresence mode="wait">
-        {activeTab === 'workspace' && (
+    {activeTab === 'workspace' && (
           <motion.div
             key="workspace-tab"
             initial={{ opacity: 0, y: 8 }}
@@ -181,10 +194,7 @@ export function MultimodalAnalysisPage() {
 
             {viewState === 'analyzing' && (
               <div className="max-w-2xl mx-auto">
-                <AnalysisProcess
-                  modality={modality}
-                  onComplete={handleAnalysisComplete}
-                />
+                <AnalysisProcess modality={modality} />
               </div>
             )}
 
@@ -192,7 +202,18 @@ export function MultimodalAnalysisPage() {
               <div className="max-w-4xl mx-auto">
                 <MultimodalResult
                   modality={modality}
+                  dynamicResult={multimodalResult}
                   onReset={handleReset}
+                />
+              </div>
+            )}
+            {viewState === 'error' && (
+              <div className="max-w-2xl mx-auto">
+                <ErrorState
+                  title={t('multimodal.apiUnavailableTitle')}
+                  message={analysisError}
+                  onRetry={() => setViewState('input')}
+                  retryLabel={t('multimodal.resetCta')}
                 />
               </div>
             )}

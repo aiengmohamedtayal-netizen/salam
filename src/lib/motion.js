@@ -45,6 +45,20 @@ export const backdropFade = {
   transition: { duration: 0.2 },
 };
 
+/** Spring entrance for a chat message bubble */
+export const messageEnter = {
+  initial: { opacity: 0, y: 10, scale: 0.985 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  transition: { type: 'spring', stiffness: 460, damping: 34, mass: 0.7 },
+};
+
+/** Spring entrance for small interactive chips (quick prompts) */
+export const chipEnter = {
+  initial: { opacity: 0, y: 6, scale: 0.97 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  transition: { type: 'spring', stiffness: 520, damping: 30, mass: 0.6 },
+};
+
 /** Collapse/expand for accordions */
 export const collapseExpand = {
   initial: { height: 0, opacity: 0 },

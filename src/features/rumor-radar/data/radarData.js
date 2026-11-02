@@ -1,5 +1,5 @@
 /**
- * SALAM — Rumor & Misinformation Radar Data Model
+ * AMAL — Rumor & Misinformation Radar Data Model
  * Pure structured data for monitoring circulating claims, indicators, and evidence.
  * Follows neutral, evidence-based verification standards.
  * Bilingual: Arabic (ar) & English (en).

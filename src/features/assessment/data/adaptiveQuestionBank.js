@@ -1,5 +1,5 @@
 /**
- * SALAM — Smart Adaptive Question Bank & Deterministic Branching Engine
+ * AMAL — Smart Adaptive Question Bank & Deterministic Branching Engine
  * Strictly non-diagnostic: collects early indicator context (Duration, Frequency,
  * Intensity, Daily Function, Sleep/Rest, Social Interaction, Concentration, Emotional Variation).
  * Fully localized for Arabic (ar) and English (en).

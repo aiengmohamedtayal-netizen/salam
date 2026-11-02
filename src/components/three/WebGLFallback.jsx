@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * Accessible SVG/CSS fallback when WebGL is unavailable or disabled.
- * Renders an abstract linguistic neural network using SALAM design tokens.
+ * Renders an abstract linguistic neural network using AMAL design tokens.
  * @param {object} props
  * @param {string} [props.className]
  */
@@ -23,11 +23,11 @@ export function WebGLFallback({ className }) {
         aria-hidden="true"
       >
         <defs>
-          <linearGradient id="salam-node-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#0d9488" stopOpacity="0.9" />
+          <linearGradient id="amal-node-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#b985dc" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#70409a" stopOpacity="0.9" />
           </linearGradient>
-          <linearGradient id="salam-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="amal-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
             <stop offset="100%" stopColor="#d97706" stopOpacity="0.9" />
           </linearGradient>
@@ -48,14 +48,14 @@ export function WebGLFallback({ className }) {
         </g>
 
         {/* Central Core Nodes */}
-        <circle cx="200" cy="150" r="28" fill="#f0fdfa" stroke="#14b8a6" strokeWidth="2" opacity="0.8" />
-        <circle cx="200" cy="150" r="14" fill="url(#salam-node-grad)" />
+        <circle cx="200" cy="150" r="28" fill="#f3e9fb" stroke="#a169cf" strokeWidth="2" opacity="0.8" />
+        <circle cx="200" cy="150" r="14" fill="url(#amal-node-grad)" />
 
         {/* Surrounding NLP Nodes */}
-        <circle cx="120" cy="80" r="10" fill="url(#salam-node-grad)" />
-        <circle cx="280" cy="90" r="12" fill="url(#salam-gold-grad)" />
-        <circle cx="110" cy="210" r="11" fill="url(#salam-node-grad)" />
-        <circle cx="290" cy="210" r="9" fill="url(#salam-node-grad)" />
+        <circle cx="120" cy="80" r="10" fill="url(#amal-node-grad)" />
+        <circle cx="280" cy="90" r="12" fill="url(#amal-gold-grad)" />
+        <circle cx="110" cy="210" r="11" fill="url(#amal-node-grad)" />
+        <circle cx="290" cy="210" r="9" fill="url(#amal-node-grad)" />
         <circle cx="60" cy="150" r="7" fill="#99f6e4" />
         <circle cx="340" cy="150" r="8" fill="#fde68a" />
       </svg>

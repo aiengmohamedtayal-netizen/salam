@@ -185,6 +185,7 @@ export function AwarenessPage() {
         open={Boolean(selectedArticle)}
         onClose={() => setSelectedArticle(null)}
         title={selectedArticle ? (isEn && selectedArticle.titleEn ? selectedArticle.titleEn : selectedArticle.title) : ''}
+        closeLabel={t('common.close')}
         size="lg"
       >
         {selectedArticle && (

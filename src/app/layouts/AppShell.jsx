@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from '@/components/navigation/Navbar';
 import { Footer } from '@/components/navigation/Footer';
 import { useTranslation } from '@/context/LanguageContext';
+import { AmalAssistant } from '@/features/assistant';
 
 /**
  * Root Application Shell layout with Navbar, accessible skip link, route change scroll management, and Footer.
@@ -45,6 +46,9 @@ export function AppShell() {
 
       {/* Main Footer */}
       <Footer />
+
+      {/* Floating AMAL Assistant (fixed, does not affect the flex column) */}
+      <AmalAssistant />
     </div>
   );
 }

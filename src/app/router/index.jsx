@@ -1,9 +1,10 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Link, useRouteError } from 'react-router-dom';
+import { createBrowserRouter, Link, Navigate, useLocation } from 'react-router-dom';
 import { AppShell } from '@/app/layouts/AppShell';
 import { LoadingState } from '@/components/feedback/LoadingState';
 import { ErrorState } from '@/components/feedback/ErrorState';
 import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/context/AuthContext';
 
 // Route-level lazy loading for optimal bundle size and performance
 const HomePage = lazy(() =>
@@ -55,6 +56,14 @@ const VoiceAnalysisPage = lazy(() =>
     default: m.VoiceAnalysisPage,
   }))
 );
+const TextAnalysisPage = lazy(() =>
+  import('@/features/assessment/TextAnalysisPage').then((m) => ({
+    default: m.TextAnalysisPage,
+  }))
+);
+const SettingsPage = lazy(() =>
+  import('@/features/settings/SettingsPage').then((m) => ({ default: m.SettingsPage }))
+);
 
 import { useTranslation } from '@/context/LanguageContext';
 
@@ -68,6 +77,18 @@ function PageLoader() {
       <LoadingState title={t('common.loadingPage')} message={t('common.waitMoment')} />
     </div>
   );
+}
+
+function ProtectedRoute({ children }) {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+  const { language } = useTranslation();
+  if (loading) return <PageLoader />;
+  if (!user) {
+    const loginPath = language === 'en' ? '/en/login' : '/ar/login';
+    return <Navigate to={loginPath} replace state={{ from: location }} />;
+  }
+  return children;
 }
 
 /**
@@ -92,30 +113,22 @@ function NotFoundPage() {
 }
 
 /**
- * Route error boundary with SALAM ErrorState feedback.
+ * Route error boundary with AMAL ErrorState feedback.
  */
 function RouteErrorBoundary() {
-  const error = useRouteError();
-  const { language } = useTranslation();
-  const isEn = language === 'en';
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-6">
       <ErrorState
-        title={isEn ? 'An unexpected error occurred' : 'حدث خطأ غير متوقع'}
-        message={
-          error?.statusText ||
-          error?.message ||
-          (isEn
-            ? 'We encountered a momentary issue. Your inputs remain secure.'
-            : 'واجهنا تعثراً مؤقتاً في عرض هذه الصفحة. يمكنك العودة للصفحة الرئيسية أو إعادة المحاولة.')
-        }
+        title={t('common.pageErrorTitle')}
+        message={t('common.pageError')}
         onRetry={() => window.location.reload()}
-        retryLabel={isEn ? 'Reload Page' : 'إعادة تحميل الصفحة'}
+        retryLabel={t('common.reloadPage')}
         secondaryAction={
           <Link to="/">
             <Button variant="outline" size="md">
-              {isEn ? 'Return Home' : 'العودة للرئيسية'}
+              {t('common.returnHome')}
             </Button>
           </Link>
         }
@@ -136,9 +149,31 @@ const routeChildren = [
   {
     path: 'assessment',
     element: (
-      <Suspense fallback={<PageLoader />}>
-        <AssessmentPage />
-      </Suspense>
+      <ProtectedRoute>
+        <Suspense fallback={<PageLoader />}>
+          <AssessmentPage />
+        </Suspense>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'settings',
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<PageLoader />}>
+          <SettingsPage />
+        </Suspense>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: 'analysis',
+    element: (
+      <ProtectedRoute>
+        <Suspense fallback={<PageLoader />}>
+          <TextAnalysisPage />
+        </Suspense>
+      </ProtectedRoute>
     ),
   },
   {

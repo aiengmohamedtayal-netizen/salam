@@ -1,53 +1,102 @@
 @import "tailwindcss";
 
 /* ========================================
-   سلام — Design System Tokens
-   Cairo Font, RTL-first, Teal primary
+   أمل — Design System Tokens
+   Cairo Font, RTL-first, Orchid primary
    ======================================== */
 
-@theme inline {
-  /* --- Primary (Teal) --- */
-  --color-primary-50: #f0fdfa;
-  --color-primary-100: #ccfbf1;
-  --color-primary-200: #99f6e4;
-  --color-primary-300: #5eead4;
-  --color-primary-400: #2dd4bf;
-  --color-primary-500: #14b8a6;
-  --color-primary-600: #0d9488;
-  --color-primary-700: #0f766e;
-  --color-primary-800: #115e59;
-  --color-primary-900: #134e4a;
+@theme {
+  /* --- Brand palette (sampled from the provided #A169CF reference) --- */
+  --color-primary-50: #fbf7ff;
+  --color-primary-100: #f3e9fb;
+  --color-primary-200: #e6d2f5;
+  --color-primary-300: #d1b1e9;
+  --color-primary-400: #b985dc;
+  --color-primary-500: #a169cf;
+  --color-primary-600: #8953b7;
+  --color-primary-700: #70409a;
+  --color-primary-800: #583278;
+  --color-primary-900: #402456;
+
+  /* Existing utility names now resolve to the new brand family. */
+  --color-teal-50: #fbf7ff;
+  --color-teal-100: #f3e9fb;
+  --color-teal-200: #e6d2f5;
+  --color-teal-300: #d1b1e9;
+  --color-teal-400: #b985dc;
+  --color-teal-500: #a169cf;
+  --color-teal-600: #8953b7;
+  --color-teal-700: #70409a;
+  --color-teal-800: #583278;
+  --color-teal-900: #402456;
+  --color-teal-950: #2b173b;
+  --color-emerald-50: #fbf7ff;
+  --color-emerald-100: #f3e9fb;
+  --color-emerald-200: #e6d2f5;
+  --color-emerald-300: #d1b1e9;
+  --color-emerald-400: #b985dc;
+  --color-emerald-500: #a169cf;
+  --color-emerald-600: #8953b7;
+  --color-emerald-700: #70409a;
+  --color-emerald-800: #583278;
+  --color-emerald-900: #402456;
+  --color-emerald-950: #2b173b;
+  --color-green-50: #fbf7ff;
+  --color-green-100: #f3e9fb;
+  --color-green-200: #e6d2f5;
+  --color-green-300: #d1b1e9;
+  --color-green-400: #b985dc;
+  --color-green-500: #a169cf;
+  --color-green-600: #8953b7;
+  --color-green-700: #70409a;
+  --color-green-800: #583278;
+  --color-green-900: #402456;
+  --color-green-950: #2b173b;
+
+  /* Plum-tinted neutrals keep existing slate utilities on-brand. */
+  --color-slate-50: #fbf9fd;
+  --color-slate-100: #f4eff8;
+  --color-slate-200: #e8dfef;
+  --color-slate-300: #d5c8e0;
+  --color-slate-400: #a99ab7;
+  --color-slate-500: #81718f;
+  --color-slate-600: #655572;
+  --color-slate-700: #4e3e5c;
+  --color-slate-800: #392a46;
+  --color-slate-900: #281b34;
+  --color-slate-950: #180f22;
 
   /* --- Surface --- */
-  --color-surface-bg: #fafbfc;
-  --color-surface-card: #ffffff;
+  --color-surface-bg: #f8f3fc;
+  --color-surface-card: #fdfaff;
   --color-surface-elevated: #ffffff;
-  --color-surface-muted: #f1f5f9;
-  --color-surface-border: #e2e8f0;
-  --color-surface-border-strong: #cbd5e1;
+  --color-surface-muted: #f1e9f8;
+  --color-surface-border: #e8ddf1;
+  --color-surface-border-strong: #d4c1e3;
 
   /* --- Text --- */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
+  --color-text-primary: #281b34;
+  --color-text-secondary: #655572;
+  --color-text-muted: #81718f;
   --color-text-inverse: #ffffff;
   --color-text-on-primary: #ffffff;
 
   /* --- Status / Semantic --- */
-  --color-safe: #10b981;
-  --color-safe-light: #d1fae5;
+  --color-safe: #8953b7;
+  --color-safe-light: #f3e9fb;
   --color-attention: #f59e0b;
   --color-attention-light: #fef3c7;
   --color-elevated: #ef4444;
   --color-elevated-light: #fee2e2;
   --color-info: #3b82f6;
   --color-info-light: #dbeafe;
-  --color-success: #10b981;
+  --color-success: #8953b7;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
 
   /* --- Font --- */
   --font-cairo: 'Cairo', sans-serif;
+  --font-english: 'Inter Variable', 'Inter', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
 
   /* --- Shadows --- */
@@ -56,7 +105,7 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 20px rgba(20, 184, 166, 0.15);
+  --shadow-glow: 0 0 24px rgba(161, 105, 207, 0.2);
 
   /* --- Radius --- */
   --radius-sm: 0.375rem;
@@ -65,6 +114,65 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
+}
+
+/* ========================================
+   أمل — Dark Mode Design Tokens
+   Preserving brand identity, WCAG AAA contrast, rich dark plum palette
+   ======================================== */
+
+html.dark,
+[data-theme="dark"] {
+  /* --- Dark Surface Hierarchy --- */
+  --color-surface-bg: #18131f;
+  --color-surface-card: #211a2a;
+  --color-surface-elevated: #2a2136;
+  --color-surface-muted: #322740;
+  --color-surface-border: #453650;
+  --color-surface-border-strong: #5b476c;
+
+  /* Deep, tinted backgrounds keep existing light-theme utility classes calm at night. */
+  --color-primary-50: #251c30;
+  --color-primary-100: #30243d;
+  --color-primary-200: #433254;
+  --color-primary-300: #5d4373;
+  --color-primary-400: #775694;
+  --color-teal-50: #251c30;
+  --color-teal-100: #30243d;
+  --color-teal-200: #433254;
+  --color-teal-300: #5d4373;
+  --color-teal-400: #775694;
+  --color-emerald-50: #251c30;
+  --color-emerald-100: #30243d;
+  --color-emerald-200: #433254;
+  --color-emerald-300: #5d4373;
+  --color-emerald-400: #775694;
+  --color-green-50: #251c30;
+  --color-green-100: #30243d;
+  --color-green-200: #433254;
+  --color-green-300: #5d4373;
+  --color-green-400: #775694;
+
+  /* --- Dark Text Hierarchy --- */
+  --color-text-primary: #f8f3fb;
+  --color-text-secondary: #d9cfe2;
+  --color-text-muted: #ab99b9;
+  --color-text-inverse: #281b34;
+  --color-text-on-primary: #ffffff;
+
+  /* --- Status / Semantic (Dark adapted) --- */
+  --color-safe-light: rgba(161, 105, 207, 0.18);
+  --color-attention-light: rgba(245, 158, 11, 0.16);
+  --color-elevated-light: rgba(239, 68, 68, 0.16);
+  --color-info-light: rgba(59, 130, 246, 0.16);
+
+  /* --- Shadows in Dark Mode --- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.55), 0 2px 4px -2px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.65), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.75), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 28px rgba(161, 105, 207, 0.3);
 }
 
 /* ========================================
@@ -86,10 +194,27 @@ body {
   font-family: var(--font-cairo);
   color: var(--color-text-primary);
   background-color: var(--color-surface-bg);
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(161, 105, 207, 0.1), transparent 58%);
   line-height: 1.7;
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.dark body,
+[data-theme="dark"] body {
+  background-image: radial-gradient(ellipse at 50% 0%, rgba(161, 105, 207, 0.13), transparent 56%);
+}
+
+/* Replace utility-level white panels with the softly tinted brand surface. */
+.bg-white {
+  background-color: var(--color-surface-card);
+}
+
+.bg-teal-700,
+.bg-primary-700 {
+  background-image: linear-gradient(135deg, #a169cf 0%, #70409a 100%);
 }
 
 #root {
@@ -98,18 +223,227 @@ body {
   flex-direction: column;
 }
 
-/* ========================================
-   Typography Helpers
-   ======================================== */
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-cairo);
-  font-weight: 700;
-  line-height: 1.3;
+header,
+nav,
+footer,
+.bg-surface-card,
+.bg-surface-bg,
+.bg-surface-elevated,
+.bg-surface-muted {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-p, span, label, a, li, td, th, input, textarea, select, button {
+/* ========================================
+   Dark Mode Contextual Adaptations
+   ======================================== */
+
+/* Hardcoded surface fallbacks */
+html.dark .bg-white {
+  background-color: var(--color-surface-card) !important;
+}
+html.dark .bg-slate-50 {
+  background-color: var(--color-surface-muted) !important;
+}
+html.dark .bg-slate-100 {
+  background-color: var(--color-surface-muted) !important;
+}
+html.dark .border-slate-100,
+html.dark .border-slate-200 {
+  border-color: var(--color-surface-border) !important;
+}
+html.dark .border-slate-300 {
+  border-color: var(--color-surface-border-strong) !important;
+}
+html.dark .text-slate-900,
+html.dark .text-slate-800 {
+  color: var(--color-text-primary) !important;
+}
+html.dark .text-slate-700,
+html.dark .text-slate-600 {
+  color: var(--color-text-secondary) !important;
+}
+html.dark .text-slate-500,
+html.dark .text-slate-400 {
+  color: var(--color-text-muted) !important;
+}
+
+/* Secondary button brand tint in dark mode */
+html.dark .bg-primary-50 {
+  background-color: rgba(161, 105, 207, 0.2) !important;
+}
+html.dark .text-primary-700 {
+  color: #d1b1e9 !important;
+}
+
+/* Badges & Alert surfaces in dark mode */
+html.dark .bg-teal-50 {
+  background-color: rgba(161, 105, 207, 0.2) !important;
+}
+html.dark .text-teal-800,
+html.dark .text-teal-900,
+html.dark .text-teal-950 {
+  color: #e6d2f5 !important;
+}
+html.dark .text-primary-50,
+html.dark .text-teal-50,
+html.dark .text-emerald-50,
+html.dark .text-green-50 {
+  color: #fbf7ff !important;
+}
+html.dark .text-primary-100,
+html.dark .text-teal-100,
+html.dark .text-emerald-100,
+html.dark .text-green-100 {
+  color: #f3e9fb !important;
+}
+html.dark .text-primary-200,
+html.dark .text-teal-200,
+html.dark .text-emerald-200,
+html.dark .text-green-200 {
+  color: #e6d2f5 !important;
+}
+html.dark .text-primary-300,
+html.dark .text-teal-300,
+html.dark .text-emerald-300,
+html.dark .text-green-300 {
+  color: #d1b1e9 !important;
+}
+html.dark .text-primary-400,
+html.dark .text-teal-400,
+html.dark .text-emerald-400,
+html.dark .text-green-400 {
+  color: #b985dc !important;
+}
+html.dark .text-teal-600,
+html.dark .text-teal-700,
+html.dark .text-primary-600 {
+  color: #d1b1e9 !important;
+}
+html.dark .border-teal-100,
+html.dark .border-teal-200 {
+  border-color: rgba(161, 105, 207, 0.38) !important;
+}
+
+html.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+}
+html.dark .text-amber-800,
+html.dark .text-amber-900,
+html.dark .text-amber-950 {
+  color: #fcd34d !important;
+}
+html.dark .border-amber-100,
+html.dark .border-amber-200 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+html.dark .bg-rose-50,
+html.dark .bg-red-50 {
+  background-color: rgba(239, 68, 68, 0.16) !important;
+}
+html.dark .text-rose-800,
+html.dark .text-rose-900,
+html.dark .text-rose-950,
+html.dark .text-red-800 {
+  color: #fda4af !important;
+}
+html.dark .border-rose-100,
+html.dark .border-rose-200,
+html.dark .border-red-200 {
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+html.dark .bg-emerald-50,
+html.dark .bg-green-50 {
+  background-color: rgba(161, 105, 207, 0.2) !important;
+}
+html.dark .text-emerald-800,
+html.dark .text-emerald-900,
+html.dark .text-emerald-950 {
+  color: #e6d2f5 !important;
+}
+html.dark .text-emerald-600,
+html.dark .text-emerald-700,
+html.dark .text-green-600,
+html.dark .text-green-700 {
+  color: #d1b1e9 !important;
+}
+html.dark .border-emerald-100,
+html.dark .border-emerald-200 {
+  border-color: rgba(161, 105, 207, 0.38) !important;
+}
+
+html.dark .bg-sky-50,
+html.dark .bg-blue-50 {
+  background-color: rgba(14, 165, 233, 0.16) !important;
+}
+html.dark .text-sky-800,
+html.dark .text-sky-900 {
+  color: #7dd3fc !important;
+}
+html.dark .border-sky-100,
+html.dark .border-sky-200 {
+  border-color: rgba(14, 165, 233, 0.3) !important;
+}
+
+/* Forms & inputs in dark mode */
+html.dark input,
+html.dark textarea,
+html.dark select {
+  color-scheme: dark;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Scrollbar & Selection in dark mode */
+html.dark ::-webkit-scrollbar-track {
+  background: var(--color-surface-bg);
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-surface-border-strong);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #765f8a;
+}
+html.dark ::selection {
+  background-color: var(--color-primary-800);
+  color: var(--color-primary-100);
+}
+
+/* ========================================
+   Typography Helpers & Bilingual Font Switching
+   ======================================== */
+
+/* Arabic Typography (Cairo) */
+html[lang="ar"],
+html[dir="rtl"] {
   font-family: var(--font-cairo);
+}
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4, html[lang="ar"] h5, html[lang="ar"] h6,
+html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3, html[dir="rtl"] h4, html[dir="rtl"] h5, html[dir="rtl"] h6,
+html[lang="ar"] p, html[lang="ar"] span, html[lang="ar"] label, html[lang="ar"] a, html[lang="ar"] li, html[lang="ar"] input, html[lang="ar"] textarea, html[lang="ar"] select, html[lang="ar"] button,
+html[dir="rtl"] p, html[dir="rtl"] span, html[dir="rtl"] label, html[dir="rtl"] a, html[dir="rtl"] li, html[dir="rtl"] input, html[dir="rtl"] textarea, html[dir="rtl"] select, html[dir="rtl"] button {
+  font-family: var(--font-cairo);
+}
+
+/* English Typography (Modern Latin Sans-Serif) */
+html[lang="en"],
+html[dir="ltr"] {
+  font-family: var(--font-english);
+  letter-spacing: -0.01em;
+}
+html[lang="en"] h1, html[lang="en"] h2, html[lang="en"] h3, html[lang="en"] h4, html[lang="en"] h5, html[lang="en"] h6,
+html[dir="ltr"] h1, html[dir="ltr"] h2, html[dir="ltr"] h3, html[dir="ltr"] h4, html[dir="ltr"] h5, html[dir="ltr"] h6 {
+  font-family: var(--font-english);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+html[lang="en"] p, html[lang="en"] span, html[lang="en"] label, html[lang="en"] a, html[lang="en"] li, html[lang="en"] input, html[lang="en"] textarea, html[lang="en"] select, html[lang="en"] button,
+html[dir="ltr"] p, html[dir="ltr"] span, html[dir="ltr"] label, html[dir="ltr"] a, html[dir="ltr"] li, html[dir="ltr"] input, html[dir="ltr"] textarea, html[dir="ltr"] select, html[dir="ltr"] button {
+  font-family: var(--font-english);
 }
 
 /* ========================================
@@ -162,6 +496,38 @@ p, span, label, a, li, td, th, input, textarea, select, button {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ========================================
+   Chat Assistant surface
+   Ambient orchid light + a faint analysis grid
+   ======================================== */
+
+.chat-surface {
+  background-color: var(--color-surface-bg);
+  background-image:
+    radial-gradient(120% 70% at 50% 0%, rgba(161, 105, 207, 0.18) 0%, rgba(161, 105, 207, 0) 62%),
+    radial-gradient(circle, rgba(40, 27, 52, 0.045) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    22px 22px;
+}
+
+html.dark .chat-surface {
+  background-color: #130d1b;
+  background-image:
+    radial-gradient(120% 70% at 50% 0%, rgba(161, 105, 207, 0.22) 0%, rgba(161, 105, 207, 0) 62%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Horizontal chip rails — keep the scrollbar out of sight. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* ========================================

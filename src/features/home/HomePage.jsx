@@ -12,9 +12,11 @@ import { Icon3D } from '@/components/ui/Icon3D';
 import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 
 export function HomePage() {
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   const pipelineIconNames = [
     'chat',
@@ -36,6 +38,15 @@ export function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Hero Main Content (7 cols on desktop) */}
             <div className="lg:col-span-7 text-center lg:text-start space-y-6">
+              {user?.name && (
+                <motion.p
+                  {...safeMotion(fadeUp)}
+                  className="text-sm sm:text-base font-semibold text-primary-700 dark:text-primary-300"
+                  aria-label={t('home.hero.welcome', { name: user.name })}
+                >
+                  {t('home.hero.welcome', { name: user.name })}
+                </motion.p>
+              )}
               {/* Top pill badge */}
               <motion.div {...safeMotion(fadeUp)} className="inline-flex justify-center lg:justify-start">
                 <Badge variant="primary" size="md" className="gap-2 py-1 px-4 shadow-xs">
@@ -50,7 +61,7 @@ export function HomePage() {
                 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black text-text-primary tracking-tight leading-[1.25]"
               >
                 {t('home.hero.titleStart')}{' '}
-                <span className="text-teal-700 underline decoration-teal-300 decoration-wavy decoration-2 underline-offset-8">
+                <span className="text-teal-700 underline decoration-teal-300 decoration-wavy decoration-2 underline-offset-8 inline-block">
                   {t('home.hero.titleHighlight')}
                 </span>
               </motion.h1>
@@ -176,7 +187,7 @@ export function HomePage() {
       {/* ============================================================
           Key Pillars & Scientific Responsibility
           ============================================================ */}
-      <section className="py-20 bg-slate-50/60 border-b border-surface-border">
+      <section className="py-20 bg-surface-muted/40 border-b border-surface-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
@@ -240,19 +251,19 @@ export function HomePage() {
               </div>
 
               <div className="space-y-4 text-xs text-text-secondary leading-relaxed">
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+                <div className="p-3.5 rounded-xl bg-surface-muted border border-surface-border flex items-start gap-2.5">
                   <Icon3D name="shield" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
                   <div>
                     <strong>{t('home.pillars.rule1Title')}</strong> {t('home.pillars.rule1Desc')}
                   </div>
                 </div>
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+                <div className="p-3.5 rounded-xl bg-surface-muted border border-surface-border flex items-start gap-2.5">
                   <Icon3D name="clipboard" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
                   <div>
                     <strong>{t('home.pillars.rule2Title')}</strong> {t('home.pillars.rule2Desc')}
                   </div>
                 </div>
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-2.5">
+                <div className="p-3.5 rounded-xl bg-surface-muted border border-surface-border flex items-start gap-2.5">
                   <Icon3D name="care" size="xs" className="w-5 h-5 shrink-0 mt-0.5" />
                   <div>
                     <strong>{t('home.pillars.rule3Title')}</strong> {t('home.pillars.rule3Desc')}

@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Shield, AlertTriangle } from 'lucide-react';
 import { VoiceAnalysisCard } from '../components/VoiceAnalysisCard';
-import { VoiceAnalysisProcess } from '../components/VoiceAnalysisProcess';
-import { VoiceResultPlaceholder } from '../components/VoiceResultPlaceholder';
+import { ErrorState } from '@/components/feedback/ErrorState';
 import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
 import { useTranslation } from '@/context/LanguageContext';
 import { fadeUp, safeMotion } from '@/lib/motion';
@@ -18,7 +17,7 @@ export function VoiceAnalysisPage() {
   const [audioBlob, setAudioBlob] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [duration, setDuration] = useState(0);
-  const [viewState, setViewState] = useState('input'); // 'input' | 'analyzing' | 'result'
+  const [viewState, setViewState] = useState('input'); // 'input' | 'unavailable'
 
   const handleAudioChange = (blob, url, recDuration) => {
     setAudioBlob(blob);
@@ -28,11 +27,7 @@ export function VoiceAnalysisPage() {
 
   const handleStartAnalysis = () => {
     if (!audioUrl) return;
-    setViewState('analyzing');
-  };
-
-  const handleAnalysisComplete = () => {
-    setViewState('result');
+    setViewState('unavailable');
   };
 
   const handleReset = () => {
@@ -67,7 +62,7 @@ export function VoiceAnalysisPage() {
 
         {/* Floating 3D Ambient Visual Layer */}
         <div className="w-full max-w-sm h-36 mx-auto relative flex items-center justify-center">
-          <SalamNeuralNetwork state={viewState === 'analyzing' ? 'processing' : 'idle'} className="w-full h-full" />
+          <SalamNeuralNetwork state="idle" className="w-full h-full" />
         </div>
       </div>
 
@@ -104,28 +99,20 @@ export function VoiceAnalysisPage() {
           </motion.div>
         )}
 
-        {viewState === 'analyzing' && (
+        {viewState === 'unavailable' && (
           <motion.div
-            key="analyzing-view"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2 }}
-            className="max-w-2xl mx-auto"
-          >
-            <VoiceAnalysisProcess onComplete={handleAnalysisComplete} />
-          </motion.div>
-        )}
-
-        {viewState === 'result' && (
-          <motion.div
-            key="result-view"
+            key="unavailable-view"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
           >
-            <VoiceResultPlaceholder duration={duration} onReset={handleReset} />
+            <ErrorState
+              title={t('voice.analysisUnavailableTitle')}
+              message={t('voice.analysisUnavailable')}
+              onRetry={handleReset}
+              retryLabel={t('voice.reRecord')}
+            />
           </motion.div>
         )}
       </AnimatePresence>

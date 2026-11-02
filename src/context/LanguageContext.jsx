@@ -15,7 +15,7 @@ export function LanguageProvider({ children }) {
       if (typeof window !== 'undefined' && window.location.pathname.startsWith('/ar')) {
         return 'ar';
       }
-      const saved = localStorage.getItem('salam_lang');
+      const saved = localStorage.getItem('amal_lang') || localStorage.getItem('salam_lang');
       return saved === 'en' ? 'en' : 'ar';
     } catch {
       return 'ar';
@@ -29,7 +29,7 @@ export function LanguageProvider({ children }) {
     document.documentElement.lang = language;
     document.documentElement.dir = direction;
     try {
-      localStorage.setItem('salam_lang', language);
+      localStorage.setItem('amal_lang', language);
     } catch {
       // localStorage may be disabled in restricted modes
     }

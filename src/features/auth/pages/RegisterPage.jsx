@@ -1,19 +1,24 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Mail, User, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { AuthShell } from '../components/AuthShell';
 import { AuthHeader } from '../components/AuthHeader';
 import { PasswordField } from '../components/PasswordField';
 import { PasswordStrength } from '../components/PasswordStrength';
 import { AuthDivider } from '../components/AuthDivider';
+import { GoogleAuthButton } from '../components/GoogleAuthButton';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Alert } from '@/components/ui/Alert';
 import { useTranslation } from '@/context/LanguageContext';
+import { useAuth } from '@/context/AuthContext';
 
 export function RegisterPage() {
   const { t, language } = useTranslation();
+  const { register } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   const loginPath = language === 'en' ? '/en/login' : '/ar/login';
 
   // Form State
@@ -70,23 +75,17 @@ export function RegisterPage() {
     }
 
     setIsLoading(true);
-
     try {
-      // Simulate frontend submission interaction with clear UI state
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      // Demonstration frontend feedback
-      setFormAlert({
-        type: 'success',
-        title: t('auth.demoSuccessRegister'),
-        message: t('auth.demoNotice'),
-      });
-    } catch {
-      setFormAlert({
-        type: 'error',
-        title: t('auth.errors.generalFailure'),
-        message: null,
-      });
+      await register(name.trim(), email.trim(), password);
+      const destination = location.state?.from;
+      navigate(destination ? `${destination.pathname}${destination.search || ''}` : (language === 'en' ? '/en/assessment' : '/ar/assessment'), { replace: true });
+    } catch (error) {
+      const message = error.code === 'ACCOUNT_EXISTS'
+        ? t('auth.errors.accountExists')
+        : error.code === 'API_UNAVAILABLE'
+          ? t('auth.errors.networkError')
+          : t('auth.errors.generalFailure');
+      setFormAlert({ type: 'error', title: t('auth.errors.generalFailure'), message });
     } finally {
       setIsLoading(false);
     }
@@ -220,7 +219,9 @@ export function RegisterPage() {
           </div>
         </form>
 
-        <AuthDivider />
+        <AuthDivider>{t('auth.orContinue')}</AuthDivider>
+
+        <GoogleAuthButton />
 
         {/* Switch to Login Page */}
         <div className="text-center text-sm text-text-secondary">

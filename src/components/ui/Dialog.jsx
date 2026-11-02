@@ -20,22 +20,54 @@ export function Dialog({
   onClose,
   title,
   description,
+  closeLabel = 'Close',
+  role = 'dialog',
   size = 'md',
   children,
   className,
 }) {
   const dialogRef = useRef(null);
+  const returnFocusRef = useRef(null);
 
-  // Close on Escape key
+  // Keep keyboard focus inside the modal, and return it to its trigger on close.
   useEffect(() => {
     if (!open) return;
+    returnFocusRef.current = document.activeElement;
+    const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusableElements = () =>
+      Array.from(dialogRef.current?.querySelectorAll(focusableSelector) || []);
+    focusableElements()[0]?.focus();
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const elements = focusableElements();
+        if (elements.length === 0) {
+          e.preventDefault();
+          dialogRef.current?.focus();
+          return;
+        }
+
+        const first = elements[0];
+        const last = elements[elements.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      returnFocusRef.current?.focus?.();
+    };
   }, [open, onClose]);
 
   // Lock body scroll when open
@@ -61,7 +93,7 @@ export function Dialog({
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
-          role="dialog"
+          role={role}
           aria-modal="true"
           aria-labelledby={title ? 'dialog-title' : undefined}
           aria-describedby={description ? 'dialog-desc' : undefined}
@@ -105,7 +137,7 @@ export function Dialog({
                 type="button"
                 onClick={onClose}
                 className="rounded-lg p-1.5 text-text-muted hover:text-text-primary hover:bg-surface-muted transition-colors focus-visible:outline-2 focus-visible:outline-primary-500"
-                aria-label="إغلاق النافذة"
+                aria-label={closeLabel}
               >
                 <X className="h-5 w-5" aria-hidden="true" />
               </button>

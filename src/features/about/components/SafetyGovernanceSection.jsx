@@ -7,7 +7,7 @@ import { useTranslation } from '@/context/LanguageContext';
 
 /**
  * Safety, Privacy, and Limitations Section
- * Emphasizes the ethical charter and scientific governance of SALAM.
+ * Emphasizes the ethical charter and scientific governance of AMAL.
  */
 export function SafetyGovernanceSection() {
   const { t, language } = useTranslation();
@@ -18,7 +18,7 @@ export function SafetyGovernanceSection() {
       case 'non-diagnostic': return 'shield';
       case 'uncertainty-handling': return 'gauge';
       case 'no-safe-guarantee': return 'clipboard';
-      case 'zero-storage': return 'shield';
+      case 'account-history-storage': return 'shield';
       case 'always-visible-support': return 'care';
       case 'academic-governance': return 'graduation';
       default: return 'shield';
@@ -52,8 +52,8 @@ export function SafetyGovernanceSection() {
       >
         <span>
           {isEn
-            ? 'SALAM is an educational and research prototype. It is strictly prohibited to treat the system as a clinical tool or as a substitute for certified human practitioner consultation.'
-            : 'نظام «سَـــلام» نموذج أولي توعوي مبني لأغراض التعليم والبحث الأكاديمي. يُحظر تماماً التعامل مع النظام كأداة سريرية أو طبية أو استخدامه كبديل عن التقييم البشري المتخصص.'}
+            ? 'AMAL is an educational and research prototype. It is strictly prohibited to treat the system as a clinical tool or as a substitute for certified human practitioner consultation.'
+            : 'نظام «أمل» نموذج أولي توعوي مبني لأغراض التعليم والبحث الأكاديمي. يُحظر تماماً التعامل مع النظام كأداة سريرية أو طبية أو استخدامه كبديل عن التقييم البشري المتخصص.'}
         </span>
       </Alert>
 

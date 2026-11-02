@@ -81,7 +81,7 @@ export function SupportPage() {
               {guideSigns.map((sign, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-text-secondary leading-relaxed"
+                  className="flex items-start gap-3 p-3.5 rounded-xl bg-surface-muted border border-surface-border text-xs sm:text-sm text-text-secondary leading-relaxed"
                 >
                   <div className="w-5 h-5 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 mt-0.5">
                     <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
@@ -109,7 +109,7 @@ export function SupportPage() {
             {guideExpect.map((item, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-xl bg-white border border-teal-100 shadow-2xs space-y-1"
+                className="p-4 rounded-xl bg-surface-card border border-surface-border shadow-2xs space-y-1"
               >
                 <div className="w-6 h-6 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mb-2">
                   0{idx + 1}

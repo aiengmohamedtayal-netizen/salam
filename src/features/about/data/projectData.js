@@ -1,5 +1,5 @@
 /**
- * SALAM Project Documentation Data
+ * AMAL Project Documentation Data
  * Source of Truth: D:\LEVEL3\workbased projcet\AI317_SALAM_Team_Document_Arabic_Updated.docx
  * Strictly faithful to the documented hierarchy, roles, stack, phases, and safety policies.
  * Complete Bilingual Support (Arabic & English).
@@ -15,8 +15,8 @@ export const academicMetadata = {
   courseCode: 'AI317',
   courseName: 'مشروع مهني قائم على بيئة العمل في الذكاء الاصطناعي (1)',
   courseNameEn: 'Work-based Professional Project in Artificial Intelligence (I)',
-  projectTitle: 'سَـــلام — نظام التوعية بالصحة النفسية العربي المدعوم بالذكاء الاصطناعي',
-  projectTitleEn: 'SALAM – AI-Powered Arabic Mental Health Awareness System',
+  projectTitle: 'أمل — نظام التوعية بالصحة النفسية العربي المدعوم بالذكاء الاصطناعي',
+  projectTitleEn: 'AMAL – AI-Powered Arabic Mental Health Awareness System',
   supervisor: 'د. أحمد زقزوق',
   supervisorTitle: 'Supervisor: Dr. Ahmed Zakzouk',
   teamRequirement: 'فريق عمل أكاديمي مكون من ستة أعضاء وفق متطلبات المقرر',
@@ -45,14 +45,14 @@ export const taskSpecification = {
 
 export const projectOverview = {
   problemStatement:
-    'يواجه الأشخاص الذين يعبرون عن ضيقهم النفسي باللغة العربية، بما في ذلك العامية المصرية، محدودية في الوصول إلى موارد توعوية ميسرة وملائمة. وتجعل اللهجات العربية، وأساليب الإملاء غير الرسمية، والخصوصيات السياقية، تحليل النصوص مهمة بالغة التحدي أمام الأنظمة الآلية. يسعى مشروع «سَـــلام» إلى استكشاف إمكانية استخدام معالجة اللغة الطبيعية للتعرف على الأنماط اللغوية المرتبطة بالضيق النفسي وتقديم إرشادات توعوية حذرة وغير تشخيصية. ويلتزم النظام التزاماً قاطعاً بعدم ادعاء تشخيص أي حالة نفسية أو إخبار المستخدم بأنه آمن بشكل مؤكد.',
+    'يواجه الأشخاص الذين يعبرون عن ضيقهم النفسي باللغة العربية، بما في ذلك العامية المصرية، محدودية في الوصول إلى موارد توعوية ميسرة وملائمة. وتجعل اللهجات العربية، وأساليب الإملاء غير الرسمية، والخصوصيات السياقية، تحليل النصوص مهمة بالغة التحدي أمام الأنظمة الآلية. يسعى مشروع «أمل» إلى استكشاف إمكانية استخدام معالجة اللغة الطبيعية للتعرف على الأنماط اللغوية المرتبطة بالضيق النفسي وتقديم إرشادات توعوية حذرة وغير تشخيصية. ويلتزم النظام التزاماً قاطعاً بعدم ادعاء تشخيص أي حالة نفسية أو إخبار المستخدم بأنه آمن بشكل مؤكد.',
   problemStatementEn:
-    'Individuals expressing psychological distress in Arabic, including colloquial Egyptian dialect, face limited access to accessible, culturally tailored awareness resources. Arabic dialects, informal spelling variations, and contextual nuances make automated text analysis extraordinarily challenging. SALAM explores utilizing Natural Language Processing to identify linguistic patterns associated with distress and provide cautious, non-diagnostic guidance. The system strictly commits to never claiming to diagnose any condition or declaring any user definitively "safe".',
+    'Individuals expressing psychological distress in Arabic, including colloquial Egyptian dialect, face limited access to accessible, culturally tailored awareness resources. Arabic dialects, informal spelling variations, and contextual nuances make automated text analysis extraordinarily challenging. AMAL explores utilizing Natural Language Processing to identify linguistic patterns associated with distress and provide cautious, non-diagnostic guidance. The system strictly commits to never claiming to diagnose any condition or declaring any user definitively "safe".',
 
   proposedSolution:
-    'يقدم مشروع «سَـــلام» نموذجاً أولياً لمنظومة توعوية قائمة على الويب موجهة للغة العربية أولاً (Arabic-first). يُدخل المستخدم نصاً قصيراً، فيتحقق النظام من مطابقة المدخلات للحدود المسموح بها لغوياً وحجمياً. ثم يحلل النص عبر نموذج تعلم آلي ليُعيد مؤشراً توعوياً مصاغاً بحذر وحزام عدم يقين عند الحاجة، مع إسناد اختياري لمقاطع الكلمات المؤثرة، ومصادر دعم معتمدة ومراجعة. كما تضمن واجهة المستخدم بقاء إشعار الحدود وروابط الوصول للدعم ظاهرة دائماً حتى في حال تعطل الخادم أو النموذج.',
+    'يقدم مشروع «أمل» نموذجاً أولياً لمنظومة توعوية قائمة على الويب موجهة للغة العربية أولاً (Arabic-first). يُدخل المستخدم نصاً قصيراً، فيتحقق النظام من مطابقة المدخلات للحدود المسموح بها لغوياً وحجمياً. ثم يحلل النص عبر نموذج تعلم آلي ليُعيد مؤشراً توعوياً مصاغاً بحذر وحزام عدم يقين عند الحاجة، مع إسناد اختياري لمقاطع الكلمات المؤثرة، ومصادر دعم معتمدة ومراجعة. كما تضمن واجهة المستخدم بقاء إشعار الحدود وروابط الوصول للدعم ظاهرة دائماً حتى في حال تعطل الخادم أو النموذج.',
   proposedSolutionEn:
-    'SALAM provides an Arabic-first web-based awareness prototype. The user enters a short text, which the system validates against language and length constraints. It then analyzes the text using machine learning to return a cautiously worded indicator with uncertainty bounds, optional word-span attribution, and accredited support resources. The UI guarantees that boundaries and support hotlines remain permanently visible, even during server or model downtime.',
+    'AMAL provides an Arabic-first web-based awareness prototype. The user enters a short text, which the system validates against language and length constraints. It then analyzes the text using machine learning to return a cautiously worded indicator with uncertainty bounds, optional word-span attribution, and accredited support resources. The UI guarantees that boundaries and support hotlines remain permanently visible, even during server or model downtime.',
 
   arabicConceptPoints: [
     {
@@ -94,11 +94,11 @@ export const projectOverview = {
     {
       id: 'red-lines',
       title: 'ما الذي لا يفعله المشروع؟ (خطوط حمراء)',
-      titleEn: 'Ethical Red Lines (What SALAM Does NOT Do)',
+      titleEn: 'Ethical Red Lines (What AMAL Does NOT Do)',
       description:
-        '«سَـــلام» ليس طبيباً ولا أداة لتشخيص أي اضطراب نفسي، ولا يقدم علاجاً، ولا يجوز أن يخبر المستخدم بأنه آمن بشكل مؤكد. قد يخطئ النموذج في فهم اللهجة أو السخرية أو النفي؛ لذلك يتم التعامل بحذر وإظهار عدم اليقين. كما يُمنع حفظ نصوص المستخدمين الخام في قواعد البيانات أو السجلات نهائياً.',
+        '«أمل» ليس طبيباً ولا أداة لتشخيص أي اضطراب نفسي، ولا يقدم علاجاً، ولا يجوز أن يخبر المستخدم بأنه آمن بشكل مؤكد. قد يخطئ النموذج في فهم اللهجة أو السخرية أو النفي؛ لذلك يتم التعامل بحذر وإظهار عدم اليقين. تُحفظ نصوص التقييم في حساب صاحبها للرجوع إليها، ولا تظهر في سجلات الطلبات.',
       descriptionEn:
-        'SALAM is strictly not a diagnostic or clinical tool. It never offers treatment and never issues an absolute guarantee of safety. The system never persists raw user input to databases or server logs.',
+        'AMAL is strictly not a diagnostic or clinical tool. It never offers treatment and never issues an absolute guarantee of safety. Assessment text is stored in the submitting account history for later access and is excluded from request logs.',
     },
     {
       id: 'expected-outcome',
@@ -119,7 +119,7 @@ export const projectOverview = {
     'معايرة مخرجات النموذج الإحصائية وإتاحة خيار الامتناع (Abstention) عند عدم كفاية الموثوقية.',
     'واجهة خلفية خفيفة مبنية بواسطة FastAPI متصلة بتطبيق واجهة React / Vite.',
     'إسناد دلالي غير سببي للنصوص (Explainability) لتوضيح مقاطع الكلمات المؤثرة على التقدير.',
-    'حظر التشخيص وتخزين النصوص الخام أو كاشتها، وعدم تقديم أي ضمان للمستخدم بسلامته المطلقة.',
+    'حظر التشخيص، وحماية سجل التقييمات المرتبط بحساب المستخدم مع إتاحة حذفه، وعدم تقديم أي ضمان للمستخدم بسلامته المطلقة.',
     'سياسة أزمات ودعم نفسي مراجعة، ومراجعة خارجية مستقلة لصياغة نصوص السلامة قبل أي إطلاق.',
   ],
   scopeItemsEn: [
@@ -130,7 +130,7 @@ export const projectOverview = {
     'Calibrated statistical confidence outputs with ethical abstention when reliability is low.',
     'Lightweight FastAPI backend integrated with a modern React / Vite frontend client.',
     'Non-causal semantic word attribution (XAI) highlighting influential text spans.',
-    'Strict prohibition of clinical diagnosis, raw text persistence, or absolute safety guarantees.',
+    'Strict prohibition of clinical diagnosis, account-scoped history with user-controlled deletion, or absolute safety guarantees.',
     'Expert-vetted crisis support resources and independent verification of safety copy.',
   ],
 
@@ -161,7 +161,7 @@ export const technicalStack = [
     componentEn: 'Server & API (Backend)',
     choice: 'Python + FastAPI + Uvicorn',
     details: 'مخططات Pydantic للتحقق الصارم من صحة البيانات؛ تسجيل خالٍ من النصوص الشخصية (content-free logging) واستجابات آمنة للأخطاء.',
-    detailsEn: 'Pydantic schemas for strict validation; content-free logging ensuring zero raw text retention; secure error handling.',
+    detailsEn: 'Pydantic schemas for strict validation; account-scoped assessment history; content-free logs and secure error handling.',
     role: 'المعالجة والأمان',
     roleEn: 'Processing & Security',
   },
@@ -308,19 +308,19 @@ export const teamMembers = [
     skills: 'Python, FastAPI, Pydantic, API Testing (مهارات مقترحة)',
     skillsEn: 'Python, FastAPI, Pydantic, API Testing (Target Competencies)',
     ownership: 'بناء واجهة FastAPI، التحقق من المدخلات، سياسة التوجيه الحتمية، وحماية خصوصية النصوص.',
-    ownershipEn: 'FastAPI service architecture, input validation, deterministic routing, and zero-storage privacy.',
+    ownershipEn: 'FastAPI service architecture, input validation, account sessions, and per-account assessment history.',
     responsibilities: [
       'بناء نقاط النهاية للواجهة البرمجية (FastAPI endpoints) ومخططات الطلب والاستجابة عبر Pydantic.',
       'تطبيق التحقق الصارم من المدخلات، وتنسيق تدفق المعالجة وسياسة التوجيه التوعوي الحتمية.',
       'ضمان عدم قيام رسائل الأخطاء بإعادة طباعة نصوص المستخدم، وتفعيل التسجيل الخالي من النصوص.',
-      'منع تخزين أو تسجيل نصوص المستخدمين الخام في قواعد البيانات أو السجلات نهائياً.',
+      'حفظ نصوص التقييم حصرياً تحت حساب المستخدم مع إتاحة حذف سجل التقييمات، ومنع إدراجها في سجلات الطلبات.',
       'دمج نماذج الذكاء الاصطناعي عبر واجهة برمجية مستقرة وصيانة اختبارات الـ API الشاملة.',
     ],
     responsibilitiesEn: [
       'Architect robust FastAPI endpoints with strict Pydantic request/response schemas.',
       'Implement defensive validation boundaries, text bounds, and deterministic guidance routing.',
       'Enforce content-free logging to ensure zero raw user input leaks into server logs.',
-      'Strictly prohibit persisting raw texts or personal identifiers to persistent storage.',
+      'Keep assessment text scoped to its owner account, support user deletion, and exclude submitted content from request logs.',
       'Maintain automated integration test suites for all API contracts and health probes.',
     ],
     status: 'مكتمل ومعتمد',
@@ -464,9 +464,9 @@ export const developmentPhases = [
     description:
       'اختبار حالات الفشل اللغوية، التحقق من سلوك الخصوصية وعدم تسجيل البيانات، تدقيق صياغة الردود ودقة التوجيه، وقياس سرعة الأداء مع ضمان استمرار ظهور موارد الدعم في كل الحالات.',
     descriptionEn:
-      'Perform adversarial stress testing, verify zero-storage privacy guarantees, audit wording clarity, and profile latency for academic showcase.',
+      'Perform adversarial stress testing, verify account-level data access and deletion, audit wording clarity, and profile latency for academic showcase.',
     tasks: ['تقرير اختبار حالات الفشل', 'التحقق الصارم من الخصوصية', 'نموذج أولي جاهز للعرض الأكاديمي'],
-    tasksEn: ['Failure Mode Analysis Report', 'Zero-Storage Privacy Audit', 'Showcase-Ready Academic Prototype'],
+    tasksEn: ['Failure Mode Analysis Report', 'Account Data Access and Deletion Audit', 'Showcase-Ready Academic Prototype'],
     deliverable: 'نموذج أولي متكامل جاهز للمناقشة الأكاديمية',
     deliverableEn: 'Polished Prototype Ready for Academic Evaluation',
   },
@@ -478,13 +478,13 @@ export const safetyPrinciples = [
     title: 'نظام توعوي تعليمي وليس جهازاً طبياً',
     titleEn: 'Educational Awareness System, Not a Medical Diagnostic Tool',
     description:
-      'مشروع «سَـــلام» نموذج أولي استرشادي للتوعية النفسية. ليس مصنفاً كأداة طبية ولا يقدم تشخيصاً لأي اضطراب نفسي، ولا يحل بأي حال من الأحوال محل الاستشارة السريرية المعتمدة.',
+      'مشروع «أمل» نموذج أولي استرشادي للتوعية النفسية. ليس مصنفاً كأداة طبية ولا يقدم تشخيصاً لأي اضطراب نفسي، ولا يحل بأي حال من الأحوال محل الاستشارة السريرية المعتمدة.',
     descriptionEn:
-      'SALAM is an educational and academic awareness prototype. It is not a certified medical device, does not diagnose any disorder, and never replaces accredited clinical consultation.',
+      'AMAL is an educational and academic awareness prototype. It is not a certified medical device, does not diagnose any disorder, and never replaces accredited clinical consultation.',
     rule:
-      'مشروع «سَـــلام» نموذج أولي استرشادي للتوعية النفسية. ليس مصنفاً كأداة طبية ولا يقدم تشخيصاً لأي اضطراب نفسي، ولا يحل بأي حال من الأحوال محل الاستشارة السريرية المعتمدة.',
+      'مشروع «أمل» نموذج أولي استرشادي للتوعية النفسية. ليس مصنفاً كأداة طبية ولا يقدم تشخيصاً لأي اضطراب نفسي، ولا يحل بأي حال من الأحوال محل الاستشارة السريرية المعتمدة.',
     ruleEn:
-      'SALAM is an educational and academic awareness prototype. It is not a certified medical device, does not diagnose any disorder, and never replaces accredited clinical consultation.',
+      'AMAL is an educational and academic awareness prototype. It is not a certified medical device, does not diagnose any disorder, and never replaces accredited clinical consultation.',
     badge: 'توعوي غير طبي',
     badgeEn: 'Educational Non-Clinical',
   },
@@ -519,19 +519,19 @@ export const safetyPrinciples = [
     badgeEn: 'No False Reassurance',
   },
   {
-    id: 'zero-storage',
-    title: 'حظر تخزين النصوص الخام في الذاكرة الدائمة',
-    titleEn: 'Zero-Storage Policy for Raw User Text',
+    id: 'account-history-storage',
+    title: 'حفظ سجل التقييمات المرتبط بالحساب',
+    titleEn: 'Account-Linked Assessment History',
     description:
-      'تتم معالجة نصوص المستخدم حصرياً في الذاكرة المؤقتة للطلب (In-Memory Request). لا يتم حفظ النصوص في قواعد بيانات، ولا في ملفات السجلات، ولا في التخزين المؤقت، ولا أنظمة التحليل.',
+      'تُحفظ نصوص التقييم وإجابات المستخدم في قاعدة البيانات تحت معرّف حسابه، ليتمكن من الرجوع إليها أو حذف سجل التقييمات. تُخزن كلمات المرور كبصمات مشتقة ولا تُسجل النصوص في سجلات الطلبات.',
     descriptionEn:
-      'User texts are processed exclusively in volatile request memory. No raw user text is saved in databases, server logs, browser caches, or third-party analytics services.',
+      'Assessment text and answers are stored in the database under the account ID so users can revisit or delete their history. Passwords are stored as derived hashes and request logs do not include submitted text.',
     rule:
-      'تتم معالجة نصوص المستخدم حصرياً في الذاكرة المؤقتة للطلب (In-Memory Request). لا يتم حفظ النصوص في قواعد بيانات، ولا في ملفات السجلات، ولا في التخزين المؤقت، ولا أنظمة التحليل.',
+      'تُحفظ نصوص التقييم وإجابات المستخدم في قاعدة البيانات تحت معرّف حسابه، ليتمكن من الرجوع إليها أو حذف سجل التقييمات. تُخزن كلمات المرور كبصمات مشتقة ولا تُسجل النصوص في سجلات الطلبات.',
     ruleEn:
-      'User texts are processed exclusively in volatile request memory. No raw user text is saved in databases, server logs, browser caches, or third-party analytics services.',
-    badge: 'خصوصية مطلقة',
-    badgeEn: 'Zero-Retention Privacy',
+      'Assessment text and answers are stored in the database under the account ID so users can revisit or delete their history. Passwords are stored as derived hashes and request logs do not include submitted text.',
+    badge: 'سجل خاص بالحساب',
+    badgeEn: 'Account-Level History',
   },
   {
     id: 'always-visible-support',
@@ -567,17 +567,17 @@ export const safetyPrinciples = [
 
 export const academicReferences = [
   {
-    title: 'SALAM Architecture Review',
-    titleEn: 'SALAM Architecture Review',
-    description: 'مراجعة نقدية معمارية مستقلة لتقرير البنية البرمجية لنظام «سَـــلام» — مقرر AI317.',
-    descriptionEn: 'Independent architectural peer review of the SALAM software engineering report — Course AI317.',
+    title: 'AMAL Architecture Review',
+    titleEn: 'AMAL Architecture Review',
+    description: 'مراجعة نقدية معمارية مستقلة لتقرير البنية البرمجية لنظام «أمل» — مقرر AI317.',
+    descriptionEn: 'Independent architectural peer review of the AMAL software engineering report — Course AI317.',
     category: 'وثائق المشروع المعتمدة',
     categoryEn: 'Approved Project Documents',
     type: 'Internal Document',
   },
   {
-    title: 'SALAM Technology Stack',
-    titleEn: 'SALAM Technology Stack',
+    title: 'AMAL Technology Stack',
+    titleEn: 'AMAL Technology Stack',
     description: 'تحليل مكونات الإصدار الثاني ومطابقتها مع التقنيات والمفاضلات وأولويات الإصدار الأول — مقرر AI317.',
     descriptionEn: 'Analysis of v2 technical components, architectural trade-offs, and v1 delivery priorities — Course AI317.',
     category: 'وثائق المشروع المعتمدة',

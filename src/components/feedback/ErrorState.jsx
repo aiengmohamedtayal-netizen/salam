@@ -36,7 +36,7 @@ export function ErrorState({
         {title}
       </h3>
 
-      <p className="text-sm text-slate-700 leading-relaxed max-w-sm mb-6">
+      <p className="text-sm text-text-secondary leading-relaxed max-w-sm mb-6">
         {message}
       </p>
 
