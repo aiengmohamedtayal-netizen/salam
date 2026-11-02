@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, ArrowLeft, Sun, Moon, Settings2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { Icon3D } from '@/components/ui/Icon3D';
 import { BrandMark } from '@/components/ui/BrandMark';
 import { cn } from '@/lib/utils';
 import { MobileMenu } from './MobileMenu';
@@ -124,7 +123,6 @@ export function Navbar() {
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-3">
             {/* Segmented Visible Active Language Switcher (العربية | English) */}
             <div className="hidden sm:flex items-center gap-1.5">
-              <Icon3D name="language" size="sm" className="w-6 h-6 shrink-0 hidden sm:inline-block drop-shadow-xs" />
               <div
                 className="inline-flex items-center p-0.5 rounded-lg border border-surface-border bg-surface-muted/70 text-xs font-bold"
                 role="group"

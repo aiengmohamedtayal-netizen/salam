@@ -99,7 +99,6 @@ export function MobileMenu({ open, onClose, items, currentPath, onSelectLanguage
               <div className="pt-4 pb-2">
                 <div className="flex items-center justify-between p-1.5 rounded-xl border border-surface-border bg-surface-muted/60">
                   <div className="flex items-center gap-2 text-xs font-bold text-text-primary px-2">
-                    <Icon3D name="language" size="xs" className="w-5 h-5 shrink-0" />
                     <span>{t('common.language')}</span>
                   </div>
                   <div className="inline-flex items-center p-0.5 rounded-lg bg-surface-card border border-surface-border text-xs font-bold">
