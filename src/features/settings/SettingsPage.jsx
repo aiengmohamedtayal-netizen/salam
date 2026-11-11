@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Dialog } from '@/components/ui/Dialog';
 import { Input } from '@/components/ui/Input';
+import { PasswordField } from '@/features/auth/components/PasswordField';
+import { PasswordStrength } from '@/components/ui/PasswordStrength';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -275,11 +277,43 @@ export function SettingsPage() {
             )}
             {securityNotice && <Alert className="mb-4" variant={securityNotice.type}>{securityNotice.message}</Alert>}
             {user?.password_enabled ? (
-              <form onSubmit={handlePasswordSave} className="grid gap-4 sm:grid-cols-2">
-                <Input id="settings-current-password" type="password" label={t('settings.currentPassword')} autoComplete="current-password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} required />
-                <Input id="settings-new-password" type="password" label={t('settings.newPassword')} autoComplete="new-password" minLength={8} maxLength={128} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required />
-                <Input id="settings-confirm-password" type="password" label={t('settings.confirmPassword')} autoComplete="new-password" minLength={8} maxLength={128} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
-                <div className="flex items-end"><Button type="submit" loading={passwordSaving} disabled={!currentPassword || !newPassword || !confirmPassword}>{t('settings.updatePassword')}</Button></div>
+              <form onSubmit={handlePasswordSave} className="space-y-4 max-w-xl">
+                <PasswordField
+                  id="settings-current-password"
+                  label={t('settings.currentPassword')}
+                  autoComplete="current-password"
+                  value={currentPassword}
+                  onChange={(event) => setCurrentPassword(event.target.value)}
+                  required
+                />
+                <div className="space-y-1">
+                  <PasswordStrength
+                    id="settings-new-password"
+                    label={t('settings.newPassword')}
+                    value={newPassword}
+                    onChange={(val) => setNewPassword(val)}
+                    placeholder={t('auth.passwordPlaceholder')}
+                    autoComplete="new-password"
+                    required
+                  />
+                </div>
+                <PasswordField
+                  id="settings-confirm-password"
+                  label={t('settings.confirmPassword')}
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  required
+                />
+                <div className="pt-2">
+                  <Button
+                    type="submit"
+                    loading={passwordSaving}
+                    disabled={!currentPassword || !newPassword || !confirmPassword}
+                  >
+                    {t('settings.updatePassword')}
+                  </Button>
+                </div>
               </form>
             ) : (
               <p className="rounded-xl bg-surface-muted p-4 text-sm leading-relaxed text-text-secondary">{t('settings.googlePasswordUnavailable')}</p>

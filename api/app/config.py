@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     google_client_secret: str = ""
     google_redirect_uri: str = ""
     frontend_url: str = "http://127.0.0.1:5173"
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_user: str = "aiengmohamedtayal@gmail.com"
+    smtp_password: str = "ovrhxngtefryoymg"
+    smtp_from_name: str = "منصة أمل | AMAL"
 
     @model_validator(mode="after")
     def require_https_for_production(self):

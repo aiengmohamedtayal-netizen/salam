@@ -16,6 +16,7 @@ from fastapi import HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.config import settings
+from app.email_service import send_otp_email
 
 SESSION_COOKIE = "amal_session"
 CSRF_COOKIE = "amal_csrf"
@@ -68,6 +69,13 @@ def initialize_database() -> None:
             );
             CREATE INDEX IF NOT EXISTS assessments_user_created_idx
                 ON assessments(user_id, created_at DESC);
+            CREATE TABLE IF NOT EXISTS otp_verifications (
+                email TEXT PRIMARY KEY COLLATE NOCASE,
+                code_hash TEXT NOT NULL,
+                expires_at TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                attempts INTEGER DEFAULT 0
+            );
             """
         )
         user_columns = {row[1] for row in connection.execute("PRAGMA table_info(users)")}
@@ -173,6 +181,7 @@ class RegisterPayload(BaseModel):
     name: str = Field(min_length=1, max_length=100)
     email: str = Field(min_length=5, max_length=254)
     password: str = Field(min_length=8, max_length=128)
+    otp_code: str | None = Field(default=None, max_length=10)
 
     @field_validator("email")
     @classmethod
@@ -198,6 +207,36 @@ class LoginPayload(BaseModel):
         return normalized
 
 
+class SendOtpPayload(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    email: str = Field(min_length=5, max_length=254)
+    name: str = Field(default="", max_length=100)
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if not EMAIL_PATTERN.fullmatch(normalized):
+            raise ValueError("Invalid email")
+        return normalized
+
+
+class VerifyOtpPayload(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    email: str = Field(min_length=5, max_length=254)
+    code: str = Field(min_length=4, max_length=10)
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, value: str) -> str:
+        normalized = value.strip().lower()
+        if not EMAIL_PATTERN.fullmatch(normalized):
+            raise ValueError("Invalid email")
+        return normalized
+
+
 class AssessmentRecordPayload(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
 
@@ -206,7 +245,89 @@ class AssessmentRecordPayload(BaseModel):
     language: str = Field(default="ar", pattern="^(ar|en)$")
 
 
+def send_registration_otp(email: str, name: str = "", background_tasks: Any | None = None) -> dict[str, Any]:
+    normalized_email = email.strip().lower()
+    with _connect() as connection:
+        existing = connection.execute(
+            "SELECT 1 FROM users WHERE email = ? COLLATE NOCASE", (normalized_email,)
+        ).fetchone()
+        if existing:
+            raise HTTPException(status_code=409, detail={"code": "ACCOUNT_EXISTS"})
+
+        code = f"{secrets.randbelow(900000) + 100000:06d}"
+        code_hash = hashlib.sha256(code.encode()).hexdigest()
+        now = _now()
+        expires_at = (now + timedelta(minutes=10)).isoformat()
+
+        connection.execute(
+            """
+            INSERT INTO otp_verifications (email, code_hash, expires_at, created_at, attempts)
+            VALUES (?, ?, ?, ?, 0)
+            ON CONFLICT(email) DO UPDATE SET
+                code_hash = excluded.code_hash,
+                expires_at = excluded.expires_at,
+                created_at = excluded.created_at,
+                attempts = 0
+            """,
+            (normalized_email, code_hash, expires_at, now.isoformat()),
+        )
+
+    if background_tasks is not None:
+        background_tasks.add_task(send_otp_email, normalized_email, code, name)
+    else:
+        send_otp_email(normalized_email, code, name)
+
+    return {
+        "status": "ok",
+        "email": normalized_email,
+        "expires_in_seconds": 600,
+        "email_sent": True,
+        "debug_code": code if settings.env in ("development", "test") else None,
+    }
+
+
+def verify_otp_code(email: str, code: str) -> bool:
+    normalized_email = email.strip().lower()
+    with _connect() as connection:
+        row = connection.execute(
+            "SELECT code_hash, expires_at, attempts FROM otp_verifications WHERE email = ? COLLATE NOCASE",
+            (normalized_email,),
+        ).fetchone()
+        if row is None:
+            return False
+
+        if datetime.fromisoformat(row["expires_at"]) <= _now():
+            connection.execute("DELETE FROM otp_verifications WHERE email = ?", (normalized_email,))
+            return False
+
+        if row["attempts"] >= 5:
+            connection.execute("DELETE FROM otp_verifications WHERE email = ?", (normalized_email,))
+            return False
+
+        code_hash = hashlib.sha256(code.strip().encode()).hexdigest()
+        if not hmac.compare_digest(code_hash, row["code_hash"]):
+            connection.execute(
+                "UPDATE otp_verifications SET attempts = attempts + 1 WHERE email = ?",
+                (normalized_email,),
+            )
+            return False
+
+        return True
+
+
+def consume_otp_code(email: str, code: str) -> bool:
+    if verify_otp_code(email, code):
+        with _connect() as connection:
+            connection.execute("DELETE FROM otp_verifications WHERE email = ? COLLATE NOCASE", (email.strip().lower(),))
+        return True
+    return False
+
+
 def register(payload: RegisterPayload, response: Response) -> dict[str, Any]:
+    if payload.otp_code is not None and payload.otp_code != "":
+        if not consume_otp_code(payload.email, payload.otp_code):
+            raise HTTPException(status_code=400, detail={"code": "INVALID_OTP"})
+
     user_id = str(uuid4())
     now = _now().isoformat()
     try:

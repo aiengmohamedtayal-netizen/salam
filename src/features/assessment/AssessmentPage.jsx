@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { JellySlider } from '@/components/ui/JellySlider';
 import { Textarea } from '@/components/ui/Textarea';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
@@ -50,6 +51,7 @@ export function AssessmentPage() {
 
   // Form states
   const [inputText, setInputText] = useState('');
+  const [distressLevel, setDistressLevel] = useState(45);
   const [answers, setAnswers] = useState({
     q_sleep: 'fluctuating',
     q_energy: 'moderate',
@@ -135,6 +137,7 @@ export function AssessmentPage() {
     }
 
     setValidationError('');
+    setAnswers((prev) => ({ ...prev, distress_level: distressLevel }));
     setStep('adaptive');
   };
 
@@ -503,6 +506,41 @@ export function AssessmentPage() {
                       </div>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* Interactive Distress / Stress Level Rating with Jelly Slider */}
+              <div className="pt-4 border-t border-surface-border space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
+                      <Icon3D name="heart" size="xs" className="w-4 h-4 shrink-0" />
+                      <span>
+                        {language === 'ar'
+                          ? 'مستوى الإجهاد النفسي الذاتي اللحظي'
+                          : 'Self-Reported Distress Level'}
+                      </span>
+                    </h3>
+                    <p className="text-xs text-text-muted">
+                      {language === 'ar'
+                        ? 'اسحب المؤشر الهلامي لتحديد مستوى التوتر أو الإجهاد الذي تشعر به الآن'
+                        : 'Drag the jelly slider to indicate the level of stress or tension you feel right now'}
+                    </p>
+                  </div>
+                  <Badge variant="primary" size="sm" className="font-mono text-xs px-2.5 py-0.5">
+                    {distressLevel}%
+                  </Badge>
+                </div>
+
+                <div className="flex justify-center py-5 px-4 bg-surface-muted/40 rounded-2xl border border-surface-border/60 overflow-hidden">
+                  <JellySlider
+                    value={distressLevel}
+                    onChange={setDistressLevel}
+                    min={0}
+                    max={100}
+                    unit="%"
+                    ariaLabel={language === 'ar' ? 'مستوى الإجهاد النفسي' : 'Distress Level'}
+                  />
                 </div>
               </div>
 

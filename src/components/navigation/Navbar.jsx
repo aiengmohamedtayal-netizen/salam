@@ -26,6 +26,7 @@ export const navItems = [
 /**
  * Top Navbar component with sticky glassmorphism header, brand identity,
  * visible active language switcher (العربية | English), and route preservation.
+ * Cleaned of duplicate links handled by the persistent desktop SidebarCollapse.
  */
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -90,36 +91,13 @@ export function Navbar() {
               <span className="text-xl font-extrabold tracking-tight text-text-primary group-hover:text-teal-700 transition-colors leading-none">
                 {t('common.brandName')}
               </span>
-              <span className="text-[10px] text-text-muted font-medium mt-1 leading-tight whitespace-nowrap hidden 2xl:block">
+              <span className="text-[10px] text-text-muted font-medium mt-1 leading-tight whitespace-nowrap hidden sm:block">
                 {t('common.brandSubtitle')}
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav
-            className="hidden 2xl:flex items-center gap-0"
-            aria-label={t('nav.home')}
-          >
-            {navItems.slice(0, 6).map((item) => (
-              <NavLink
-                key={item.path}
-                to={getLocalizedPath(item.path)}
-                className={({ isActive }) =>
-                  cn(
-                    'px-1.5 py-1.5 text-xs font-semibold rounded-lg transition-colors select-none whitespace-nowrap shrink-0',
-                    isActive
-                      ? 'bg-teal-50 text-teal-800 font-bold'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-muted'
-                  )
-                }
-              >
-                {t(item.labelKey)}
-              </NavLink>
-            ))}
-          </nav>
-
-          {/* Actions: Segmented Language Switcher, Start Assessment CTA, Mobile Menu */}
+          {/* Actions: Segmented Language Switcher, Theme, Auth, Mobile Menu */}
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-3">
             {/* Segmented Visible Active Language Switcher (العربية | English) */}
             <div className="hidden sm:flex items-center gap-1.5">
@@ -128,37 +106,37 @@ export function Navbar() {
                 role="group"
                 aria-label={t('common.language')}
               >
-              <button
-                type="button"
-                onClick={() => handleSelectLanguage('ar')}
-                className={cn(
-                  'px-2.5 py-1 rounded-md transition-all cursor-pointer select-none',
-                  isAr
-                    ? 'bg-teal-700 text-white shadow-xs font-black'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-card'
-                )}
-                aria-pressed={isAr}
-              >
-                العربية
-              </button>
-              <span className="text-surface-border px-0.5 select-none" aria-hidden="true">
-                |
-              </span>
-              <button
-                type="button"
-                onClick={() => handleSelectLanguage('en')}
-                className={cn(
-                  'px-2.5 py-1 rounded-md transition-all cursor-pointer select-none',
-                  isEn
-                    ? 'bg-teal-700 text-white shadow-xs font-black'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-card'
-                )}
-                aria-pressed={isEn}
-              >
-                English
-              </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectLanguage('ar')}
+                  className={cn(
+                    'px-2.5 py-1 rounded-md transition-all cursor-pointer select-none',
+                    isAr
+                      ? 'bg-teal-700 text-white shadow-xs font-black'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-card'
+                  )}
+                  aria-pressed={isAr}
+                >
+                  العربية
+                </button>
+                <span className="text-surface-border px-0.5 select-none" aria-hidden="true">
+                  |
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleSelectLanguage('en')}
+                  className={cn(
+                    'px-2.5 py-1 rounded-md transition-all cursor-pointer select-none',
+                    isEn
+                      ? 'bg-teal-700 text-white shadow-xs font-black'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-card'
+                  )}
+                  aria-pressed={isEn}
+                >
+                  English
+                </button>
+              </div>
             </div>
-          </div>
 
             {/* Accessible Theme Toggle (Light / Dark) */}
             <button
@@ -175,7 +153,8 @@ export function Navbar() {
               )}
             </button>
 
-            <div className="hidden 2xl:flex items-center gap-2">
+            {/* Auth Buttons */}
+            <div className="hidden sm:flex items-center gap-2">
               {user ? (
                 <>
                   <Link
@@ -203,18 +182,11 @@ export function Navbar() {
               )}
             </div>
 
-            <Link to={getLocalizedPath('/assessment')} className="hidden sm:inline-flex 2xl:hidden">
-              <Button variant="primary" size="sm" className="shadow-xs gap-1.5 whitespace-nowrap shrink-0">
-                <span>{t('nav.startAssessment')}</span>
-                <ArrowLeft className="h-4 w-4 rtl:rotate-0 ltr:rotate-180" aria-hidden="true" />
-              </Button>
-            </Link>
-
-            {/* Mobile menu trigger button */}
+            {/* Mobile menu trigger button - only visible on small screens where sidebar is hidden */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-teal-600 cursor-pointer"
+              className="p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-teal-600 cursor-pointer xl:hidden"
               aria-label={t('nav.openMenu')}
               aria-expanded={mobileMenuOpen}
             >

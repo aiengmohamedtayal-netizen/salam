@@ -1,9 +1,13 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { AppIcon } from '@/components/ui/AppIcon';
 
 /**
- * 3D Claymorphic Icon System
- * High-definition, smooth 3D rendered icons with consistent lighting and playful tech aesthetics.
+ * 3D Claymorphic & Hybrid Icon System
+ * Features:
+ * - High-definition, clean, transparent 3D rendered icons with zero background halos.
+ * - Automatic smart vector delegation for small sizes (xs, sm) to ensure razor-sharp legibility (Apple HIG).
+ * - Graceful fallback to vector glyphs if any image fails to load.
  */
 export const ICONS_3D = {
   brain: '/icons/3d/brain.png',
@@ -168,6 +172,7 @@ export const Icon3D = forwardRef(function Icon3D(
   {
     name,
     size = 'md',
+    variant, // '3d' | 'vector' | 'two-tone' (defaults to vector for xs/sm, 3d for md+)
     className,
     alt = '',
     glow = true,
@@ -176,7 +181,30 @@ export const Icon3D = forwardRef(function Icon3D(
   },
   ref
 ) {
+  const [loadError, setLoadError] = useState(false);
   const iconKey = ICON_ALIAS_MAP[name] || name;
+  const isSmall = size === 'xs' || size === 'sm';
+  // Default to crisp, high-definition Iconsax / Apple HIG vectors unless 3D raster is explicitly requested
+  const shouldUseVector = variant !== '3d' || loadError;
+
+  if (shouldUseVector) {
+    return (
+      <AppIcon
+        ref={ref}
+        name={iconKey}
+        size={size}
+        style={variant === 'linear' ? 'linear' : isSmall ? 'linear' : 'two-tone'}
+        tile={variant === 'tile'}
+        className={cn(
+          animated && 'hover:scale-110 active:scale-95 transition-transform duration-200 cursor-pointer',
+          className
+        )}
+        alt={alt}
+        {...props}
+      />
+    );
+  }
+
   const iconSrc = ICONS_3D[iconKey] || ICONS_3D.brain;
   const sizeClasses = SIZE_VARIANTS[size] || size;
 
@@ -188,9 +216,10 @@ export const Icon3D = forwardRef(function Icon3D(
       loading="lazy"
       decoding="async"
       aria-hidden={!alt}
+      onError={() => setLoadError(true)}
       className={cn(
         'icon-3d-image inline-block object-contain select-none shrink-0 transition-transform duration-200',
-        glow && 'filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)]',
+        glow && 'filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.12)]',
         animated && 'hover:scale-110 active:scale-95 cursor-pointer pointer-events-auto',
         sizeClasses,
         className
@@ -221,3 +250,5 @@ export const Icon3DNotepad = (props) => <Icon3D name="notepad" {...props} />;
 export const Icon3DMeditation = (props) => <Icon3D name="meditation" {...props} />;
 export const Icon3DHeartbeat = (props) => <Icon3D name="heartbeat" {...props} />;
 export const Icon3DLifebuoy = (props) => <Icon3D name="lifebuoy" {...props} />;
+
+export default Icon3D;

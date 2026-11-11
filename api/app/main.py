@@ -9,8 +9,7 @@ from urllib.parse import urlencode
 from uuid import uuid4
 
 import httpx
-from fastapi import FastAPI, Request
-from fastapi import Depends, HTTPException, Response
+from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
@@ -26,6 +25,8 @@ from app.auth import (  # noqa: E402
     AssessmentRecordPayload,
     LoginPayload,
     RegisterPayload,
+    SendOtpPayload,
+    VerifyOtpPayload,
     current_user,
     delete_assessments,
     delete_other_user_sessions,
@@ -37,8 +38,10 @@ from app.auth import (  # noqa: E402
     register,
     require_csrf,
     save_assessment,
+    send_registration_otp,
     update_user_name,
     update_user_password,
+    verify_otp_code,
 )
 from starlette.concurrency import run_in_threadpool
 
@@ -190,6 +193,24 @@ async def health():
 @app.get("/ready")
 async def ready():
     return JSONResponse(status_code=503, content={"status": "not_ready", "reason": "MODEL_ARTIFACT_UNAVAILABLE"})
+
+
+@app.post("/api/v1/auth/send-otp")
+@limiter.limit("10/minute")
+async def auth_send_otp(request: Request, payload: SendOtpPayload, background_tasks: BackgroundTasks):
+    return send_registration_otp(payload.email, payload.name, background_tasks)
+
+
+@app.post("/api/v1/auth/verify-otp")
+@limiter.limit("20/minute")
+async def auth_verify_otp(request: Request, payload: VerifyOtpPayload):
+    valid = verify_otp_code(payload.email, payload.code)
+    if not valid:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "INVALID_OTP", "message": "رمز التحقق غير صحيح أو انتهت صلاحيته"},
+        )
+    return {"status": "ok", "valid": True}
 
 
 @app.post("/api/v1/auth/register")

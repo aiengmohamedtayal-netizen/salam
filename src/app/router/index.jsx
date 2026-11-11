@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Link, Navigate, useLocation } from 'react-router-dom';
+import { createBrowserRouter, Link, Navigate, useLocation, useRouteError } from 'react-router-dom';
 import { AppShell } from '@/app/layouts/AppShell';
 import { LoadingState } from '@/components/feedback/LoadingState';
 import { ErrorState } from '@/components/feedback/ErrorState';
@@ -65,6 +65,9 @@ const SettingsPage = lazy(() =>
   import('@/features/settings/SettingsPage').then((m) => ({ default: m.SettingsPage }))
 );
 
+
+
+
 import { useTranslation } from '@/context/LanguageContext';
 
 /**
@@ -117,9 +120,11 @@ function NotFoundPage() {
  */
 function RouteErrorBoundary() {
   const { t } = useTranslation();
+  const error = useRouteError();
+  console.error('[RouteErrorBoundary caught error]:', error);
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center p-6">
+    <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 space-y-4">
       <ErrorState
         title={t('common.pageErrorTitle')}
         message={t('common.pageError')}
@@ -133,6 +138,11 @@ function RouteErrorBoundary() {
           </Link>
         }
       />
+      {import.meta.env.DEV && error && (
+        <pre className="max-w-xl p-4 rounded-xl bg-black/80 text-rose-400 text-xs overflow-auto font-mono text-start dir-ltr">
+          {error?.stack || error?.message || (typeof error === 'object' ? JSON.stringify(error, null, 2) : String(error))}
+        </pre>
+      )}
     </div>
   );
 }
@@ -232,6 +242,15 @@ const routeChildren = [
       </Suspense>
     ),
   },
+  {
+    path: 'voice-analysis',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <VoiceAnalysisPage />
+      </Suspense>
+    ),
+  },
+
   { path: '*', element: <NotFoundPage /> },
 ];
 

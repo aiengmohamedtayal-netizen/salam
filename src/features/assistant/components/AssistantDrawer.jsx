@@ -246,7 +246,7 @@ export function AssistantDrawer({ onClose }) {
 
         <footer className="border-t border-surface-border bg-surface-card/95 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur">
           <div ref={inputAreaRef}>
-            <ChatInput onSend={handleSend} disabled={isTyping} />
+            <ChatInput onSend={handleSend} onStop={() => setIsTyping(false)} disabled={isTyping} />
           </div>
           <p className="mt-2 flex items-start gap-1.5 text-[11px] leading-relaxed text-text-secondary">
             <Lock className="mt-0.5 h-3 w-3 shrink-0" aria-hidden="true" />

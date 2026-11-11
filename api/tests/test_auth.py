@@ -138,3 +138,36 @@ def test_google_provider_reports_disabled_until_credentials_are_configured(clien
     response = client.get("/api/v1/auth/google/start", follow_redirects=False)
     assert response.status_code == 303
     assert response.headers["location"].endswith("/ar/login?auth_error=GOOGLE_NOT_CONFIGURED")
+
+
+def test_otp_dispatch_and_verification_flow(client):
+    send_res = client.post("/api/v1/auth/send-otp", json={"email": "otpuser@example.com", "name": "OTP User"})
+    assert send_res.status_code == 200
+    data = send_res.json()
+    assert data["status"] == "ok"
+    assert data["email"] == "otpuser@example.com"
+    code = data["debug_code"]
+    assert code is not None
+    assert len(code) == 6
+
+    # Verify invalid code fails
+    invalid_res = client.post("/api/v1/auth/verify-otp", json={"email": "otpuser@example.com", "code": "000000"})
+    assert invalid_res.status_code == 400
+
+    # Verify valid code passes
+    valid_res = client.post("/api/v1/auth/verify-otp", json={"email": "otpuser@example.com", "code": code})
+    assert valid_res.status_code == 200
+    assert valid_res.json()["valid"] is True
+
+    # Register with valid OTP code
+    reg_res = client.post(
+        "/api/v1/auth/register",
+        json={"name": "OTP User", "email": "otpuser@example.com", "password": "secure-password-123", "otp_code": code},
+    )
+    assert reg_res.status_code == 200
+    assert reg_res.json()["user"]["email"] == "otpuser@example.com"
+
+    # Subsequent OTP request for existing user is rejected with 409
+    dup_res = client.post("/api/v1/auth/send-otp", json={"email": "otpuser@example.com", "name": "OTP User"})
+    assert dup_res.status_code == 409
+    assert dup_res.json()["detail"]["code"] == "ACCOUNT_EXISTS"

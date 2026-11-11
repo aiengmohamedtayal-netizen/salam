@@ -62,7 +62,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback((email, password) => authenticate('/api/v1/auth/login', { email, password }), [authenticate]);
-  const register = useCallback((name, email, password) => authenticate('/api/v1/auth/register', { name, email, password }), [authenticate]);
+  const register = useCallback((name, email, password, otp_code) => authenticate('/api/v1/auth/register', { name, email, password, otp_code }), [authenticate]);
+  const sendOtp = useCallback((email, name = '') => request('/api/v1/auth/send-otp', { method: 'POST', body: JSON.stringify({ email, name }) }), []);
+  const verifyOtp = useCallback((email, code) => request('/api/v1/auth/verify-otp', { method: 'POST', body: JSON.stringify({ email, code }) }), []);
 
   const updateProfile = useCallback(async (name) => {
     const body = await request('/api/v1/auth/profile', {
@@ -85,7 +87,7 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  const value = useMemo(() => ({ user, loading, login, register, updateProfile, changePassword, logout, refresh }), [user, loading, login, register, updateProfile, changePassword, logout, refresh]);
+  const value = useMemo(() => ({ user, loading, login, register, sendOtp, verifyOtp, updateProfile, changePassword, logout, refresh }), [user, loading, login, register, sendOtp, verifyOtp, updateProfile, changePassword, logout, refresh]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

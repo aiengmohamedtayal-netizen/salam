@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { AlertCircle, ShieldAlert, Sparkles } from 'lucide-react';
+import { VoiceInput } from '@/components/ui/VoiceInput';
 import { VoiceWaveform } from './VoiceWaveform';
 import { VoiceRecorderControls } from './VoiceRecorderControls';
 import { AudioPreview } from './AudioPreview';
@@ -35,6 +36,25 @@ export function VoiceRecorder({
   const [errorMessage, setErrorMessage] = useState(null);
   const [limitNotice, setLimitNotice] = useState(false);
   const [analyser, setAnalyser] = useState(null);
+  const [liveLevel, setLiveLevel] = useState(undefined);
+  useEffect(() => {
+    if (!analyser || status !== 'recording') {
+      setLiveLevel(undefined);
+      return;
+    }
+    let frameId;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    const updateLevel = () => {
+      analyser.getByteFrequencyData(dataArray);
+      let sum = 0;
+      for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+      const avg = sum / (dataArray.length * 255);
+      setLiveLevel(Math.min(1, avg * 2.5));
+      frameId = requestAnimationFrame(updateLevel);
+    };
+    frameId = requestAnimationFrame(updateLevel);
+    return () => cancelAnimationFrame(frameId);
+  }, [analyser, status]);
 
   // References to browser resources for clean release
   const mediaRecorderRef = useRef(null);
@@ -245,12 +265,23 @@ export function VoiceRecorder({
             />
           )}
 
-          {/* Recorder Controls */}
-          <VoiceRecorderControls
-            status={status}
-            secondsElapsed={secondsElapsed}
-            onStart={handleStartRecording}
-            onStop={handleStopRecording}
+          {/* Animated AI Voice Component */}
+          <VoiceInput
+            demo={false}
+            level={liveLevel}
+            onListeningChange={(listening) => {
+              if (listening && status !== 'recording') {
+                handleStartRecording();
+              } else if (!listening && status === 'recording') {
+                handleStopRecording();
+              }
+            }}
+            onStop={() => {
+              if (status === 'recording') {
+                handleStopRecording();
+              }
+            }}
+            onDiscard={handleReRecord}
           />
 
           {/* Privacy Note */}

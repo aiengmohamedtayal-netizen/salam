@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { Navbar } from '@/components/navigation/Navbar';
+import { Navbar, SidebarCollapse } from '@/components/navigation';
 import { Footer } from '@/components/navigation/Footer';
 import { useTranslation } from '@/context/LanguageContext';
 import { AmalAssistant } from '@/features/assistant';
+import { MindfulNotificationIsland } from '@/components/ui/MindfulNotificationIsland';
 
 /**
- * Root Application Shell layout with Navbar, accessible skip link, route change scroll management, and Footer.
+ * Root Application Shell layout with Navbar, SidebarCollapse on desktop,
+ * accessible skip link, route change scroll management, and Footer.
  */
 export function AppShell() {
   const { pathname } = useLocation();
@@ -39,16 +41,26 @@ export function AppShell() {
       {/* Main Top Navigation */}
       <Navbar />
 
-      {/* Content Area */}
-      <main id="main-content" className="flex-1 flex flex-col focus:outline-none" tabIndex={-1}>
-        <Outlet />
-      </main>
+      {/* Main Layout Area with Desktop Persistent Sidebar */}
+      <div className="flex-1 flex w-full relative">
+        <div className="hidden xl:flex shrink-0 ps-4 pe-1 py-6 sticky top-16 h-[calc(100vh-4rem)] items-start z-30">
+          <SidebarCollapse />
+        </div>
+
+        {/* Content Area with dedicated clearance for suspended top mindful island */}
+        <main id="main-content" className="flex-1 min-w-0 flex flex-col pt-10 sm:pt-12 focus:outline-none" tabIndex={-1}>
+          <Outlet />
+        </main>
+      </div>
 
       {/* Main Footer */}
       <Footer />
 
       {/* Floating AMAL Assistant (fixed, does not affect the flex column) */}
       <AmalAssistant />
+
+      {/* Suspended Top Mindful Notification Island (Tips & Self-Development) */}
+      <MindfulNotificationIsland />
     </div>
   );
 }

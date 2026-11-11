@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Cairo';
+  src: url('/fonts/Cairo/Cairo-VariableFont_slnt,wght.ttf') format('truetype');
+  font-weight: 200 1000;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cairo Variable';
+  src: url('/fonts/Cairo/Cairo-VariableFont_slnt,wght.ttf') format('truetype');
+  font-weight: 200 1000;
+  font-display: swap;
+}
+
+
 /* ========================================
    أمل — Design System Tokens
    Cairo Font, RTL-first, Orchid primary
@@ -557,4 +572,42 @@ html.dark .chat-surface {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+
+/* ========================================
+   Prompt Box Animation Tokens & Keyframes
+   From DesignBookmark Motion Study
+   ======================================== */
+@keyframes pb-pulse {
+  50% {
+    transform: scale(0.55);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pb-shine {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.pb-mark-pulse {
+  animation: pb-pulse 1s ease-in-out infinite;
+}
+
+.pb-shine-text {
+  background: linear-gradient(90deg, #81718f 20%, #281b34 50%, #81718f 80%) 0 0 / 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: pb-shine 1.4s linear infinite;
+}
+
+html.dark .pb-shine-text {
+  background: linear-gradient(90deg, #81718f 20%, #fbf7ff 50%, #81718f 80%) 0 0 / 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: pb-shine 1.4s linear infinite;
 }
