@@ -14,6 +14,7 @@ import { PasswordStrength } from '@/components/ui/PasswordStrength';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
+import { cn } from '@/lib/utils';
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
@@ -45,9 +46,36 @@ function SectionHeading({ icon: Icon, title, description }) {
   );
 }
 
+const THEME_PALETTES = [
+  {
+    id: 'default',
+    nameKey: 'settings.paletteDefault',
+    descKey: 'settings.paletteDefaultDesc',
+    primary: '#a169cf',
+    hover: '#8953b7',
+    tint: 'rgba(161, 105, 207, 0.16)',
+  },
+  {
+    id: 'whatsapp',
+    nameKey: 'settings.paletteWhatsapp',
+    descKey: 'settings.paletteWhatsappDesc',
+    primary: '#25d366',
+    hover: '#075e54',
+    tint: 'rgba(37, 211, 102, 0.16)',
+  },
+  {
+    id: 'facebook',
+    nameKey: 'settings.paletteFacebook',
+    descKey: 'settings.paletteFacebookDesc',
+    primary: '#1877f2',
+    hover: '#166fe5',
+    tint: 'rgba(24, 119, 242, 0.16)',
+  },
+];
+
 export function SettingsPage() {
   const { t, language, setLanguage } = useTranslation();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, colorPalette = 'default', setColorPalette } = useTheme();
   const { user, updateProfile, changePassword, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -250,6 +278,87 @@ export function SettingsPage() {
                       {t(`theme.${mode}`)}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              {/* Theme & Color Palette Switcher */}
+              <div className="py-5">
+                <div className="mb-4">
+                  <h3 className="text-base font-bold text-text-primary flex items-center gap-2">
+                    <Palette className="h-4 w-4 text-primary-600" aria-hidden="true" />
+                    {t('settings.colorPalette')}
+                  </h3>
+                  <p className="mt-1 text-xs text-text-muted leading-relaxed">
+                    {t('settings.colorPaletteDescription')}
+                  </p>
+                </div>
+
+                <div className="grid gap-3.5 sm:grid-cols-3" role="radiogroup" aria-label={t('settings.colorPalette')}>
+                  {THEME_PALETTES.map((palette) => {
+                    const isSelected = colorPalette === palette.id;
+                    return (
+                      <button
+                        key={palette.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={isSelected}
+                        onClick={() => setColorPalette?.(palette.id)}
+                        className={cn(
+                          'group relative flex flex-col justify-between rounded-2xl border p-4 text-start transition-all duration-200 outline-hidden cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500',
+                          isSelected
+                            ? 'border-primary-500 bg-primary-50/50 shadow-sm ring-2 ring-primary-500/20 dark:bg-primary-950/20'
+                            : 'border-surface-border bg-surface-elevated hover:border-surface-border-strong hover:bg-surface-muted/40'
+                        )}
+                      >
+                        {/* Header: Name and Checkmark Badge */}
+                        <div className="flex items-start justify-between gap-2 mb-2.5">
+                          <span className="font-bold text-sm text-text-primary">
+                            {t(palette.nameKey)}
+                          </span>
+                          <span
+                            className={cn(
+                              'flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-all',
+                              isSelected
+                                ? 'bg-primary-600 text-white shadow-xs'
+                                : 'border border-surface-border bg-surface-muted opacity-30 group-hover:opacity-75'
+                            )}
+                            aria-hidden="true"
+                          >
+                            {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
+                          </span>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-xs text-text-secondary leading-relaxed mb-4">
+                          {t(palette.descKey)}
+                        </p>
+
+                        {/* Visual Color Swatches (Apple HIG Color Wells) */}
+                        <div className="flex items-center justify-between pt-2.5 border-t border-surface-border/60">
+                          <span className="text-[11px] font-semibold text-text-muted">
+                            {isSelected ? '✓ نشط' : 'معاينة'}
+                          </span>
+                          <div className="flex items-center gap-1.5" aria-hidden="true">
+                            <span
+                              className="h-4.5 w-4.5 rounded-full shadow-xs ring-1 ring-black/10 transition-transform group-hover:scale-110"
+                              style={{ backgroundColor: palette.primary }}
+                              title="Primary"
+                            />
+                            <span
+                              className="h-4.5 w-4.5 rounded-full shadow-xs ring-1 ring-black/10 transition-transform group-hover:scale-110"
+                              style={{ backgroundColor: palette.hover }}
+                              title="Hover / Accent"
+                            />
+                            <span
+                              className="h-4.5 w-4.5 rounded-full shadow-xs ring-1 ring-black/10 border border-black/5 transition-transform group-hover:scale-110"
+                              style={{ backgroundColor: palette.tint }}
+                              title="Soft Tint"
+                            />
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
               <div className="flex flex-wrap items-center justify-between gap-4 py-4 last:pb-0">

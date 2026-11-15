@@ -1,8 +1,21 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
 const THEME_STORAGE_KEY = 'amal_theme';
+const COLOR_PALETTE_STORAGE_KEY = 'amal_color_palette';
+export const VALID_PALETTES = ['default', 'whatsapp', 'facebook'];
 
 const ThemeContext = createContext(null);
+
+function getInitialColorPalette() {
+  if (typeof window === 'undefined') return 'default';
+  try {
+    const saved = localStorage.getItem(COLOR_PALETTE_STORAGE_KEY);
+    if (VALID_PALETTES.includes(saved)) {
+      return saved;
+    }
+  } catch {}
+  return 'default';
+}
 
 /**
  * Determines the initial theme based on:
@@ -26,6 +39,16 @@ function getInitialTheme() {
 
 export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState(getInitialTheme);
+  const [colorPalette, setColorPaletteState] = useState(getInitialColorPalette);
+
+  // Sync color palette to DOM and localStorage
+  useEffect(() => {
+    const root = document.documentElement;
+    root.setAttribute('data-color-palette', colorPalette);
+    try {
+      localStorage.setItem(COLOR_PALETTE_STORAGE_KEY, colorPalette);
+    } catch {}
+  }, [colorPalette]);
 
   // Sync DOM and storage whenever theme changes
   useEffect(() => {
@@ -84,6 +107,12 @@ export function ThemeProvider({ children }) {
     setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'));
   }, []);
 
+  const setColorPalette = useCallback((nextPalette) => {
+    if (VALID_PALETTES.includes(nextPalette)) {
+      setColorPaletteState(nextPalette);
+    }
+  }, []);
+
   const value = useMemo(
     () => ({
       theme,
@@ -91,8 +120,10 @@ export function ThemeProvider({ children }) {
       isLight: theme === 'light',
       setTheme,
       toggleTheme,
+      colorPalette,
+      setColorPalette,
     }),
-    [theme, setTheme, toggleTheme]
+    [theme, setTheme, toggleTheme, colorPalette, setColorPalette]
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

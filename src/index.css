@@ -191,6 +191,164 @@ html.dark,
 }
 
 /* ========================================
+   Theme & Color Palette Switcher Custom Properties
+   (Default Orchid, WhatsApp Green, Facebook Blue)
+   ======================================== */
+
+:root,
+html[data-color-palette="default"] {
+  --color-brand-tint: rgba(161, 105, 207, 0.12);
+  --color-primary-hover: #8953b7;
+}
+
+/* WhatsApp Green — Light Mode */
+html[data-color-palette="whatsapp"] {
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #25d366;
+  --color-primary-600: #128c7e;
+  --color-primary-700: #075e54;
+  --color-primary-800: #064e43;
+  --color-primary-900: #043830;
+  --color-primary-950: #022c25;
+
+  --color-teal-50: #f0fdf4;
+  --color-teal-100: #dcfce7;
+  --color-teal-200: #bbf7d0;
+  --color-teal-300: #86efac;
+  --color-teal-400: #4ade80;
+  --color-teal-500: #25d366;
+  --color-teal-600: #128c7e;
+  --color-teal-700: #075e54;
+  --color-teal-800: #064e43;
+  --color-teal-900: #043830;
+  --color-teal-950: #022c25;
+
+  --color-brand-tint: rgba(37, 211, 102, 0.12);
+  --color-primary-hover: #075e54;
+  --shadow-glow: 0 0 24px rgba(37, 211, 102, 0.25);
+}
+
+/* WhatsApp Green — Dark Mode */
+html.dark[data-color-palette="whatsapp"],
+[data-theme="dark"][data-color-palette="whatsapp"] {
+  --color-primary-50: #07221b;
+  --color-primary-100: #0d3429;
+  --color-primary-200: #124d3d;
+  --color-primary-300: #186b55;
+  --color-primary-400: #1f8d70;
+  --color-primary-500: #25d366;
+  --color-primary-600: #128c7e;
+  --color-primary-700: #075e54;
+  --color-primary-800: #054a41;
+  --color-primary-900: #03342d;
+  --color-primary-950: #02221d;
+
+  --color-teal-50: #07221b;
+  --color-teal-100: #0d3429;
+  --color-teal-200: #124d3d;
+  --color-teal-300: #186b55;
+  --color-teal-400: #1f8d70;
+  --color-teal-500: #25d366;
+  --color-teal-600: #128c7e;
+  --color-teal-700: #075e54;
+  --color-teal-800: #054a41;
+  --color-teal-900: #03342d;
+  --color-teal-950: #02221d;
+
+  --color-brand-tint: rgba(37, 211, 102, 0.16);
+  --color-primary-hover: #128c7e;
+  --shadow-glow: 0 0 28px rgba(37, 211, 102, 0.35);
+}
+
+/* Facebook Blue — Light Mode */
+html[data-color-palette="facebook"] {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #1877f2;
+  --color-primary-600: #166fe5;
+  --color-primary-700: #0c56c2;
+  --color-primary-800: #094297;
+  --color-primary-900: #083375;
+  --color-primary-950: #05204d;
+
+  --color-teal-50: #eff6ff;
+  --color-teal-100: #dbeafe;
+  --color-teal-200: #bfdbfe;
+  --color-teal-300: #93c5fd;
+  --color-teal-400: #60a5fa;
+  --color-teal-500: #1877f2;
+  --color-teal-600: #166fe5;
+  --color-teal-700: #0c56c2;
+  --color-teal-800: #094297;
+  --color-teal-900: #083375;
+  --color-teal-950: #05204d;
+
+  --color-brand-tint: rgba(24, 119, 242, 0.12);
+  --color-primary-hover: #166fe5;
+  --shadow-glow: 0 0 24px rgba(24, 119, 242, 0.25);
+}
+
+/* Facebook Blue — Dark Mode */
+html.dark[data-color-palette="facebook"],
+[data-theme="dark"][data-color-palette="facebook"] {
+  --color-primary-50: #091a33;
+  --color-primary-100: #0e274d;
+  --color-primary-200: #14376b;
+  --color-primary-300: #1b4a8e;
+  --color-primary-400: #2665be;
+  --color-primary-500: #1877f2;
+  --color-primary-600: #166fe5;
+  --color-primary-700: #0c56c2;
+  --color-primary-800: #094297;
+  --color-primary-900: #062c64;
+  --color-primary-950: #031b40;
+
+  --color-teal-50: #091a33;
+  --color-teal-100: #0e274d;
+  --color-teal-200: #14376b;
+  --color-teal-300: #1b4a8e;
+  --color-teal-400: #2665be;
+  --color-teal-500: #1877f2;
+  --color-teal-600: #166fe5;
+  --color-teal-700: #0c56c2;
+  --color-teal-800: #094297;
+  --color-teal-900: #062c64;
+  --color-teal-950: #031b40;
+
+  --color-brand-tint: rgba(24, 119, 242, 0.16);
+  --color-primary-hover: #166fe5;
+  --shadow-glow: 0 0 28px rgba(24, 119, 242, 0.35);
+}
+
+/* ========================================
+   Vercel View Transitions Recipes
+   ======================================== */
+@keyframes vt-fade {
+  from { opacity: 0; filter: blur(3px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+@keyframes vt-slide-y {
+  from { transform: translateY(8px); }
+  to { transform: translateY(0); }
+}
+
+::view-transition-old(root) {
+  animation: 140ms ease-in vt-fade reverse;
+}
+
+::view-transition-new(root) {
+  animation: 200ms ease-out 140ms both vt-fade, 300ms cubic-bezier(0.16, 1, 0.3, 1) both vt-slide-y;
+}
+
+/* ========================================
    Base Styles
    ======================================== */
 
