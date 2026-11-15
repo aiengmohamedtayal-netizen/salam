@@ -49,10 +49,10 @@ const THEME_STYLES = {
     progress: 'bg-teal-500',
   },
   purple: {
-    badge: 'bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/20',
-    iconBg: 'bg-purple-600 text-white',
-    pillBorder: 'border-purple-500/30',
-    progress: 'bg-purple-500',
+    badge: 'bg-primary-500/10 text-primary-700 dark:text-primary-300 border-primary-500/20',
+    iconBg: 'bg-primary-600 text-white',
+    pillBorder: 'border-primary-500/30',
+    progress: 'bg-primary-500',
   },
   rose: {
     badge: 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20',

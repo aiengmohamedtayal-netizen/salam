@@ -266,8 +266,8 @@ export function OtpCode({
             el.style.backgroundColor = `color-mix(in srgb, #10b981 ${(g * 100).toFixed(1)}%, var(--color-surface-card))`;
             el.style.borderColor = 'transparent';
           } else if (a > 0.01) {
-            el.style.backgroundColor = `color-mix(in srgb, rgba(161,105,207,0.14) ${(a * 100).toFixed(1)}%, var(--color-surface-card))`;
-            el.style.borderColor = `color-mix(in srgb, #a169cf ${(a * 100).toFixed(1)}%, var(--color-surface-border))`;
+            el.style.backgroundColor = `color-mix(in srgb, var(--color-brand-tint, rgba(161,105,207,0.14)) ${(a * 100).toFixed(1)}%, var(--color-surface-card))`;
+            el.style.borderColor = `color-mix(in srgb, var(--color-primary-500, #a169cf) ${(a * 100).toFixed(1)}%, var(--color-surface-border))`;
           } else {
             el.style.backgroundColor = '';
             el.style.borderColor = '';

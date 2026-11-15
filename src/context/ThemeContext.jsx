@@ -77,9 +77,10 @@ export function ThemeProvider({ children }) {
     // Keep theme-color meta tag in sync for browser chrome on mobile
     const themeMeta = document.querySelector('meta[name="theme-color"]');
     if (themeMeta) {
-      themeMeta.setAttribute('content', isDark ? '#130d1b' : '#a169cf');
+      const paletteColor = colorPalette === 'green' ? '#059669' : colorPalette === 'blue' ? '#1d4ed8' : '#a169cf';
+      themeMeta.setAttribute('content', isDark ? '#130d1b' : paletteColor);
     }
-  }, [theme]);
+  }, [theme, colorPalette]);
 
   // Listen to system preference changes if the user hasn't explicitly set one
   useEffect(() => {

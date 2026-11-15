@@ -462,7 +462,7 @@ export function RubberDock({ className }) {
           top: 30px;
           height: 18px;
           border-radius: 50%;
-          background: radial-gradient(closest-side, rgba(112, 64, 154, 0.35), transparent);
+          background: radial-gradient(closest-side, var(--color-brand-tint, rgba(161, 105, 207, 0.35)), transparent);
           transform: translateX(-50%);
           filter: blur(8px);
           pointer-events: none;
@@ -474,25 +474,25 @@ export function RubberDock({ className }) {
           width: 208px;
           height: 52px;
           border-radius: 26px;
-          background: #ffffff;
-          border: 1.5px solid #b895db;
-          box-shadow: 0 16px 45px -8px rgba(112, 64, 154, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+          background: var(--color-surface-elevated, #ffffff);
+          border: 1.5px solid var(--color-surface-border-strong, #b895db);
+          box-shadow: 0 16px 45px -8px var(--color-brand-tint, rgba(112, 64, 154, 0.3)), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
           backdrop-filter: blur(20px);
           overflow: hidden;
           transform: translateX(-50%);
           will-change: width, height, transform;
           z-index: 60;
-          color: #170d24 !important;
+          color: var(--color-text-primary, #170d24) !important;
         }
         .rubber-dock,
         .rubber-dock * {
           opacity: 1 !important;
         }
         .dark .rubber-dock {
-          background: #20152d;
-          border: 1.5px solid rgba(161, 105, 207, 0.3);
-          box-shadow: 0 18px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(161, 105, 207, 0.2) inset;
-          color: #f4effa !important;
+          background: var(--color-surface-card, #20152d);
+          border: 1.5px solid var(--color-surface-border, rgba(161, 105, 207, 0.3));
+          box-shadow: 0 18px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--color-brand-tint, rgba(161, 105, 207, 0.2)) inset;
+          color: var(--color-text-primary, #f4effa) !important;
         }
         .rubber-tabs {
           position: absolute;
@@ -525,17 +525,17 @@ export function RubberDock({ className }) {
         .dock-icons.base button {
           background: none;
           border: 0;
-          color: #3b284c;
+          color: var(--color-text-secondary, #3b284c);
           cursor: pointer;
           border-radius: 23px;
           outline: none;
           transition: color 0.15s ease;
         }
         .dark .dock-icons.base button {
-          color: #cbbddc;
+          color: var(--color-text-muted, #cbbddc);
         }
         .dock-icons.base button:hover {
-          color: #70409a;
+          color: var(--color-primary-700, #70409a);
         }
         .dark .dock-icons.base button:hover {
           color: #ffffff;
@@ -556,8 +556,8 @@ export function RubberDock({ className }) {
           width: 46px;
           height: 46px;
           border-radius: 23px;
-          background: linear-gradient(135deg, #a169cf 0%, #70409a 100%);
-          box-shadow: 0 4px 14px rgba(112, 64, 154, 0.5);
+          background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-700) 100%);
+          box-shadow: 0 4px 14px var(--color-brand-tint, rgba(112, 64, 154, 0.5));
           pointer-events: none;
         }
         .dock-panels {
@@ -609,13 +609,13 @@ export function RubberDock({ className }) {
           display: inline-block;
           width: 1.5px;
           height: 14px;
-          background: #70409a;
+          background: var(--color-primary-700);
           margin-inline-start: 2px;
           vertical-align: -2px;
           animation: dockBlink 1s steps(1) infinite;
         }
         .dark .dock-typed::after {
-          background: #a169cf;
+          background: var(--color-primary-400);
         }
         @keyframes dockBlink {
           50% { opacity: 0; }
@@ -624,14 +624,14 @@ export function RubberDock({ className }) {
           width: 38px;
           height: 22px;
           border-radius: 999px;
-          background: #d8c3ed;
+          background: var(--color-primary-200);
           position: relative;
           border: 0;
           cursor: pointer;
           transition: background 0.25s;
         }
         .dark .dock-sw {
-          background: rgba(161, 105, 207, 0.25);
+          background: var(--color-primary-900);
         }
         .dock-sw::after {
           content: "";
@@ -646,10 +646,10 @@ export function RubberDock({ className }) {
           transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.2s;
         }
         .dock-sw[aria-checked="true"] {
-          background: #70409a;
+          background: var(--color-primary-600);
         }
         .dark .dock-sw[aria-checked="true"] {
-          background: #a169cf;
+          background: var(--color-primary-500);
         }
         .dock-sw[aria-checked="true"]::after {
           transform: translateX(16px);
@@ -727,29 +727,29 @@ export function RubberDock({ className }) {
             </div>
 
             <div className="grid grid-cols-3 gap-2 mb-3">
-              <div className="bg-[#f7f1fc] dark:bg-primary-950/40 p-2.5 rounded-xl border border-[#c9aee6] dark:border-primary-500/20 dock-it">
-                <span className="block text-[10.5px] font-bold text-[#341d4a] dark:text-primary-300 mb-1">{isRtl ? 'جلسات الهدوء' : 'Calm'}</span>
-                <b className="text-[15px] font-black text-[#170d24] dark:text-white">14</b>
+              <div className="bg-primary-50/70 dark:bg-primary-950/40 p-2.5 rounded-xl border border-primary-200 dark:border-primary-500/20 dock-it">
+                <span className="block text-[10.5px] font-bold text-text-secondary dark:text-primary-300 mb-1">{isRtl ? 'جلسات الهدوء' : 'Calm'}</span>
+                <b className="text-[15px] font-black text-text-primary dark:text-white">14</b>
                 <em className="not-italic text-[11px] font-black text-emerald-800 dark:text-emerald-400 ms-1">+18%</em>
               </div>
-              <div className="bg-[#f7f1fc] dark:bg-primary-950/40 p-2.5 rounded-xl border border-[#c9aee6] dark:border-primary-500/20 dock-it">
-                <span className="block text-[10.5px] font-bold text-[#341d4a] dark:text-primary-300 mb-1">{isRtl ? 'معدل الراحة' : 'Score'}</span>
-                <b className="text-[15px] font-black text-[#170d24] dark:text-white">86%</b>
+              <div className="bg-primary-50/70 dark:bg-primary-950/40 p-2.5 rounded-xl border border-primary-200 dark:border-primary-500/20 dock-it">
+                <span className="block text-[10.5px] font-bold text-text-secondary dark:text-primary-300 mb-1">{isRtl ? 'معدل الراحة' : 'Score'}</span>
+                <b className="text-[15px] font-black text-text-primary dark:text-white">86%</b>
                 <em className="not-italic text-[11px] font-black text-emerald-800 dark:text-emerald-400 ms-1">+9%</em>
               </div>
-              <div className="bg-[#f7f1fc] dark:bg-primary-950/40 p-2.5 rounded-xl border border-[#c9aee6] dark:border-primary-500/20 dock-it">
-                <span className="block text-[10.5px] font-bold text-[#341d4a] dark:text-primary-300 mb-1">{isRtl ? 'التقييم' : 'State'}</span>
+              <div className="bg-primary-50/70 dark:bg-primary-950/40 p-2.5 rounded-xl border border-primary-200 dark:border-primary-500/20 dock-it">
+                <span className="block text-[10.5px] font-bold text-text-secondary dark:text-primary-300 mb-1">{isRtl ? 'التقييم' : 'State'}</span>
                 <b className="text-[14px] font-black text-emerald-900 dark:text-emerald-400">{isRtl ? 'مطمئن' : 'Stable'}</b>
               </div>
             </div>
 
-            <div className="h-24 bg-[#f7f1fc] dark:bg-primary-950/30 rounded-xl p-2.5 flex items-end gap-1.5 dock-it border border-[#c9aee6] dark:border-primary-500/15">
+            <div className="h-24 bg-primary-50/70 dark:bg-primary-950/30 rounded-xl p-2.5 flex items-end gap-1.5 dock-it border border-primary-200 dark:border-primary-500/15">
               {[45, 55, 40, 72, 60, 85, 68, 92, 75, 100, 88, 80].map((val, idx) => (
                 <div
                   key={idx}
                   className={cn(
                     'flex-1 rounded-sm transition-all duration-500',
-                    idx === 9 ? 'bg-[#70409a] dark:bg-primary-400' : 'bg-[#a982d6] dark:bg-primary-800/40'
+                    idx === 9 ? 'bg-primary-600 dark:bg-primary-400' : 'bg-primary-300 dark:bg-primary-800/40'
                   )}
                   style={{ height: `${val}%` }}
                 />
@@ -759,30 +759,30 @@ export function RubberDock({ className }) {
 
           {/* Panel 1: Explore */}
           <section className="dock-panel" data-i="1">
-            <div className="flex items-center gap-2 h-9 rounded-xl bg-[#f7f1fc] dark:bg-primary-950/40 px-3 mb-2.5 border border-[#b895db] dark:border-primary-500/20 dock-it">
-              <svg className="w-4 h-4 text-[#70409a] dark:text-primary-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              <span ref={typedRef} className="dock-typed truncate text-xs font-black text-[#170d24] dark:text-white" />
+            <div className="flex items-center gap-2 h-9 rounded-xl bg-primary-50/70 dark:bg-primary-950/40 px-3 mb-2.5 border border-primary-200 dark:border-primary-500/20 dock-it">
+              <svg className="w-4 h-4 text-primary-600 dark:text-primary-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <span ref={typedRef} className="dock-typed truncate text-xs font-black text-text-primary dark:text-white" />
             </div>
 
             <div className="flex gap-1.5 flex-wrap mb-3 dock-it">
               <button
                 type="button"
                 onClick={() => navigate(getLocalizedPath('/assessment'))}
-                className="text-[11px] font-black px-3 py-1 rounded-full bg-[#ebdcf8] text-[#240e3b] border border-[#b895db] dark:bg-primary-900/60 dark:text-primary-100 hover:bg-[#dfc4f4] transition-colors cursor-pointer"
+                className="text-[11px] font-black px-3 py-1 rounded-full bg-primary-100 text-primary-900 border border-primary-200 dark:bg-primary-900/60 dark:text-primary-100 hover:bg-primary-200 transition-colors cursor-pointer"
               >
                 {isRtl ? 'التقييم الذاتي' : 'Self Assessment'}
               </button>
               <button
                 type="button"
                 onClick={() => navigate(getLocalizedPath('/analysis'))}
-                className="text-[11px] font-black px-3 py-1 rounded-full bg-[#ebdcf8] text-[#240e3b] border border-[#b895db] dark:bg-primary-900/60 dark:text-primary-100 hover:bg-[#dfc4f4] transition-colors cursor-pointer"
+                className="text-[11px] font-black px-3 py-1 rounded-full bg-primary-100 text-primary-900 border border-primary-200 dark:bg-primary-900/60 dark:text-primary-100 hover:bg-primary-200 transition-colors cursor-pointer"
               >
                 {isRtl ? 'تحليل المشاعر' : 'Text Analysis'}
               </button>
               <button
                 type="button"
                 onClick={() => navigate(getLocalizedPath('/support'))}
-                className="text-[11px] font-black px-3 py-1 rounded-full bg-[#ebdcf8] text-[#240e3b] border border-[#b895db] dark:bg-primary-900/60 dark:text-primary-100 hover:bg-[#dfc4f4] transition-colors cursor-pointer"
+                className="text-[11px] font-black px-3 py-1 rounded-full bg-primary-100 text-primary-900 border border-primary-200 dark:bg-primary-900/60 dark:text-primary-100 hover:bg-primary-200 transition-colors cursor-pointer"
               >
                 {isRtl ? 'تمارين الاسترخاء' : 'Breathing'}
               </button>
@@ -792,14 +792,14 @@ export function RubberDock({ className }) {
               onClick={() => navigate(getLocalizedPath('/multimodal'))}
               className="flex items-center gap-2.5 py-2 cursor-pointer group rounded-lg hover:bg-primary-100/70 dark:hover:bg-primary-900/30 px-1.5 transition-colors dock-it"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#ebdcf8] dark:bg-primary-900/60 flex items-center justify-center text-primary-800 dark:text-primary-300 shrink-0 group-hover:scale-105 transition-transform text-base border border-[#d8c3ed]">
+              <div className="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/60 flex items-center justify-center text-primary-800 dark:text-primary-300 shrink-0 group-hover:scale-105 transition-transform text-base border border-primary-200">
                 🧠
               </div>
               <div className="min-w-0 flex-1">
-                <b className="block text-[13px] font-black text-[#170d24] dark:text-[#f4effa] group-hover:text-primary-800 transition-colors">
+                <b className="block text-[13px] font-black text-text-primary dark:text-[#f4effa] group-hover:text-primary-800 transition-colors">
                   {isRtl ? 'التحليل متعدد الوسائط' : 'Multimodal Analysis'}
                 </b>
-                <span className="block text-[11px] font-bold text-[#341d4a] dark:text-primary-200/90 truncate">
+                <span className="block text-[11px] font-bold text-text-secondary dark:text-primary-200/90 truncate">
                   {isRtl ? 'دمج دقيق للغة ونبرة الصوت' : 'Combine text & voice cues'}
                 </span>
               </div>
@@ -809,14 +809,14 @@ export function RubberDock({ className }) {
               onClick={() => navigate(getLocalizedPath('/radar'))}
               className="flex items-center gap-2.5 py-2 cursor-pointer group rounded-lg hover:bg-primary-100/70 dark:hover:bg-primary-900/30 px-1.5 transition-colors dock-it"
             >
-              <div className="w-8 h-8 rounded-lg bg-[#ebdcf8] dark:bg-primary-900/60 flex items-center justify-center text-primary-800 dark:text-primary-300 shrink-0 group-hover:scale-105 transition-transform text-base border border-[#d8c3ed]">
+              <div className="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/60 flex items-center justify-center text-primary-800 dark:text-primary-300 shrink-0 group-hover:scale-105 transition-transform text-base border border-primary-200">
                 📡
               </div>
               <div className="min-w-0 flex-1">
-                <b className="block text-[13px] font-black text-[#170d24] dark:text-[#f4effa] group-hover:text-primary-800 transition-colors">
+                <b className="block text-[13px] font-black text-text-primary dark:text-[#f4effa] group-hover:text-primary-800 transition-colors">
                   {isRtl ? 'رادار الشائعات والتوعية' : 'Rumor Radar'}
                 </b>
-                <span className="block text-[11px] font-bold text-[#341d4a] dark:text-primary-200/90 truncate">
+                <span className="block text-[11px] font-bold text-text-secondary dark:text-primary-200/90 truncate">
                   {isRtl ? 'تصحيح المفاهيم النفسية الخاطئة' : 'Verify mental health facts'}
                 </span>
               </div>
@@ -826,7 +826,7 @@ export function RubberDock({ className }) {
           {/* Panel 2: Reminders */}
           <section className="dock-panel" data-i="2">
             <div className="flex items-center justify-between mb-2.5 dock-it">
-              <h3 className="text-sm font-black text-[#170d24] dark:text-[#f4effa]">
+              <h3 className="text-sm font-black text-text-primary dark:text-[#f4effa]">
                 {isRtl ? 'المتابعة اليومية' : 'Daily Routine'}
               </h3>
               <span className="text-[11px] text-emerald-900 dark:text-emerald-400 font-black">
@@ -834,7 +834,7 @@ export function RubberDock({ className }) {
               </span>
             </div>
 
-            <div className="flex items-center gap-2.5 py-2 border-b border-[#d8c3ed] dark:border-primary-500/15 dock-it">
+            <div className="flex items-center gap-2.5 py-2 border-b border-primary-200 dark:border-primary-500/15 dock-it">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0" />
               <div className="flex-1 min-w-0">
                 <b className="block text-[12.5px] font-black text-[#170d24] dark:text-[#f4effa]">
@@ -847,36 +847,36 @@ export function RubberDock({ className }) {
               <time className="text-[11px] font-black text-[#341d4a] dark:text-primary-300">{isRtl ? 'الآن' : 'now'}</time>
             </div>
 
-            <div className="flex items-center gap-2.5 py-2 border-b border-[#d8c3ed] dark:border-primary-500/15 dock-it">
+            <div className="flex items-center gap-2.5 py-2 border-b border-primary-200 dark:border-primary-500/15 dock-it">
               <div className="w-2.5 h-2.5 rounded-full bg-amber-600 shrink-0" />
               <div className="flex-1 min-w-0">
-                <b className="block text-[12.5px] font-black text-[#170d24] dark:text-[#f4effa]">
+                <b className="block text-[12.5px] font-black text-text-primary dark:text-[#f4effa]">
                   {isRtl ? 'تسجيل المؤشر اليومي' : 'Daily Check-in'}
                 </b>
-                <span className="block text-[11px] font-bold text-[#341d4a] dark:text-primary-200/90 truncate">
+                <span className="block text-[11px] font-bold text-text-secondary dark:text-primary-200/90 truncate">
                   {isRtl ? 'تدوين مشاعرك يدعم مرونتك النفسية' : 'Track your feelings'}
                 </span>
               </div>
-              <time className="text-[11px] font-black text-[#341d4a] dark:text-primary-300">{isRtl ? '1 س' : '1h'}</time>
+              <time className="text-[11px] font-black text-text-secondary dark:text-primary-300">{isRtl ? '1 س' : '1h'}</time>
             </div>
 
             <div className="flex items-center gap-2.5 py-2 dock-it">
               <div className="w-2.5 h-2.5 rounded-full bg-primary-700 shrink-0" />
               <div className="flex-1 min-w-0">
-                <b className="block text-[12.5px] font-black text-[#170d24] dark:text-[#f4effa]">
+                <b className="block text-[12.5px] font-black text-text-primary dark:text-[#f4effa]">
                   {isRtl ? 'فكرة اليوم من أمل' : 'Mindful Reflection'}
                 </b>
-                <span className="block text-[11px] font-bold text-[#341d4a] dark:text-primary-200/90 truncate">
+                <span className="block text-[11px] font-bold text-text-secondary dark:text-primary-200/90 truncate">
                   {isRtl ? 'الأفكار مجرد مقترحات وليست حقائق' : 'Thoughts are not facts'}
                 </span>
               </div>
-              <time className="text-[11px] font-black text-[#341d4a] dark:text-primary-300">{isRtl ? 'اليوم' : 'today'}</time>
+              <time className="text-[11px] font-black text-text-secondary dark:text-primary-300">{isRtl ? 'اليوم' : 'today'}</time>
             </div>
           </section>
 
           {/* Panel 3: Profile & Settings */}
           <section className="dock-panel" data-i="3">
-            <div className="flex items-center gap-3 mb-3 pb-2.5 border-b border-[#d8c3ed] dark:border-primary-500/15 dock-it">
+            <div className="flex items-center gap-3 mb-3 pb-2.5 border-b border-primary-200 dark:border-primary-500/15 dock-it">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-700 to-primary-900 text-white font-black flex items-center justify-center text-sm shadow-sm shrink-0">
                 {user?.name ? user.name.slice(0, 2).toUpperCase() : 'أمل'}
               </div>
