@@ -16,6 +16,8 @@
             document.documentElement.setAttribute('data-theme', 'light');
           }
           var savedPalette = localStorage.getItem('amal_color_palette') || 'default';
+          if (savedPalette === 'whatsapp') savedPalette = 'green';
+          if (savedPalette === 'facebook') savedPalette = 'blue';
           document.documentElement.setAttribute('data-color-palette', savedPalette);
         } catch (e) {}
       })();

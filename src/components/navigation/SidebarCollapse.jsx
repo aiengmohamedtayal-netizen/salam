@@ -114,8 +114,8 @@ export function SidebarCollapse({
     R: createSpring(defaultOpen ? 0 : 1, 300, 22),
     // Highlight Y spring: tracks active item offsetTop. stiffness: 380, damping: 28
     Y: createSpring(0, 380, 28),
-    // Label springs: each label has stiffness: 300, damping: 26
-    labels: items.map(() => createSpring(defaultOpen ? 1 : 0, 300, 26)),
+    // Label springs: each item label + brand text
+    labels: [...items, { id: 'brand' }].map(() => createSpring(defaultOpen ? 1 : 0, 300, 26)),
   });
 
   const timersRef = useRef([]);
@@ -209,12 +209,11 @@ export function SidebarCollapse({
       const rClamped = clamp(R.x, 0, 1);
 
       if (toggleBtnRef.current) {
-        // Smoothly position toggle button
+        // Toggle button sits aligned 4px from the end edge
         if (isRTL) {
-          // In RTL, toggle is on the left (or start), transitions towards the logo position
-          toggleBtnRef.current.style.left = `${(rClamped * 4).toFixed(2)}px`;
+          toggleBtnRef.current.style.left = '4px';
         } else {
-          toggleBtnRef.current.style.right = `${(rClamped * 4).toFixed(2)}px`;
+          toggleBtnRef.current.style.right = '4px';
         }
       }
 
@@ -225,18 +224,30 @@ export function SidebarCollapse({
       }
 
       if (logoRef.current) {
-        // As it collapses, toggle smoothly takes the logo's place
-        logoRef.current.style.opacity = clamp(1 - R.x * 2, 0, 1).toFixed(3);
+        // As it collapses, logo smoothly fades out
+        const logoO = clamp(1 - R.x * 2.2, 0, 1);
+        logoRef.current.style.opacity = logoO.toFixed(3);
+        logoRef.current.style.transform = `scale(${(0.8 + 0.2 * logoO).toFixed(2)})`;
+        logoRef.current.style.visibility = logoO < 0.05 ? 'hidden' : 'visible';
       }
 
-      // Staggered label slide and opacity
+      // Staggered label slide, maxWidth collapse, and opacity
       labels.forEach((labelSpring, index) => {
         const el = labelRefs.current[index];
         if (el) {
           const o = clamp(labelSpring.x, 0, 1);
           el.style.opacity = o.toFixed(3);
-          const offset = (1 - o) * (isRTL ? 10 : -10);
+          const offset = (1 - o) * (isRTL ? 12 : -12);
           el.style.transform = `translateX(${offset.toFixed(2)}px)`;
+          el.style.maxWidth = `${(o * 140).toFixed(1)}px`;
+          el.style.marginInlineStart = `${(o * 12).toFixed(1)}px`;
+          if (o < 0.05) {
+            el.style.visibility = 'hidden';
+            el.style.pointerEvents = 'none';
+          } else {
+            el.style.visibility = 'visible';
+            el.style.pointerEvents = 'auto';
+          }
         }
       });
 
@@ -307,7 +318,12 @@ export function SidebarCollapse({
         {/* Brand Text */}
         <span
           ref={(el) => (labelRefs.current[items.length] = el)}
-          className="lb ms-[10px] text-[15px] font-bold text-text-primary whitespace-nowrap overflow-hidden inline-block"
+          className="lb ms-[10px] text-[15px] font-bold text-text-primary whitespace-nowrap overflow-hidden inline-block will-change-transform"
+          style={{
+            maxWidth: defaultOpen ? '120px' : '0px',
+            opacity: defaultOpen ? 1 : 0,
+            visibility: defaultOpen ? 'visible' : 'hidden',
+          }}
         >
           {t('common.brandName')}
         </span>
@@ -321,7 +337,7 @@ export function SidebarCollapse({
           aria-label={isOpen ? t('nav.closeMenu') : t('nav.openMenu')}
           className={cn(
             'col absolute top-[4px] w-[36px] h-[36px] rounded-[12px]',
-            isRTL ? 'left-0' : 'right-0',
+            isRTL ? 'left-1' : 'right-1',
             'grid place-items-center cursor-pointer',
             'bg-surface-muted hover:bg-primary-100 dark:hover:bg-primary-900/60',
             'text-text-primary transition-colors focus-visible:outline-2 focus-visible:outline-primary-500'
@@ -361,8 +377,9 @@ export function SidebarCollapse({
               type="button"
               onClick={() => handleItemClick(index, item.path)}
               aria-current={isActive ? 'page' : undefined}
+              title={!isOpen ? t(item.labelKey) : undefined}
               className={cn(
-                'it relative z-10 flex items-center h-[44px] px-[11px] rounded-[14px] border-0 bg-transparent cursor-pointer',
+                'it relative z-10 flex items-center h-[44px] px-[11px] rounded-[14px] border-0 bg-transparent cursor-pointer overflow-hidden',
                 'text-[14px] font-medium whitespace-nowrap text-start w-full',
                 'transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40',
                 isActive
@@ -373,7 +390,12 @@ export function SidebarCollapse({
               <Icon className="w-[22px] h-[22px] shrink-0 stroke-[1.9]" aria-hidden="true" />
               <span
                 ref={(el) => (labelRefs.current[index] = el)}
-                className="lb ms-[12px] inline-block whitespace-nowrap will-change-transform"
+                className="lb ms-[12px] inline-block whitespace-nowrap will-change-transform overflow-hidden"
+                style={{
+                  maxWidth: defaultOpen ? '140px' : '0px',
+                  opacity: defaultOpen ? 1 : 0,
+                  visibility: defaultOpen ? 'visible' : 'hidden',
+                }}
               >
                 {t(item.labelKey)}
               </span>

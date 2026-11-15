@@ -192,7 +192,7 @@ html.dark,
 
 /* ========================================
    Theme & Color Palette Switcher Custom Properties
-   (Default Orchid, WhatsApp Green, Facebook Blue)
+   (Default Orchid, Green, Blue)
    ======================================== */
 
 :root,
@@ -201,130 +201,184 @@ html[data-color-palette="default"] {
   --color-primary-hover: #8953b7;
 }
 
-/* WhatsApp Green — Light Mode */
+/* Green — Light Mode */
+html[data-color-palette="green"],
 html[data-color-palette="whatsapp"] {
   --color-primary-50: #f0fdf4;
   --color-primary-100: #dcfce7;
   --color-primary-200: #bbf7d0;
   --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: #25d366;
-  --color-primary-600: #128c7e;
-  --color-primary-700: #075e54;
-  --color-primary-800: #064e43;
-  --color-primary-900: #043830;
-  --color-primary-950: #022c25;
+  --color-primary-400: #34d399;
+  --color-primary-500: #10b981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+  --color-primary-800: #065f46;
+  --color-primary-900: #064e3b;
+  --color-primary-950: #022c22;
 
   --color-teal-50: #f0fdf4;
   --color-teal-100: #dcfce7;
   --color-teal-200: #bbf7d0;
   --color-teal-300: #86efac;
-  --color-teal-400: #4ade80;
-  --color-teal-500: #25d366;
-  --color-teal-600: #128c7e;
-  --color-teal-700: #075e54;
-  --color-teal-800: #064e43;
-  --color-teal-900: #043830;
-  --color-teal-950: #022c25;
+  --color-teal-400: #34d399;
+  --color-teal-500: #10b981;
+  --color-teal-600: #059669;
+  --color-teal-700: #047857;
+  --color-teal-800: #065f46;
+  --color-teal-900: #064e3b;
+  --color-teal-950: #022c22;
 
-  --color-brand-tint: rgba(37, 211, 102, 0.12);
-  --color-primary-hover: #075e54;
-  --shadow-glow: 0 0 24px rgba(37, 211, 102, 0.25);
+  --color-emerald-50: #f0fdf4;
+  --color-emerald-100: #dcfce7;
+  --color-emerald-200: #bbf7d0;
+  --color-emerald-300: #86efac;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
+  --color-emerald-950: #022c22;
+
+  --color-brand-tint: rgba(16, 185, 129, 0.12);
+  --color-primary-hover: #047857;
+  --shadow-glow: 0 0 24px rgba(16, 185, 129, 0.25);
 }
 
-/* WhatsApp Green — Dark Mode */
+/* Green — Dark Mode */
+html.dark[data-color-palette="green"],
 html.dark[data-color-palette="whatsapp"],
+[data-theme="dark"][data-color-palette="green"],
 [data-theme="dark"][data-color-palette="whatsapp"] {
-  --color-primary-50: #07221b;
-  --color-primary-100: #0d3429;
-  --color-primary-200: #124d3d;
-  --color-primary-300: #186b55;
-  --color-primary-400: #1f8d70;
-  --color-primary-500: #25d366;
-  --color-primary-600: #128c7e;
-  --color-primary-700: #075e54;
-  --color-primary-800: #054a41;
-  --color-primary-900: #03342d;
-  --color-primary-950: #02221d;
+  --color-primary-50: #062117;
+  --color-primary-100: #0b3325;
+  --color-primary-200: #114936;
+  --color-primary-300: #34d399;
+  --color-primary-400: #10b981;
+  --color-primary-500: #059669;
+  --color-primary-600: #047857;
+  --color-primary-700: #065f46;
+  --color-primary-800: #064e3b;
+  --color-primary-900: #022c22;
+  --color-primary-950: #011712;
 
-  --color-teal-50: #07221b;
-  --color-teal-100: #0d3429;
-  --color-teal-200: #124d3d;
-  --color-teal-300: #186b55;
-  --color-teal-400: #1f8d70;
-  --color-teal-500: #25d366;
-  --color-teal-600: #128c7e;
-  --color-teal-700: #075e54;
-  --color-teal-800: #054a41;
-  --color-teal-900: #03342d;
-  --color-teal-950: #02221d;
+  --color-teal-50: #062117;
+  --color-teal-100: #0b3325;
+  --color-teal-200: #114936;
+  --color-teal-300: #34d399;
+  --color-teal-400: #10b981;
+  --color-teal-500: #059669;
+  --color-teal-600: #047857;
+  --color-teal-700: #065f46;
+  --color-teal-800: #064e3b;
+  --color-teal-900: #022c22;
+  --color-teal-950: #011712;
 
-  --color-brand-tint: rgba(37, 211, 102, 0.16);
-  --color-primary-hover: #128c7e;
-  --shadow-glow: 0 0 28px rgba(37, 211, 102, 0.35);
+  --color-emerald-50: #062117;
+  --color-emerald-100: #0b3325;
+  --color-emerald-200: #114936;
+  --color-emerald-300: #34d399;
+  --color-emerald-400: #10b981;
+  --color-emerald-500: #059669;
+  --color-emerald-600: #047857;
+  --color-emerald-700: #065f46;
+  --color-emerald-800: #064e3b;
+  --color-emerald-900: #022c22;
+  --color-emerald-950: #011712;
+
+  --color-brand-tint: rgba(16, 185, 129, 0.16);
+  --color-primary-hover: #059669;
+  --shadow-glow: 0 0 28px rgba(16, 185, 129, 0.35);
 }
 
-/* Facebook Blue — Light Mode */
+/* Blue — Light Mode */
+html[data-color-palette="blue"],
 html[data-color-palette="facebook"] {
   --color-primary-50: #eff6ff;
   --color-primary-100: #dbeafe;
   --color-primary-200: #bfdbfe;
   --color-primary-300: #93c5fd;
   --color-primary-400: #60a5fa;
-  --color-primary-500: #1877f2;
-  --color-primary-600: #166fe5;
-  --color-primary-700: #0c56c2;
-  --color-primary-800: #094297;
-  --color-primary-900: #083375;
-  --color-primary-950: #05204d;
+  --color-primary-500: #2563eb;
+  --color-primary-600: #1d4ed8;
+  --color-primary-700: #1e40af;
+  --color-primary-800: #1e3a8a;
+  --color-primary-900: #172554;
+  --color-primary-950: #0f172a;
 
   --color-teal-50: #eff6ff;
   --color-teal-100: #dbeafe;
   --color-teal-200: #bfdbfe;
   --color-teal-300: #93c5fd;
   --color-teal-400: #60a5fa;
-  --color-teal-500: #1877f2;
-  --color-teal-600: #166fe5;
-  --color-teal-700: #0c56c2;
-  --color-teal-800: #094297;
-  --color-teal-900: #083375;
-  --color-teal-950: #05204d;
+  --color-teal-500: #2563eb;
+  --color-teal-600: #1d4ed8;
+  --color-teal-700: #1e40af;
+  --color-teal-800: #1e3a8a;
+  --color-teal-900: #172554;
+  --color-teal-950: #0f172a;
 
-  --color-brand-tint: rgba(24, 119, 242, 0.12);
-  --color-primary-hover: #166fe5;
-  --shadow-glow: 0 0 24px rgba(24, 119, 242, 0.25);
+  --color-emerald-50: #eff6ff;
+  --color-emerald-100: #dbeafe;
+  --color-emerald-200: #bfdbfe;
+  --color-emerald-300: #93c5fd;
+  --color-emerald-400: #60a5fa;
+  --color-emerald-500: #2563eb;
+  --color-emerald-600: #1d4ed8;
+  --color-emerald-700: #1e40af;
+  --color-emerald-800: #1e3a8a;
+  --color-emerald-900: #172554;
+  --color-emerald-950: #0f172a;
+
+  --color-brand-tint: rgba(37, 99, 235, 0.12);
+  --color-primary-hover: #1e40af;
+  --shadow-glow: 0 0 24px rgba(37, 99, 235, 0.25);
 }
 
-/* Facebook Blue — Dark Mode */
+/* Blue — Dark Mode */
+html.dark[data-color-palette="blue"],
 html.dark[data-color-palette="facebook"],
+[data-theme="dark"][data-color-palette="blue"],
 [data-theme="dark"][data-color-palette="facebook"] {
   --color-primary-50: #091a33;
   --color-primary-100: #0e274d;
   --color-primary-200: #14376b;
-  --color-primary-300: #1b4a8e;
-  --color-primary-400: #2665be;
-  --color-primary-500: #1877f2;
-  --color-primary-600: #166fe5;
-  --color-primary-700: #0c56c2;
-  --color-primary-800: #094297;
-  --color-primary-900: #062c64;
-  --color-primary-950: #031b40;
+  --color-primary-300: #60a5fa;
+  --color-primary-400: #3b82f6;
+  --color-primary-500: #2563eb;
+  --color-primary-600: #1d4ed8;
+  --color-primary-700: #1e40af;
+  --color-primary-800: #172554;
+  --color-primary-900: #0d1b33;
+  --color-primary-950: #060d1a;
 
   --color-teal-50: #091a33;
   --color-teal-100: #0e274d;
   --color-teal-200: #14376b;
-  --color-teal-300: #1b4a8e;
-  --color-teal-400: #2665be;
-  --color-teal-500: #1877f2;
-  --color-teal-600: #166fe5;
-  --color-teal-700: #0c56c2;
-  --color-teal-800: #094297;
-  --color-teal-900: #062c64;
-  --color-teal-950: #031b40;
+  --color-teal-300: #60a5fa;
+  --color-teal-400: #3b82f6;
+  --color-teal-500: #2563eb;
+  --color-teal-600: #1d4ed8;
+  --color-teal-700: #1e40af;
+  --color-teal-800: #172554;
+  --color-teal-900: #0d1b33;
+  --color-teal-950: #060d1a;
 
-  --color-brand-tint: rgba(24, 119, 242, 0.16);
-  --color-primary-hover: #166fe5;
-  --shadow-glow: 0 0 28px rgba(24, 119, 242, 0.35);
+  --color-emerald-50: #091a33;
+  --color-emerald-100: #0e274d;
+  --color-emerald-200: #14376b;
+  --color-emerald-300: #60a5fa;
+  --color-emerald-400: #3b82f6;
+  --color-emerald-500: #2563eb;
+  --color-emerald-600: #1d4ed8;
+  --color-emerald-700: #1e40af;
+  --color-emerald-800: #172554;
+  --color-emerald-900: #0d1b33;
+  --color-emerald-950: #060d1a;
+
+  --color-brand-tint: rgba(37, 99, 235, 0.16);
+  --color-primary-hover: #1d4ed8;
+  --shadow-glow: 0 0 28px rgba(37, 99, 235, 0.35);
 }
 
 /* ========================================

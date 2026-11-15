@@ -2,7 +2,14 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo } 
 
 const THEME_STORAGE_KEY = 'amal_theme';
 const COLOR_PALETTE_STORAGE_KEY = 'amal_color_palette';
-export const VALID_PALETTES = ['default', 'whatsapp', 'facebook'];
+export const VALID_PALETTES = ['default', 'green', 'blue', 'whatsapp', 'facebook'];
+
+export function normalizePalette(palette) {
+  if (palette === 'whatsapp') return 'green';
+  if (palette === 'facebook') return 'blue';
+  if (VALID_PALETTES.includes(palette)) return palette;
+  return 'default';
+}
 
 const ThemeContext = createContext(null);
 
@@ -10,9 +17,7 @@ function getInitialColorPalette() {
   if (typeof window === 'undefined') return 'default';
   try {
     const saved = localStorage.getItem(COLOR_PALETTE_STORAGE_KEY);
-    if (VALID_PALETTES.includes(saved)) {
-      return saved;
-    }
+    return normalizePalette(saved);
   } catch {}
   return 'default';
 }
@@ -108,9 +113,8 @@ export function ThemeProvider({ children }) {
   }, []);
 
   const setColorPalette = useCallback((nextPalette) => {
-    if (VALID_PALETTES.includes(nextPalette)) {
-      setColorPaletteState(nextPalette);
-    }
+    const normalized = normalizePalette(nextPalette);
+    setColorPaletteState(normalized);
   }, []);
 
   const value = useMemo(
