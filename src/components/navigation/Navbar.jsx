@@ -8,7 +8,6 @@ import { MobileMenu } from './MobileMenu';
 import { useTranslation } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
-import { RubberDock } from '@/components/ui/RubberDock';
 
 export const navItems = [
   { path: '/', labelKey: 'nav.home' },
@@ -97,11 +96,6 @@ export function Navbar() {
               </span>
             </div>
           </Link>
-
-          {/* Rubber Dock (DesignBookmark Motion) - Centered Top Navigation Dock */}
-          <div className="hidden md:flex items-center justify-center flex-1 max-w-[220px] mx-auto h-full relative">
-            <RubberDock />
-          </div>
 
           {/* Actions: Segmented Language Switcher, Theme, Auth, Mobile Menu */}
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-3">
