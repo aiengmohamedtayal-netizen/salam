@@ -1,11 +1,17 @@
+import { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Shield, AlertTriangle, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { TextAnalysisCard } from './components/TextAnalysisCard';
-import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { useTranslation } from '@/context/LanguageContext';
+
+const SalamNeuralNetwork = lazy(() =>
+  import('@/components/three/SalamNeuralNetwork').then((m) => ({
+    default: m.SalamNeuralNetwork,
+  }))
+);
 
 /**
  * TextAnalysisPage Component
@@ -36,7 +42,9 @@ export function TextAnalysisPage() {
 
         {/* Ambient Neural Network Visual */}
         <div className="w-full max-w-sm h-32 mx-auto relative flex items-center justify-center">
-          <SalamNeuralNetwork state="idle" className="w-full h-full" />
+          <Suspense fallback={<div className="w-8 h-8 border-2 border-teal-500/30 border-t-teal-500 rounded-full animate-spin" />}>
+            <SalamNeuralNetwork state="idle" className="w-full h-full" />
+          </Suspense>
         </div>
       </div>
 

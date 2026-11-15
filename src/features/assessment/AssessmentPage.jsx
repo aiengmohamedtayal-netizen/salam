@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -18,7 +18,11 @@ import { Textarea } from '@/components/ui/Textarea';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
 import { Icon3D } from '@/components/ui/Icon3D';
-import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
+const SalamNeuralNetwork = lazy(() =>
+  import('@/components/three/SalamNeuralNetwork').then((m) => ({
+    default: m.SalamNeuralNetwork,
+  }))
+);
 import { FormField } from '@/components/forms/FormField';
 import { FormActions } from '@/components/forms/FormActions';
 import { ErrorState } from '@/components/feedback/ErrorState';
@@ -592,7 +596,9 @@ export function AssessmentPage() {
             <Card variant="elevated" padding="lg" className="text-center space-y-6 overflow-hidden">
               {/* 3D Dynamic Processing Visual */}
               <div className="h-44 w-full rounded-2xl bg-gradient-to-b from-teal-50/60 to-surface-card border border-surface-border/70 overflow-hidden relative flex items-center justify-center">
-                <SalamNeuralNetwork state="processing" className="w-full h-full absolute inset-0" />
+                <Suspense fallback={<div className="w-8 h-8 border-2 border-teal-500/30 border-t-teal-500 rounded-full animate-spin" />}>
+                  <SalamNeuralNetwork state="processing" className="w-full h-full absolute inset-0" />
+                </Suspense>
                 <div className="absolute top-2.5 start-3 z-10">
                   <Badge variant="primary" size="sm" className="shadow-xs text-[10px]">
                     {t('home.threeVisual.stateProcessing')}

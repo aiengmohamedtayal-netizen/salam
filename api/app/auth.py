@@ -36,6 +36,11 @@ def _connect() -> sqlite3.Connection:
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     connection.execute("PRAGMA busy_timeout = 10000")
+    connection.execute("PRAGMA journal_mode = WAL")
+    connection.execute("PRAGMA synchronous = NORMAL")
+    connection.execute("PRAGMA cache_size = -64000")
+    connection.execute("PRAGMA temp_store = MEMORY")
+    connection.execute("PRAGMA mmap_size = 268435456")
     return connection
 
 
@@ -58,6 +63,7 @@ def initialize_database() -> None:
                 created_at TEXT NOT NULL
             );
             CREATE INDEX IF NOT EXISTS sessions_user_id_idx ON sessions(user_id);
+            CREATE INDEX IF NOT EXISTS sessions_expires_at_idx ON sessions(expires_at);
             CREATE TABLE IF NOT EXISTS assessments (
                 id TEXT PRIMARY KEY,
                 user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -75,6 +81,16 @@ def initialize_database() -> None:
                 expires_at TEXT NOT NULL,
                 created_at TEXT NOT NULL,
                 attempts INTEGER DEFAULT 0
+            );
+            CREATE INDEX IF NOT EXISTS otp_verifications_expires_at_idx ON otp_verifications(expires_at);
+            CREATE TABLE IF NOT EXISTS oauth_states (
+                state TEXT PRIMARY KEY,
+                nonce TEXT NOT NULL,
+                next_path TEXT NOT NULL,
+                auth_path TEXT NOT NULL,
+                frontend_base TEXT NOT NULL,
+                redirect_uri TEXT NOT NULL,
+                created_at REAL NOT NULL
             );
             """
         )
@@ -129,8 +145,9 @@ def _create_session(response: Response, user_id: str) -> str:
             (hashlib.sha256(raw_token.encode()).hexdigest(), user_id, (now + SESSION_TTL).isoformat(), now.isoformat()),
         )
     secure = settings.env == "production"
-    response.set_cookie(SESSION_COOKIE, raw_token, httponly=True, secure=secure, samesite="strict", path="/", max_age=int(SESSION_TTL.total_seconds()))
-    response.set_cookie(CSRF_COOKIE, csrf_token, httponly=False, secure=secure, samesite="strict", path="/", max_age=int(SESSION_TTL.total_seconds()))
+    samesite = "lax"
+    response.set_cookie(SESSION_COOKIE, raw_token, httponly=True, secure=secure, samesite=samesite, path="/", max_age=int(SESSION_TTL.total_seconds()))
+    response.set_cookie(CSRF_COOKIE, csrf_token, httponly=False, secure=secure, samesite=samesite, path="/", max_age=int(SESSION_TTL.total_seconds()))
     return csrf_token
 
 
@@ -173,6 +190,32 @@ def delete_other_user_sessions(user_id: str, raw_token: str | None) -> None:
             connection.execute("DELETE FROM sessions WHERE user_id = ? AND token_hash != ?", (user_id, current_hash))
         else:
             connection.execute("DELETE FROM sessions WHERE user_id = ?", (user_id,))
+
+
+def save_oauth_state(state: str, nonce: str, next_path: str, auth_path: str, frontend_base: str, redirect_uri: str) -> None:
+    with _connect() as connection:
+        connection.execute(
+            """
+            INSERT OR REPLACE INTO oauth_states (state, nonce, next_path, auth_path, frontend_base, redirect_uri, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (state, nonce, next_path, auth_path, frontend_base, redirect_uri, time.time()),
+        )
+
+
+def pop_oauth_state(state: str) -> dict[str, Any]:
+    with _connect() as connection:
+        row = connection.execute("SELECT * FROM oauth_states WHERE state = ?", (state,)).fetchone()
+        if row:
+            connection.execute("DELETE FROM oauth_states WHERE state = ?", (state,))
+            return dict(row)
+        return {}
+
+
+def cleanup_oauth_states(max_age_seconds: int = 900) -> None:
+    with _connect() as connection:
+        cutoff = time.time() - max_age_seconds
+        connection.execute("DELETE FROM oauth_states WHERE created_at < ?", (cutoff,))
 
 
 class RegisterPayload(BaseModel):

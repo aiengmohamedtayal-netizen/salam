@@ -629,6 +629,8 @@ export const en = {
       failed: 'Google sign-in could not be completed. Please try again.',
     },
     secureNotice: 'A secure system respecting your privacy and adhering to ethical AI standards.',
+    pullCordHint: 'Pull cord to toggle light & dark mode',
+    pullCordAria: 'Light switch: pull cord to toggle between dark and light mode',
     
     // Login Page
     loginTitle: 'Sign In',

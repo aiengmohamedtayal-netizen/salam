@@ -90,9 +90,9 @@
   --color-surface-border-strong: #d4c1e3;
 
   /* --- Text --- */
-  --color-text-primary: #281b34;
-  --color-text-secondary: #655572;
-  --color-text-muted: #81718f;
+  --color-text-primary: #170d24;
+  --color-text-secondary: #3b284c;
+  --color-text-muted: #523b68;
   --color-text-inverse: #ffffff;
   --color-text-on-primary: #ffffff;
 
@@ -246,6 +246,66 @@ footer,
 .bg-surface-elevated,
 .bg-surface-muted {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* ========================================================
+   Light Mode — High Contrast & Zero Transparency Rules
+   Ensures solid, readable, crisp text everywhere in Light Mode
+   ======================================================== */
+html:not(.dark) {
+  --color-text-primary: #170d24;
+  --color-text-secondary: #3b284c;
+  --color-text-muted: #523b68;
+}
+
+html:not(.dark) body {
+  color: #170d24;
+}
+
+/* Ensure no faint, low-contrast lavender or washed out text in light mode */
+html:not(.dark) .text-primary-100,
+html:not(.dark) .text-primary-200,
+html:not(.dark) .text-primary-300 {
+  color: #583278 !important; /* Deep solid plum instead of pale lavender */
+  opacity: 1 !important;
+}
+
+html:not(.dark) .text-primary-400 {
+  color: #402456 !important;
+  opacity: 1 !important;
+}
+
+html:not(.dark) .text-slate-400 {
+  color: #523b68 !important;
+  opacity: 1 !important;
+}
+
+html:not(.dark) .text-slate-500 {
+  color: #3b284c !important;
+  opacity: 1 !important;
+}
+
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: #523b68 !important;
+  opacity: 1 !important;
+}
+
+/* Base headings and paragraphs solid contrast */
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3,
+html:not(.dark) h4,
+html:not(.dark) h5,
+html:not(.dark) h6 {
+  color: #170d24;
+  opacity: 1 !important;
+}
+
+html:not(.dark) p,
+html:not(.dark) span,
+html:not(.dark) label {
+  opacity: 1 !important;
 }
 
 /* ========================================

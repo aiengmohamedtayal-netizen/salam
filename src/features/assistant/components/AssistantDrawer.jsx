@@ -12,6 +12,8 @@ import { QuickPrompt } from './QuickPrompt';
 import { ChatInput } from './ChatInput';
 import { TypingIndicator } from './TypingIndicator';
 import { SafetyCard } from './SafetyCard';
+import { AssistantAvatar } from './AssistantAvatar';
+import { GooThinking } from '@/components/ui/GooThinking';
 
 const MOBILE_QUERY = '(max-width: 767px)';
 const SCROLL_TRIGGER = 120;
@@ -53,6 +55,7 @@ export function AssistantDrawer({ onClose }) {
   const messageIdRef = useRef(0);
 
   const quickPromptTexts = [
+    language === 'ar' ? '✨ تجربة Goo Thinking' : '✨ Try Goo Thinking',
     t('assistant.quickPrompts.work'),
     t('assistant.quickPrompts.result'),
     t('assistant.quickPrompts.text'),
@@ -123,6 +126,20 @@ export function AssistantDrawer({ onClose }) {
         setMessages((previous) => [
           ...previous,
           { id: `assistant-${currentId}`, role: 'assistant', kind: 'safety', text: '' },
+        ]);
+        return;
+      }
+
+      // Goo Thinking demo trigger
+      if (text.includes('Goo Thinking') || text.includes('التفكير الذكي')) {
+        setMessages((previous) => [
+          ...previous,
+          {
+            id: `assistant-${currentId}`,
+            role: 'assistant',
+            kind: 'goo_thinking',
+            text: '',
+          },
         ]);
         return;
       }
@@ -203,6 +220,23 @@ export function AssistantDrawer({ onClose }) {
                 <div key={message.id} className="flex flex-col gap-1">
                   {message.kind === 'safety' ? (
                     <SafetyCard />
+                  ) : message.kind === 'goo_thinking' ? (
+                    <div className="flex items-start gap-2.5 my-2">
+                      <span
+                        aria-hidden="true"
+                        className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-lg)] bg-primary-50 dark:bg-primary-950/80 shadow-[0_4px_10px_-4px_rgba(112,64,154,0.5)]"
+                      >
+                        <AssistantAvatar className="h-9 w-9" />
+                      </span>
+                      <div className="flex flex-col gap-1.5 items-start">
+                        <GooThinking autoCycle interactive />
+                        <span className="text-[11px] text-text-secondary ps-1">
+                          {language === 'ar'
+                            ? 'مؤشر التفكير الذكي (DesignBookmark Goo Thinking) — اضغط للتبديل'
+                            : 'Smart Goo Thinking (DesignBookmark Motion) — Click to toggle'}
+                        </span>
+                      </div>
+                    </div>
                   ) : (
                     <ChatMessage message={message} />
                   )}

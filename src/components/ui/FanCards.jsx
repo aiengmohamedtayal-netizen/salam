@@ -87,6 +87,7 @@ export function FanCards({
 
   const containerRef = useRef(null);
   const cardElsRef = useRef([]);
+  const wakeRef = useRef(null);
   const springsRef = useRef({
     f: createSpring(0, 220, 18),
     cards: [
@@ -113,6 +114,7 @@ export function FanCards({
   }, []);
 
   const setHot = useCallback((i) => {
+    wakeRef.current?.();
     stateRef.current.hot = i;
     const springs = springsRef.current;
     springs.cards.forEach((c, idx) => {
@@ -129,6 +131,17 @@ export function FanCards({
   useEffect(() => {
     let animId;
     let last = performance.now();
+    let isRunning = false;
+
+    const wake = () => {
+      if (!isRunning) {
+        isRunning = true;
+        last = performance.now();
+        animId = requestAnimationFrame(loop);
+      }
+    };
+    wakeRef.current = wake;
+
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Apply reduced motion damping if requested by user OS
@@ -175,10 +188,27 @@ export function FanCards({
         el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${r.toFixed(3)}deg) scale(${sc.toFixed(4)})`;
       });
 
+      // Performance Optimization (fixing-motion-performance): Rest condition
+      const allRest =
+        Math.abs(springs.f.v) < 0.001 &&
+        Math.abs(springs.f.x - springs.f.t) < 0.001 &&
+        springs.cards.every(
+          (c) =>
+            Math.abs(c.lift.v) < 0.005 &&
+            Math.abs(c.lift.x - c.lift.t) < 0.005 &&
+            Math.abs(c.sc.v) < 0.002 &&
+            Math.abs(c.sc.x - c.sc.t) < 0.002
+        );
+
+      if (allRest) {
+        isRunning = false;
+        return;
+      }
+
       animId = requestAnimationFrame(loop);
     };
 
-    animId = requestAnimationFrame(loop);
+    wake();
     return () => cancelAnimationFrame(animId);
   }, [spread, isAr]);
 
@@ -190,6 +220,7 @@ export function FanCards({
     const SEQ = [
       () => {
         springsRef.current.f.t = 1;
+        wakeRef.current?.();
       },
       () => setHot(0),
       () => setHot(1),
@@ -197,6 +228,7 @@ export function FanCards({
       () => setHot(-1),
       () => {
         springsRef.current.f.t = 0;
+        wakeRef.current?.();
       },
     ];
 

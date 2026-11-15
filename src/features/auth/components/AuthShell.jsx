@@ -5,6 +5,7 @@ import { ArrowRight, ArrowLeft, ShieldCheck } from 'lucide-react';
 import { useTranslation } from '@/context/LanguageContext';
 import { fadeUp, safeMotion } from '@/lib/motion';
 import { cn } from '@/lib/utils';
+import { PullCord } from '@/components/ui/PullCord';
 
 /**
  * Shared AuthShell layout for AMAL Login and Create Account pages.
@@ -70,6 +71,11 @@ export function AuthShell({ children }) {
         className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-teal-500/5 via-teal-500/[0.02] to-transparent pointer-events-none"
         aria-hidden="true"
       />
+
+      {/* DesignBookmark Motion: Interactive Pull Cord Lamp */}
+      <div className="absolute top-0 end-2 sm:end-12 lg:end-28 z-30 pointer-events-auto scale-75 sm:scale-100 origin-top">
+        <PullCord />
+      </div>
 
       {/* Top Focused Navigation Bar */}
       <header className="relative z-10 w-full border-b border-surface-border/60 bg-surface-card/75 backdrop-blur-md">

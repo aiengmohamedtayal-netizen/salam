@@ -36,6 +36,7 @@ export function RegisterPage() {
   const [otpCode, setOtpCode] = useState('');
   const [otpError, setOtpError] = useState('');
   const [resendTimer, setResendTimer] = useState(0);
+  const [debugOtpCode, setDebugOtpCode] = useState(null);
 
   const isAr = language !== 'en';
 
@@ -92,19 +93,34 @@ export function RegisterPage() {
 
     setIsLoading(true);
     try {
-      await sendOtp(email.trim(), name.trim());
+      const res = await sendOtp(email.trim(), name.trim());
       setStep('otp');
       setResendTimer(60);
       setOtpError('');
       setFormAlert(null);
+      if (res?.debug_code) {
+        setDebugOtpCode(res.debug_code);
+      }
     } catch (error) {
+      const isNetworkError =
+        error.code === 'API_UNAVAILABLE' ||
+        error.code === 'API_ERROR' ||
+        (error.status && error.status >= 500);
+
       const message =
         error.code === 'ACCOUNT_EXISTS'
           ? t('auth.errors.accountExists')
-          : error.code === 'API_UNAVAILABLE'
-          ? t('auth.errors.networkError')
+          : isNetworkError
+          ? (isAr
+              ? 'تعذر الاتصال بالخادم. يرجى التأكد من تشغيل خادم الباك إند (Port 8000) وإعادة المحاولة.'
+              : 'Unable to connect to server. Please verify the backend API server is running on port 8000.')
           : t('auth.errors.generalFailure');
-      setFormAlert({ type: 'error', title: t('auth.errors.generalFailure'), message });
+
+      setFormAlert({
+        type: 'error',
+        title: isAr ? 'تعذر إرسال رمز التحقق' : 'Verification Request Failed',
+        message,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -125,13 +141,20 @@ export function RegisterPage() {
         );
       }, 700);
     } catch (error) {
+      const isNetworkError =
+        error.code === 'API_UNAVAILABLE' ||
+        error.code === 'API_ERROR' ||
+        (error.status && error.status >= 500);
+
       const message =
         error.code === 'INVALID_OTP'
           ? (isAr ? 'رمز التحقق غير صحيح أو انتهت صلاحيته' : 'Invalid or expired verification code')
           : error.code === 'ACCOUNT_EXISTS'
           ? t('auth.errors.accountExists')
-          : error.code === 'API_UNAVAILABLE'
-          ? t('auth.errors.networkError')
+          : isNetworkError
+          ? (isAr
+              ? 'تعذر الاتصال بالخادم. يرجى التأكد من تشغيل خادم الباك إند (Port 8000).'
+              : 'Unable to connect to server. Please verify backend API on port 8000.')
           : t('auth.errors.generalFailure');
       setOtpError(message);
       setFormAlert({ type: 'error', title: isAr ? 'خطأ في التحقق' : 'Verification Error', message });
@@ -144,10 +167,13 @@ export function RegisterPage() {
     if (resendTimer > 0 || isLoading) return;
     setIsLoading(true);
     try {
-      await sendOtp(email.trim(), name.trim());
+      const res = await sendOtp(email.trim(), name.trim());
       setResendTimer(60);
       setOtpCode('');
       setOtpError('');
+      if (res?.debug_code) {
+        setDebugOtpCode(res.debug_code);
+      }
       setFormAlert({
         type: 'success',
         title: isAr ? 'تم إرسال رمز جديد' : 'New code sent',
@@ -227,6 +253,28 @@ export function RegisterPage() {
                 <p className="mt-3 text-xs text-rose-600 dark:text-rose-400 font-medium">
                   {otpError}
                 </p>
+              )}
+              {debugOtpCode && (
+                <div className="mt-3 p-2.5 rounded-xl bg-primary-500/10 border border-primary-500/20 text-xs text-text-primary flex items-center justify-between gap-2 max-w-xs mx-auto animate-fade-in">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-semibold text-primary-700 dark:text-primary-300">
+                      {isAr ? 'رمز الاختبار:' : 'Dev OTP:'}
+                    </span>
+                    <span className="font-mono font-bold tracking-widest px-1.5 py-0.5 rounded bg-surface-card border border-surface-border text-primary-600 dark:text-primary-400">
+                      {debugOtpCode}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOtpCode(debugOtpCode);
+                      handleVerifyOtp(debugOtpCode);
+                    }}
+                    className="px-2.5 py-1 text-xs font-bold rounded-lg bg-primary-600 hover:bg-primary-700 text-white transition-colors cursor-pointer"
+                  >
+                    {isAr ? 'تعبئة وتأكيد' : 'Fill & Confirm'}
+                  </button>
+                </div>
               )}
             </div>
 

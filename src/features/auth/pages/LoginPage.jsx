@@ -66,12 +66,24 @@ export function LoginPage() {
       const destination = location.state?.from;
       navigate(destination ? `${destination.pathname}${destination.search || ''}` : (language === 'en' ? '/en/assessment' : '/ar/assessment'), { replace: true });
     } catch (error) {
+      const isNetworkError =
+        error.code === 'API_UNAVAILABLE' ||
+        error.code === 'API_ERROR' ||
+        (error.status && error.status >= 500);
+
       const message = error.code === 'INVALID_CREDENTIALS'
         ? t('auth.errors.invalidCredentials')
-        : error.code === 'API_UNAVAILABLE'
-          ? t('auth.errors.networkError')
+        : isNetworkError
+          ? (language !== 'en'
+              ? 'تعذر الاتصال بالخادم. يرجى التأكد من تشغيل خادم الباك إند (Port 8000) وإعادة المحاولة.'
+              : 'Unable to connect to server. Please verify the backend API server is running on port 8000.')
           : t('auth.errors.generalFailure');
-      setFormAlert({ type: 'error', title: t('auth.errors.generalFailure'), message });
+
+      setFormAlert({
+        type: 'error',
+        title: language !== 'en' ? 'تعذر تسجيل الدخول' : 'Login Failed',
+        message
+      });
     } finally {
       setIsLoading(false);
     }

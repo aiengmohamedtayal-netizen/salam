@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -13,7 +13,11 @@ import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
 import { Icon3D } from '@/components/ui/Icon3D';
 import { AppIcon } from '@/components/ui/AppIcon';
-import { SalamNeuralNetwork } from '@/components/three/SalamNeuralNetwork';
+const SalamNeuralNetwork = lazy(() =>
+  import('@/components/three/SalamNeuralNetwork').then((m) => ({
+    default: m.SalamNeuralNetwork,
+  }))
+);
 import { WeightWave } from '@/components/ui/WeightWave';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { SignaturePad } from '@/components/ui/SignaturePad';
@@ -168,7 +172,15 @@ export function HomePage() {
               className="lg:col-span-5 w-full flex items-center justify-center pt-2 lg:pt-0"
             >
               <div className="relative w-full h-[320px] sm:h-[400px] lg:h-[480px] flex items-center justify-center pointer-events-auto">
-                <SalamNeuralNetwork state="idle" className="w-full h-full" />
+                <Suspense
+                  fallback={
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full border-2 border-purple-500/20 border-t-purple-500 animate-spin" />
+                    </div>
+                  }
+                >
+                  <SalamNeuralNetwork state="idle" className="w-full h-full" />
+                </Suspense>
               </div>
             </motion.div>
           </div>

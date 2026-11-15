@@ -8,6 +8,7 @@ import { MobileMenu } from './MobileMenu';
 import { useTranslation } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
+import { RubberDock } from '@/components/ui/RubberDock';
 
 export const navItems = [
   { path: '/', labelKey: 'nav.home' },
@@ -76,7 +77,7 @@ export function Navbar() {
 
   return (
     <>
-    <header className="sticky top-0 z-40 w-full border-b border-surface-border bg-surface-card/85 backdrop-blur-md transition-colors">
+    <header className="sticky top-0 z-50 w-full border-b border-surface-border bg-surface-card/85 backdrop-blur-md transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Brand Logo & Title */}
@@ -96,6 +97,11 @@ export function Navbar() {
               </span>
             </div>
           </Link>
+
+          {/* Rubber Dock (DesignBookmark Motion) - Centered Top Navigation Dock */}
+          <div className="hidden md:flex items-center justify-center flex-1 max-w-[220px] mx-auto h-full relative">
+            <RubberDock />
+          </div>
 
           {/* Actions: Segmented Language Switcher, Theme, Auth, Mobile Menu */}
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 lg:gap-3">

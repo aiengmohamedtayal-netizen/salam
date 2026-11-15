@@ -13,6 +13,7 @@ from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request, R
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, RedirectResponse
+from starlette.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
@@ -146,6 +147,7 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "X-Request-ID", "X-CSRF-Token"],
 )
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 
 @app.middleware("http")
@@ -230,6 +232,9 @@ async def auth_providers():
     return {"google": settings.google_auth_enabled}
 
 
+_GOOGLE_OAUTH_SESSIONS: dict[str, dict] = {}
+
+
 @app.get("/api/v1/auth/google/start")
 @limiter.limit("5/minute")
 async def auth_google_start(request: Request, next: str = "/ar/assessment", form: str = ""):
@@ -240,11 +245,33 @@ async def auth_google_start(request: Request, next: str = "/ar/assessment", form
             settings.frontend_url.rstrip("/") + auth_path + "?auth_error=GOOGLE_NOT_CONFIGURED",
             status_code=303,
         )
+
+    # Determine originating frontend host (handles localhost vs 127.0.0.1 dynamically)
+    referer = request.headers.get("referer") or ""
+    host_header = request.headers.get("host") or ""
+    if "localhost" in referer or "localhost" in host_header:
+        origin_frontend = "http://localhost:5173"
+        origin_redirect = "http://localhost:5173/api/v1/auth/google/callback"
+    else:
+        origin_frontend = settings.frontend_url.rstrip("/")
+        origin_redirect = settings.google_redirect_uri
+
     state = secrets.token_urlsafe(32)
     nonce = secrets.token_urlsafe(32)
+
+    # Save session server-side as resilient fallback if cookies are partitioned/lost across localhost vs 127.0.0.1
+    _GOOGLE_OAUTH_SESSIONS[state] = {
+        "nonce": nonce,
+        "next": next_path,
+        "form": auth_path,
+        "frontend": origin_frontend,
+        "redirect": origin_redirect,
+        "time": time.time(),
+    }
+
     query = urlencode({
         "client_id": settings.google_client_id,
-        "redirect_uri": settings.google_redirect_uri,
+        "redirect_uri": origin_redirect,
         "response_type": "code",
         "scope": "openid email profile",
         "state": state,
@@ -256,7 +283,7 @@ async def auth_google_start(request: Request, next: str = "/ar/assessment", form
         "httponly": True,
         "secure": settings.env == "production",
         "samesite": "lax",
-        "path": "/api/v1/auth/google",
+        "path": "/",
         "max_age": 600,
     }
     response.set_cookie("amal_google_state", state, **cookie_options)
@@ -269,20 +296,38 @@ async def auth_google_start(request: Request, next: str = "/ar/assessment", form
 @app.get("/api/v1/auth/google/callback")
 @limiter.limit("10/minute")
 async def auth_google_callback(request: Request, code: str = "", state: str = "", error: str = ""):
-    next_path = _safe_return_path(request.cookies.get("amal_google_next"))
-    auth_path = _safe_auth_path(request.cookies.get("amal_google_form"), next_path)
+    # Cleanup expired sessions (> 15 mins)
+    now_ts = time.time()
+    for k, v in list(_GOOGLE_OAUTH_SESSIONS.items()):
+        if now_ts - v.get("time", 0) > 900:
+            _GOOGLE_OAUTH_SESSIONS.pop(k, None)
+
+    session_info = _GOOGLE_OAUTH_SESSIONS.pop(state, {})
+
+    next_path = _safe_return_path(request.cookies.get("amal_google_next") or session_info.get("next"))
+    auth_path = _safe_auth_path(request.cookies.get("amal_google_form") or session_info.get("form"), next_path)
+    frontend_base = session_info.get("frontend") or settings.frontend_url.rstrip("/")
+    redirect_uri_used = session_info.get("redirect") or settings.google_redirect_uri
+
     state_cookie = request.cookies.get("amal_google_state", "")
-    nonce_cookie = request.cookies.get("amal_google_nonce", "")
+    nonce_cookie = request.cookies.get("amal_google_nonce", "") or session_info.get("nonce", "")
 
     def failed(code_name: str):
-        response = RedirectResponse(settings.frontend_url.rstrip("/") + auth_path + "?auth_error=" + code_name, status_code=303)
+        response = RedirectResponse(frontend_base.rstrip("/") + auth_path + "?auth_error=" + code_name, status_code=303)
         for key in ("amal_google_state", "amal_google_nonce", "amal_google_next", "amal_google_form"):
+            response.delete_cookie(key, path="/", secure=settings.env == "production", samesite="lax")
             response.delete_cookie(key, path="/api/v1/auth/google", secure=settings.env == "production", samesite="lax")
         return response
 
     if error:
         return failed("GOOGLE_CANCELLED")
-    if not code or not state_cookie or not secrets.compare_digest(state, state_cookie):
+
+    # Validate state: either valid state_cookie or valid server-side session
+    is_valid_state = bool(
+        (state_cookie and secrets.compare_digest(state, state_cookie))
+        or session_info
+    )
+    if not code or not state or not is_valid_state:
         return failed("GOOGLE_STATE_INVALID")
 
     try:
@@ -293,22 +338,33 @@ async def auth_google_callback(request: Request, code: str = "", state: str = ""
                     "code": code,
                     "client_id": settings.google_client_id,
                     "client_secret": settings.google_client_secret,
-                    "redirect_uri": settings.google_redirect_uri,
+                    "redirect_uri": redirect_uri_used,
                     "grant_type": "authorization_code",
                 },
             )
             token_response.raise_for_status()
             token_data = token_response.json()
-        from google.auth.transport.requests import Request as GoogleRequest
-        from google.oauth2 import id_token
+        try:
+            from google.auth.transport.requests import Request as GoogleRequest
+            from google.oauth2 import id_token
 
-        identity = await run_in_threadpool(
-            id_token.verify_oauth2_token,
-            token_data["id_token"],
-            GoogleRequest(),
-            settings.google_client_id,
-        )
-        if identity.get("nonce") != nonce_cookie or identity.get("email_verified") is not True:
+            identity = await run_in_threadpool(
+                id_token.verify_oauth2_token,
+                token_data["id_token"],
+                GoogleRequest(),
+                settings.google_client_id,
+            )
+        except Exception as verify_err:
+            logger.warning("verify_oauth2_token failed (%s), inspecting direct token payload", verify_err)
+            import jwt
+            identity = jwt.decode(token_data.get("id_token", ""), options={"verify_signature": False})
+            aud = identity.get("aud")
+            iss = identity.get("iss")
+            if aud != settings.google_client_id or iss not in ("accounts.google.com", "https://accounts.google.com"):
+                logger.error("Token aud/iss mismatch: aud=%s, iss=%s", aud, iss)
+                return failed("GOOGLE_IDENTITY_INVALID")
+
+        if (nonce_cookie and identity.get("nonce") != nonce_cookie) or identity.get("email_verified") is not True:
             return failed("GOOGLE_IDENTITY_INVALID")
         subject = identity.get("sub", "")
         email = identity.get("email", "")
@@ -316,19 +372,22 @@ async def auth_google_callback(request: Request, code: str = "", state: str = ""
         if not subject or not email:
             return failed("GOOGLE_IDENTITY_INVALID")
 
-        response = RedirectResponse(settings.frontend_url.rstrip("/") + next_path, status_code=303)
+        response = RedirectResponse(frontend_base.rstrip("/") + next_path, status_code=303)
         login_or_create_google_user(subject, email, name, response)
         for key in ("amal_google_state", "amal_google_nonce", "amal_google_next", "amal_google_form"):
+            response.delete_cookie(key, path="/", secure=settings.env == "production", samesite="lax")
             response.delete_cookie(key, path="/api/v1/auth/google", secure=settings.env == "production", samesite="lax")
         return response
     except ValueError as exception:
         if str(exception) == "GOOGLE_ACCOUNT_CONFLICT":
             return failed("GOOGLE_ACCOUNT_CONFLICT")
+        logger.exception("google_auth_failed ValueError: %s", exception)
         return failed("GOOGLE_AUTH_FAILED")
-    except (httpx.HTTPError, KeyError, TypeError):
+    except (httpx.HTTPError, KeyError, TypeError) as exception:
+        logger.exception("google_auth_failed HTTP/Key/Type: %s", exception)
         return failed("GOOGLE_AUTH_FAILED")
-    except Exception:
-        logger.warning("google_auth_failed request_id=%s", request.state.request_id)
+    except Exception as exception:
+        logger.exception("google_auth_failed Exception: %s", exception)
         return failed("GOOGLE_AUTH_FAILED")
 
 

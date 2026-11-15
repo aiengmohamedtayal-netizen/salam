@@ -44,6 +44,7 @@ export function MagneticButton({
 
   const pointerPosRef = useRef({ px: null, py: null, lastTime: -1e9 });
   const clockRef = useRef(0);
+  const cachedRectRef = useRef(null);
   const ghostPosRef = useRef({ gx: 0, gy: 0 });
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -101,7 +102,10 @@ export function MagneticButton({
         return;
       }
 
-      const rect = field.getBoundingClientRect();
+      if (!cachedRectRef.current) {
+        cachedRectRef.current = field.getBoundingClientRect();
+      }
+      const rect = cachedRectRef.current;
       const cx = rect.width / 2;
       const cy = rect.height / 2;
 
@@ -184,7 +188,14 @@ export function MagneticButton({
   }, [radius, showGhost]);
 
   // Pointer event listeners on outer field
+  const handlePointerEnter = () => {
+    if (fieldRef.current) cachedRectRef.current = fieldRef.current.getBoundingClientRect();
+  };
+
   const handlePointerMove = (e) => {
+    if (!cachedRectRef.current && fieldRef.current) {
+      cachedRectRef.current = fieldRef.current.getBoundingClientRect();
+    }
     if (disabled || !fieldRef.current) return;
     const r = fieldRef.current.getBoundingClientRect();
     pointerPosRef.current.px = e.clientX - r.left;
@@ -215,6 +226,7 @@ export function MagneticButton({
   return (
     <div
       ref={fieldRef}
+      onPointerEnter={handlePointerEnter}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       className="relative inline-flex items-center justify-center p-3 select-none touch-none"
