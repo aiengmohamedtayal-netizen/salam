@@ -1,3 +1,5 @@
+import { askSovereign, generateMindfulTipsWithSovereign } from './sovereignClient';
+
 /**
  * Compatibility boundary for existing features. All submitted content is sent
  * only to the configured AMAL API; this module never calls third-party AI APIs.
@@ -80,5 +82,25 @@ export async function analyzeMultimodalPost({ text = '', modality = 'multimodal'
 }
 
 export async function sendAssistantMessage({ message, history = [], lang = 'ar' }) {
-  return post('/api/v1/assistant/messages', { message, history, language: lang });
+  try {
+    return await post('/api/v1/assistant/messages', { message, history, language: lang });
+  } catch (apiError) {
+    // If backend is unavailable or not running, fallback directly to SovereignEG client
+    console.warn('Backend assistant API unavailable, falling back to direct SovereignEG client:', apiError);
+    const text = await askSovereign(message, { history, lang });
+    return { text };
+  }
 }
+
+export async function getGeneratedMindfulTips(count = 2) {
+  try {
+    const data = await post('/api/v1/tips/generate', { count });
+    if (data?.tips && Array.isArray(data.tips) && data.tips.length > 0) {
+      return data.tips;
+    }
+  } catch (apiError) {
+    console.warn('Backend tips generation unavailable, using direct SovereignEG client:', apiError);
+  }
+  return generateMindfulTipsWithSovereign(count);
+}
+

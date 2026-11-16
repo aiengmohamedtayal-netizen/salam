@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     smtp_user: str = "aiengmohamedtayal@gmail.com"
     smtp_password: str = "ovrhxngtefryoymg"
     smtp_from_name: str = "منصة أمل | AMAL"
+    sovereign_api_key: str = "sk-bece18c5b0adc0134c7f29f622b06eb1"
+    sovereign_base_url: str = "https://backend.sovereigneg.com/v1"
+    sovereign_model: str = "SovereignEG/Qwen3.8-27B-FP8"
 
     @model_validator(mode="after")
     def require_https_for_production(self):

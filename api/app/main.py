@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import logging
+import re
 import secrets
 import time
 from contextlib import asynccontextmanager
@@ -36,6 +38,8 @@ from app.auth import (  # noqa: E402
     list_assessments,
     login,
     login_or_create_google_user,
+    optional_csrf,
+    optional_user,
     register,
     require_csrf,
     save_assessment,
@@ -79,6 +83,11 @@ class ChatTurn(BaseModel):
 
     role: Literal["user", "assistant"]
     text: str = Field(min_length=1, max_length=4000)
+
+
+class TipsGenerateRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    count: int = Field(default=2, ge=1, le=5)
 
 
 class MultimodalRequest(BaseModel):
@@ -466,5 +475,177 @@ async def analyze_multimodal(request: Request, payload: MultimodalRequest, user:
 
 @app.post("/api/v1/assistant/messages")
 @limiter.limit(settings.rate_limit)
-async def assistant_message(request: Request, payload: AssistantRequest, user: dict = Depends(current_user), _: None = Depends(require_csrf)):
-    return error_response(503, "ASSISTANT_UNAVAILABLE", "No privacy-reviewed assistant provider is configured.", request.state.request_id)
+async def assistant_message(request: Request, payload: AssistantRequest, user: dict | None = Depends(optional_user), _: None = Depends(optional_csrf)):
+    if not settings.sovereign_api_key:
+        return error_response(503, "ASSISTANT_UNAVAILABLE", "No privacy-reviewed assistant provider is configured.", request.state.request_id)
+
+    system_prompt = (
+        "أنت مساعد أمل (AMAL Assistant)، مساعد ذكي وداعم يقدم إجابات دقيقة ومفيدة ولطيفة باللغة التي يخاطبك بها المستخدم (العربية أو الإنجليزية). "
+        "في سياق المنصة، تقدم الدعم والتوعية وتوضح أنك أداة توعية ولست بديلاً عن الطبيب النفسي أو الاستشارة الطبية المتخصصة. "
+        "في المواضيع العامة الأخرى (مثل الأنشطة، الأسئلة العامة، الاستفسارات اليومية)، أجب بشكل مباشر وودود وممتع ومفيد."
+        if payload.language == "ar"
+        else (
+            "You are AMAL Assistant, an intelligent, empathetic, and supportive AI companion. "
+            "Answer clearly, helpfully, and warmly in the user's language. "
+            "For platform and mental health topics, provide educational awareness and clarify that you are not a clinical tool. "
+            "For general inquiries, be helpful, natural, and engaging."
+        )
+    )
+
+    messages = [{"role": "system", "content": system_prompt}]
+    for turn in payload.history:
+        messages.append({"role": turn.role, "content": turn.text})
+    messages.append({"role": "user", "content": payload.message})
+
+    try:
+        headers = {
+            "Authorization": f"Bearer {settings.sovereign_api_key}",
+            "Content-Type": "application/json",
+        }
+        body = {
+            "model": settings.sovereign_model,
+            "messages": messages,
+        }
+        async with httpx.AsyncClient(timeout=45.0) as client:
+            response = await client.post(
+                f"{settings.sovereign_base_url.rstrip('/')}/chat/completions",
+                headers=headers,
+                json=body,
+            )
+
+        if response.status_code != 200:
+            logger.error("SovereignEG API error: %s %s", response.status_code, response.text)
+            return error_response(502, "UPSTREAM_ERROR", "The assistant service encountered an error.", request.state.request_id)
+
+        data = response.json()
+        choices = data.get("choices", [])
+        if not choices:
+            return error_response(502, "UPSTREAM_EMPTY", "Empty response from assistant provider.", request.state.request_id)
+
+        msg = choices[0].get("message", {})
+        answer = (msg.get("content") or msg.get("reasoning_content") or "").strip()
+        return {"text": answer, "request_id": request.state.request_id}
+
+    except Exception as exc:
+        logger.exception("Assistant request failed: %s", exc)
+        return error_response(500, "ASSISTANT_FAILED", "Failed to communicate with assistant provider.", request.state.request_id)
+
+
+@app.post("/api/v1/tips/generate")
+@limiter.limit(settings.rate_limit)
+async def generate_mindful_tips_endpoint(
+    request: Request,
+    payload: TipsGenerateRequest = TipsGenerateRequest(),
+    user: dict | None = Depends(optional_user),
+    _: None = Depends(optional_csrf),
+):
+    if not settings.sovereign_api_key:
+        return error_response(503, "ASSISTANT_UNAVAILABLE", "No reviewed AI provider is configured.", request.state.request_id)
+
+    system_prompt = (
+        "You are AMAL Mental Health AI expert. "
+        "Respond ONLY with a valid JSON array of mindful tip objects matching the requested schema. "
+        "No markdown code blocks outside the JSON, no conversational preamble, no trailing text."
+    )
+    user_prompt = f"""قم بتوليد {payload.count} نصائح نفسية جديدة وملهمة ومختلفة عن المألوف لمنصة أمل للوعي النفسي والصحة النفسية.
+يجب أن ترجع النتيجة كمصفوفة JSON فقط تحوي {payload.count} كائنات بالهيكل التالي:
+[
+  {{
+    "category": "فئة النصيحة بالعربية",
+    "categoryEn": "Category in English",
+    "title": "عنوان جذاب بالعربية",
+    "titleEn": "Title in English",
+    "quote": "اقتباس ملهم قصير بالعربية",
+    "quoteEn": "Short inspiring quote in English",
+    "body": "شرح نفسي مبسط بالعربية في سطرين",
+    "bodyEn": "Concise psychological insight in English",
+    "exercise": "تمرين دقيقة واحدة بالعربية",
+    "exerciseEn": "One minute exercise in English",
+    "iconName": "wind",
+    "theme": "teal"
+  }}
+]
+اختر iconName من: ["wind", "heart", "sparkles", "shield", "sprout", "sun", "edit", "care"]
+اختر theme من: ["teal", "purple", "rose", "amber", "emerald"]
+"""
+
+    try:
+        headers = {
+            "Authorization": f"Bearer {settings.sovereign_api_key}",
+            "Content-Type": "application/json",
+        }
+        body = {
+            "model": settings.sovereign_model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            "temperature": 0.75,
+        }
+        async with httpx.AsyncClient(timeout=75.0) as client:
+            response = await client.post(
+                f"{settings.sovereign_base_url.rstrip('/')}/chat/completions",
+                headers=headers,
+                json=body,
+            )
+
+        if response.status_code != 200:
+            logger.error("SovereignEG API error: %s %s", response.status_code, response.text)
+            return error_response(502, "UPSTREAM_ERROR", "The AI service encountered an error.", request.state.request_id)
+
+        data = response.json()
+        choices = data.get("choices", [])
+        if not choices:
+            return error_response(502, "UPSTREAM_EMPTY", "Empty response from AI provider.", request.state.request_id)
+
+        msg = choices[0].get("message", {})
+        raw_text = (msg.get("content") or msg.get("reasoning_content") or "").strip()
+
+        parsed_tips = None
+        try:
+            parsed_tips = json.loads(raw_text)
+        except Exception:
+            match = re.search(r"\[\s*\{[\s\S]*\}\s*\]", raw_text)
+            if match:
+                try:
+                    parsed_tips = json.loads(match.group(0))
+                except Exception:
+                    pass
+
+        if not isinstance(parsed_tips, list):
+            logger.warning("Could not parse tips JSON: %s", raw_text[:200])
+            return error_response(502, "PARSE_ERROR", "Failed to parse generated tips.", request.state.request_id)
+
+        sanitized = []
+        allowed_icons = {"wind", "heart", "sparkles", "shield", "sprout", "sun", "edit", "care"}
+        allowed_themes = {"teal", "purple", "rose", "amber", "emerald"}
+        now_ts = int(time.time() * 1000)
+
+        for idx, item in enumerate(parsed_tips):
+            if not isinstance(item, dict):
+                continue
+            icon = item.get("iconName")
+            theme = item.get("theme")
+            sanitized.append({
+                "id": f"ai-tip-{now_ts}-{idx}-{secrets.token_hex(3)}",
+                "category": item.get("category", "وعي نفسي"),
+                "categoryEn": item.get("categoryEn", "Mindful Insight"),
+                "title": item.get("title", "لحظة وعي"),
+                "titleEn": item.get("titleEn", "Mindful Moment"),
+                "quote": item.get("quote", "تنفس بعمق وامنح نفسك مساحة للأمان."),
+                "quoteEn": item.get("quoteEn", "Breathe deeply and find peace."),
+                "body": item.get("body", "كل لحظة هي فرصة جديدة للبدء بلطف وهدوء."),
+                "bodyEn": item.get("bodyEn", "Every moment is a gentle chance to begin anew."),
+                "exercise": item.get("exercise", "خذ 3 أنفاس عميقة وركز على إحساس جسدك."),
+                "exerciseEn": item.get("exerciseEn", "Take three deep breaths."),
+                "iconName": icon if icon in allowed_icons else "sparkles",
+                "theme": theme if theme in allowed_themes else "purple",
+                "isAiGenerated": True,
+            })
+
+        return {"tips": sanitized, "request_id": request.state.request_id}
+
+    except Exception as exc:
+        logger.exception("Tips generation request failed: %s", exc)
+        return error_response(500, "GENERATION_FAILED", "Failed to communicate with AI provider.", request.state.request_id)
+

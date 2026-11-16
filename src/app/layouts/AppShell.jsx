@@ -41,14 +41,17 @@ export function AppShell() {
       {/* Main Top Navigation */}
       <Navbar />
 
-      {/* Main Layout Area with Desktop Persistent Sidebar */}
+      {/* Main Layout Area with Seamless Desktop Sidebar */}
       <div className="flex-1 flex w-full relative">
-        <div className="hidden xl:flex shrink-0 ps-4 pe-1 py-6 sticky top-16 h-[calc(100vh-4rem)] items-start z-30">
+        <aside
+          aria-label={t('nav.openMenu')}
+          className="hidden xl:flex shrink-0 sticky top-16 h-[calc(100vh-4rem)] items-start z-30 border-inline-end border-surface-border/70 bg-surface-card/40 backdrop-blur-md px-2.5 py-4 transition-all"
+        >
           <SidebarCollapse />
-        </div>
+        </aside>
 
-        {/* Content Area with dedicated clearance for suspended top mindful island */}
-        <main id="main-content" className="flex-1 min-w-0 flex flex-col pt-10 sm:pt-12 focus:outline-none" tabIndex={-1}>
+        {/* Content Area */}
+        <main id="main-content" className="flex-1 min-w-0 flex flex-col focus:outline-none" tabIndex={-1}>
           <Outlet />
         </main>
       </div>

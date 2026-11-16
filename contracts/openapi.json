@@ -582,6 +582,44 @@
           }
         }
       }
+    },
+    "/api/v1/tips/generate": {
+      "post": {
+        "summary": "Generate Mindful Tips Endpoint",
+        "operationId": "generate_mindful_tips_endpoint_api_v1_tips_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipsGenerateRequest",
+                "default": {
+                  "count": 2
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -870,6 +908,19 @@
           "email"
         ],
         "title": "SendOtpPayload"
+      },
+      "TipsGenerateRequest": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Count",
+            "default": 2
+          }
+        },
+        "type": "object",
+        "title": "TipsGenerateRequest"
       },
       "ValidationError": {
         "properties": {

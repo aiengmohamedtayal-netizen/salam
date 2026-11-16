@@ -167,11 +167,32 @@ def current_user(request: Request) -> dict[str, str]:
     return _public_user(row)
 
 
+def optional_user(request: Request) -> dict[str, str] | None:
+    raw_token = request.cookies.get(SESSION_COOKIE)
+    if not raw_token:
+        return None
+    token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
+    with _connect() as connection:
+        row = connection.execute(
+            "SELECT u.id, u.name, u.email, u.password_hash, u.google_sub, s.expires_at FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ?",
+            (token_hash,),
+        ).fetchone()
+        if row is None or datetime.fromisoformat(row["expires_at"]) <= _now():
+            return None
+    return _public_user(row)
+
+
 def require_csrf(request: Request) -> None:
     cookie = request.cookies.get(CSRF_COOKIE, "")
     header = request.headers.get("X-CSRF-Token", "")
     if not cookie or not header or not hmac.compare_digest(cookie, header):
         raise HTTPException(status_code=403, detail={"code": "CSRF_INVALID"})
+
+
+def optional_csrf(request: Request) -> None:
+    raw_token = request.cookies.get(SESSION_COOKIE)
+    if raw_token:
+        require_csrf(request)
 
 
 def delete_user_sessions(user_id: str, raw_token: str | None) -> None:

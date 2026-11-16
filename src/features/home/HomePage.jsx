@@ -471,7 +471,7 @@ export function HomePage() {
           ============================================================ */}
       <section className="py-16 bg-teal-900 text-white relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
-          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight !text-white text-white" style={{ color: '#ffffff' }}>
             {t('home.ctaBanner.title')}
           </h2>
           <p className="text-sm sm:text-base text-teal-100 max-w-xl mx-auto leading-relaxed">

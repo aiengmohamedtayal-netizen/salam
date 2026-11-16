@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Sparkles,
   ChevronLeft,
@@ -20,13 +20,14 @@ import {
   Layers,
   Heart,
   Quote,
-  ExternalLink,
+  Loader2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '@/context/LanguageContext';
 import { cn } from '@/lib/utils';
 import { MINDFUL_TIPS } from '@/data/mindfulTips';
 import { NotificationStack } from '@/components/ui/NotificationStack';
+import { getGeneratedMindfulTips } from '@/services/amalApi';
 
 const ROTATION_INTERVAL_MS = 10000; // 10 seconds per tip
 
@@ -80,6 +81,9 @@ export function MindfulNotificationIsland() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const isGeneratingRef = useRef(false);
+
   const [isMinimized, setIsMinimized] = useState(() => {
     try {
       return localStorage.getItem('amal_tips_minimized') === 'true';
@@ -91,9 +95,47 @@ export function MindfulNotificationIsland() {
   const [selectedTipForModal, setSelectedTipForModal] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  const currentTip = tips[currentIndex % tips.length] || tips[0];
+  // Safe index resolution
+  const safeIndex = tips.length > 0 ? Math.min(currentIndex, tips.length - 1) : 0;
+  const currentTip = tips[safeIndex] || MINDFUL_TIPS[0];
   const theme = THEME_STYLES[currentTip.theme] || THEME_STYLES.purple;
   const IconComponent = THEME_ICONS[currentTip.iconName] || Sparkles;
+
+  /**
+   * Automatically generate more tips using SovereignEG when stock is low or ended.
+   */
+  const fetchMoreTips = useCallback(async (silent = false) => {
+    if (isGeneratingRef.current) return null;
+    isGeneratingRef.current = true;
+    setIsGenerating(true);
+
+    try {
+      const newTips = await getGeneratedMindfulTips(2);
+      if (Array.isArray(newTips) && newTips.length > 0) {
+        setTips((prev) => {
+          const existingIds = new Set(prev.map((t) => t.id));
+          const uniqueNewTips = newTips.filter((t) => !existingIds.has(t.id));
+          return uniqueNewTips.length > 0 ? [...prev, ...uniqueNewTips] : prev;
+        });
+        return newTips;
+      }
+    } catch (err) {
+      if (!silent) {
+        console.warn('SovereignEG tips generation error:', err);
+      }
+    } finally {
+      isGeneratingRef.current = false;
+      setIsGenerating(false);
+    }
+    return null;
+  }, []);
+
+  // Pre-fetch next tips when approaching the end of current stock
+  useEffect(() => {
+    if (currentIndex >= tips.length - 2 && !isGeneratingRef.current) {
+      fetchMoreTips(true);
+    }
+  }, [currentIndex, tips.length, fetchMoreTips]);
 
   // Auto-rotation timer
   useEffect(() => {
@@ -102,15 +144,43 @@ export function MindfulNotificationIsland() {
     }
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % tips.length);
+      setCurrentIndex((prev) => {
+        // If at the last tip, check if new tips are ready
+        if (prev >= tips.length - 1) {
+          if (!isGeneratingRef.current) {
+            fetchMoreTips(true).then((newBatch) => {
+              if (newBatch && newBatch.length > 0) {
+                setCurrentIndex(prev + 1);
+              }
+            });
+          }
+          // Wrap around safely if still generating
+          return (prev + 1) % tips.length;
+        }
+        return prev + 1;
+      });
     }, ROTATION_INTERVAL_MS);
 
     return () => clearInterval(interval);
-  }, [isPaused, isHovered, isMinimized, selectedTipForModal, viewMode, tips.length]);
+  }, [isPaused, isHovered, isMinimized, selectedTipForModal, viewMode, tips.length, fetchMoreTips]);
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e?.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % tips.length);
+
+    // Reached or approaching the end of current stock
+    if (currentIndex >= tips.length - 1) {
+      if (!isGeneratingRef.current) {
+        const newBatch = await fetchMoreTips(false);
+        if (newBatch && newBatch.length > 0) {
+          setCurrentIndex(tips.length);
+          return;
+        }
+      }
+      // If generation is pending or failed, loop back
+      setCurrentIndex(0);
+    } else {
+      setCurrentIndex((prev) => prev + 1);
+    }
   };
 
   const handlePrev = (e) => {
@@ -138,7 +208,7 @@ export function MindfulNotificationIsland() {
   };
 
   // Convert current tips into Kokonut UI Stack format when expanded
-  const stackItems = tips.slice(0, 5).map((tip) => {
+  const stackItems = tips.slice(0, 15).map((tip) => {
     const TipIcon = THEME_ICONS[tip.iconName] || Sparkles;
     const itemTheme = THEME_STYLES[tip.theme] || THEME_STYLES.purple;
     return {
@@ -149,8 +219,10 @@ export function MindfulNotificationIsland() {
       titleEn: tip.titleEn,
       body: isAr ? tip.quote : tip.quoteEn,
       bodyEn: tip.quoteEn,
-      time: isAr ? 'ومضة يومية' : 'Daily Insight',
-      timeEn: 'Daily Insight',
+      time: tip.isAiGenerated
+        ? (isAr ? '✨ SovereignEG' : '✨ SovereignEG')
+        : (isAr ? 'ومضة يومية' : 'Daily Insight'),
+      timeEn: tip.isAiGenerated ? '✨ SovereignEG' : 'Daily Insight',
       icon: (
         <span className={cn('flex size-8 shrink-0 items-center justify-center rounded-lg shadow-xs', itemTheme.iconBg)}>
           <TipIcon className="size-4" />
@@ -165,7 +237,7 @@ export function MindfulNotificationIsland() {
       {/* Floating Island Container Pinned at Top Center */}
       <aside
         aria-label={isAr ? 'نظام إشعارات الوعي النفسي' : 'Mindful Notifications'}
-        className="fixed top-20 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[94vw] sm:w-[540px] pointer-events-auto"
+        className="fixed top-20 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[94vw] sm:w-[560px] pointer-events-auto"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -197,8 +269,11 @@ export function MindfulNotificationIsland() {
                 </span>
                 <span>{isAr ? 'ومضة وعي نفسي' : 'Mindful Insight'}</span>
                 <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-primary-100 dark:bg-primary-900/60 text-primary-700 dark:text-primary-300 font-mono">
-                  {currentIndex + 1}/{tips.length}
+                  {safeIndex + 1}/{tips.length}
                 </span>
+                {isGenerating && (
+                  <Loader2 className="size-3 animate-spin text-primary-500" />
+                )}
               </button>
             </motion.div>
           ) : viewMode === 'stack' ? (
@@ -220,7 +295,7 @@ export function MindfulNotificationIsland() {
                     {isAr ? 'حزمة نصائح أمل للوعي النفسي' : 'AMAL Wisdom Stack'}
                   </span>
                   <span className="text-[11px] text-text-muted font-mono">
-                    ({tips.length} {isAr ? 'نصائح' : 'insights'})
+                    ({tips.length} {isAr ? 'نصيحة' : 'insights'})
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -260,14 +335,34 @@ export function MindfulNotificationIsland() {
               </div>
 
               <div className="flex items-center justify-between pt-2 text-[11px] text-text-muted border-t border-surface-border/60">
-                <span>{isAr ? '💡 انقر على أي بطاقة لعرض التمرين بالكامل أو اسحبها للتنحية' : '💡 Click card for exercise or swipe to dismiss'}</span>
                 <button
                   type="button"
-                  onClick={() => setTips(MINDFUL_TIPS)}
-                  className="inline-flex items-center gap-1 font-bold text-primary-700 hover:text-primary-800 transition-colors cursor-pointer"
+                  onClick={() => fetchMoreTips(false)}
+                  disabled={isGenerating}
+                  className="inline-flex items-center gap-1.5 font-bold text-primary-700 hover:text-primary-800 dark:text-primary-400 transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  {isGenerating ? (
+                    <Loader2 className="size-3.5 animate-spin" />
+                  ) : (
+                    <Sparkles className="size-3.5 text-primary-500" />
+                  )}
+                  <span>
+                    {isGenerating
+                      ? (isAr ? 'جارٍ التوليد بواسطة SovereignEG...' : 'Generating via SovereignEG...')
+                      : (isAr ? 'توليد نصائح SovereignEG' : 'Generate AI Tips')}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTips(MINDFUL_TIPS);
+                    setCurrentIndex(0);
+                  }}
+                  className="inline-flex items-center gap-1 font-semibold text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                 >
                   <RefreshCw className="size-3" />
-                  <span>{isAr ? 'استعادة النصائح' : 'Reset tips'}</span>
+                  <span>{isAr ? 'استعادة الافتراضية' : 'Reset default'}</span>
                 </button>
               </div>
             </motion.div>
@@ -289,8 +384,8 @@ export function MindfulNotificationIsland() {
               )}
             >
               <div className="flex items-center justify-between gap-2.5">
-                {/* Left: Thematic Glowing Icon + Category Badge */}
-                <div className="flex items-center gap-2 shrink-0">
+                {/* Left: Thematic Glowing Icon + Category Badge + AI Indicator */}
+                <div className="flex items-center gap-1.5 shrink-0">
                   <div
                     className={cn(
                       'flex size-7 sm:size-8 shrink-0 items-center justify-center rounded-full shadow-xs transition-transform duration-200 group-hover:scale-110',
@@ -302,27 +397,47 @@ export function MindfulNotificationIsland() {
                   <span className={cn('hidden xs:inline-block text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full border', theme.badge)}>
                     {isAr ? currentTip.category : currentTip.categoryEn}
                   </span>
+                  {currentTip.isAiGenerated && (
+                    <span
+                      className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gradient-to-r from-purple-500/15 to-teal-500/15 border border-purple-500/30 text-primary-700 dark:text-primary-300 shadow-2xs"
+                      title={isAr ? 'تم استلهام هذه النصيحة بواسطة موديل SovereignEG' : 'Generated by SovereignEG'}
+                    >
+                      <Sparkles className="size-2.5 text-primary-500 animate-spin-slow" />
+                      <span>SovereignEG</span>
+                    </span>
+                  )}
                 </div>
 
-                {/* Center: Dynamic Animated Rotating Quote */}
+                {/* Center: Dynamic Animated Rotating Quote or Loading State */}
                 <div className="flex-1 min-w-0 px-1">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentTip.id}
-                      initial={{ opacity: 0, y: 4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                      className="flex items-center gap-1.5 text-xs sm:text-[13px] text-text-primary tracking-tight font-medium truncate"
-                    >
-                      <span className="font-bold text-primary-700 dark:text-primary-300 shrink-0">
-                        {isAr ? currentTip.title : currentTip.titleEn}:
+                  {isGenerating && currentIndex >= tips.length - 1 ? (
+                    <div className="flex items-center gap-1.5 text-xs sm:text-[13px] text-primary-700 dark:text-primary-300 font-semibold animate-pulse truncate">
+                      <Loader2 className="size-3.5 animate-spin text-primary-500 shrink-0" />
+                      <span className="truncate">
+                        {isAr
+                          ? '✨ يستلهم موديل SovereignEG نصائح جديدة الآن...'
+                          : '✨ SovereignEG is inspiring fresh tips...'}
                       </span>
-                      <span className="text-text-secondary truncate">
-                        «{isAr ? currentTip.quote : currentTip.quoteEn}»
-                      </span>
-                    </motion.div>
-                  </AnimatePresence>
+                    </div>
+                  ) : (
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentTip.id}
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="flex items-center gap-1.5 text-xs sm:text-[13px] text-text-primary tracking-tight font-medium truncate"
+                      >
+                        <span className="font-bold text-primary-700 dark:text-primary-300 shrink-0">
+                          {isAr ? currentTip.title : currentTip.titleEn}:
+                        </span>
+                        <span className="text-text-secondary truncate">
+                          «{isAr ? currentTip.quote : currentTip.quoteEn}»
+                        </span>
+                      </motion.div>
+                    </AnimatePresence>
+                  )}
                 </div>
 
                 {/* Right: Interactive Controls Pill */}
@@ -354,10 +469,38 @@ export function MindfulNotificationIsland() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="p-1 rounded-full text-text-muted hover:text-text-primary hover:bg-surface-muted transition-colors cursor-pointer"
+                    disabled={isGenerating && currentIndex >= tips.length - 1}
+                    className="p-1 rounded-full text-text-muted hover:text-text-primary hover:bg-surface-muted transition-colors cursor-pointer disabled:opacity-40"
                     title={isAr ? 'التالية' : 'Next'}
                   >
                     <ChevronLeft className="size-3.5 rtl:rotate-0 rotate-180" />
+                  </button>
+
+                  {/* Manual SovereignEG Generate Trigger */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      fetchMoreTips(false);
+                    }}
+                    disabled={isGenerating}
+                    className={cn(
+                      'p-1 rounded-full transition-colors cursor-pointer',
+                      isGenerating
+                        ? 'text-primary-400 animate-spin'
+                        : 'text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:hover:bg-primary-950/60'
+                    )}
+                    title={
+                      isGenerating
+                        ? (isAr ? 'جارٍ التوليد بواسطة SovereignEG...' : 'Generating via SovereignEG...')
+                        : (isAr ? 'توليد نصائح جديدة بواسطة SovereignEG' : 'Generate new tips via SovereignEG')
+                    }
+                  >
+                    {isGenerating ? (
+                      <Loader2 className="size-3.5 animate-spin" />
+                    ) : (
+                      <Sparkles className="size-3.5" />
+                    )}
                   </button>
 
                   {/* Expand to Stack */}
@@ -393,7 +536,7 @@ export function MindfulNotificationIsland() {
               </div>
 
               {/* Ultra-subtle Progress Bar along the bottom of the pill */}
-              {!isPaused && !isHovered && (
+              {!isPaused && !isHovered && !isGenerating && (
                 <motion.div
                   key={currentTip.id}
                   initial={{ width: '0%' }}
@@ -440,14 +583,22 @@ export function MindfulNotificationIsland() {
                     })()}
                   </div>
                   <div>
-                    <span
-                      className={cn(
-                        'text-xs font-bold px-2.5 py-0.5 rounded-full border',
-                        THEME_STYLES[selectedTipForModal.theme]?.badge
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={cn(
+                          'text-xs font-bold px-2.5 py-0.5 rounded-full border',
+                          THEME_STYLES[selectedTipForModal.theme]?.badge
+                        )}
+                      >
+                        {isAr ? selectedTipForModal.category : selectedTipForModal.categoryEn}
+                      </span>
+                      {selectedTipForModal.isAiGenerated && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-500/15 to-teal-500/15 border border-purple-500/30 text-primary-700 dark:text-primary-300">
+                          <Sparkles className="size-2.5 text-primary-500 animate-spin-slow" />
+                          <span>SovereignEG</span>
+                        </span>
                       )}
-                    >
-                      {isAr ? selectedTipForModal.category : selectedTipForModal.categoryEn}
-                    </span>
+                    </div>
                     <h3 id="wisdom-title" className="text-lg sm:text-xl font-black text-text-primary tracking-tight mt-1">
                       {isAr ? selectedTipForModal.title : selectedTipForModal.titleEn}
                     </h3>
@@ -463,6 +614,18 @@ export function MindfulNotificationIsland() {
                   <X className="size-5" />
                 </button>
               </div>
+
+              {/* AI Generation Notification Banner if applicable */}
+              {selectedTipForModal.isAiGenerated && (
+                <div className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-gradient-to-r from-purple-500/10 via-primary-500/10 to-teal-500/10 border border-primary-500/25 text-primary-800 dark:text-primary-200 text-xs font-medium">
+                  <Sparkles className="size-4 text-primary-500 shrink-0" />
+                  <span>
+                    {isAr
+                      ? 'تم استلهام وتوليد هذه النصيحة تلقائياً بواسطة الذكاء الاصطناعي السيادي SovereignEG'
+                      : 'Dynamically generated by the SovereignEG AI model for continuous mindful insights.'}
+                  </span>
+                </div>
+              )}
 
               {/* Quote Card */}
               <div className="p-4 sm:p-5 rounded-2xl bg-surface-muted/70 border border-surface-border relative">
@@ -497,15 +660,39 @@ export function MindfulNotificationIsland() {
               <div className="flex items-center justify-between gap-3 pt-2 border-t border-surface-border">
                 <button
                   type="button"
-                  onClick={() => {
-                    const nextIdx = (currentIndex + 1) % tips.length;
-                    setCurrentIndex(nextIdx);
-                    setSelectedTipForModal(tips[nextIdx]);
+                  onClick={async () => {
+                    if (currentIndex >= tips.length - 2 && !isGeneratingRef.current) {
+                      fetchMoreTips(true);
+                    }
+                    if (currentIndex >= tips.length - 1) {
+                      const newBatch = await fetchMoreTips(false);
+                      if (newBatch && newBatch.length > 0) {
+                        const nextIdx = tips.length;
+                        setCurrentIndex(nextIdx);
+                        setSelectedTipForModal(newBatch[0]);
+                      } else {
+                        setCurrentIndex(0);
+                        setSelectedTipForModal(tips[0]);
+                      }
+                    } else {
+                      const nextIdx = currentIndex + 1;
+                      setCurrentIndex(nextIdx);
+                      setSelectedTipForModal(tips[nextIdx]);
+                    }
                   }}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-700 hover:text-primary-800 transition-colors cursor-pointer"
+                  disabled={isGenerating}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-700 hover:text-primary-800 dark:text-primary-300 transition-colors cursor-pointer disabled:opacity-50"
                 >
-                  <RefreshCw className="size-3.5" />
-                  <span>{isAr ? 'نصيحة أخرى' : 'Next insight'}</span>
+                  {isGenerating ? (
+                    <Loader2 className="size-3.5 animate-spin text-primary-500" />
+                  ) : (
+                    <RefreshCw className="size-3.5" />
+                  )}
+                  <span>
+                    {isGenerating
+                      ? (isAr ? 'جارٍ التوليد بواسطة SovereignEG...' : 'Generating with SovereignEG...')
+                      : (isAr ? 'نصيحة أخرى (توليد ذكي)' : 'Next insight (AI Gen)')}
+                  </span>
                 </button>
 
                 <div className="flex items-center gap-2">
